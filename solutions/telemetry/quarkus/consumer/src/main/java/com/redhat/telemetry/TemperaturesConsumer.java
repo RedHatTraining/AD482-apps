@@ -5,7 +5,7 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
 
-import io.reactivex.Flowable;
+import io.smallrye.mutiny.Multi;
 
 
 @ApplicationScoped
@@ -13,9 +13,9 @@ public class TemperaturesConsumer {
 
     @Inject
     @Channel("temperatures")
-    Flowable<Integer> temperatures;
+    Multi<Integer> temperatures;
 
-    public Flowable<Integer> consume() {
+    public Multi<Integer> consume() {
         return temperatures;
     }
 

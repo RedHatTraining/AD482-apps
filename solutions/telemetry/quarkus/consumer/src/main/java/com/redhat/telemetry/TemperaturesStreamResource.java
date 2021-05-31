@@ -6,7 +6,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.reactivestreams.Publisher;
+import org.jboss.resteasy.reactive.RestSseElementType;
+
+import io.smallrye.mutiny.Multi;
 
 @Path("/temperatures")
 public class TemperaturesStreamResource {
@@ -16,7 +18,8 @@ public class TemperaturesStreamResource {
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    public Publisher<String> getTemperaturesStream() {
-        return consumer.consume().map(temp -> "Received temperature: " + temp);
+    @RestSseElementType(MediaType.TEXT_PLAIN)
+    public Multi<String> getTemperaturesStream() {
+        return consumer.consume().map(temp -> "Received temperature: " + temp).toHotStream();
     }
 }
