@@ -2,7 +2,7 @@
 
 This folder contains a basic temperature telemetry Kafka app, in two flavors:
 
-- `console` contains a producer/consumer Kafka app in plain Java.
+- `plain` contains a producer/consumer Kafka app in plain Java.
 - `quarkus` contains a producer/consumer Kafka app in Quarkus.
 
 The `certs` folder is for the certificate files necessary to connect to your AMQ Streams cluster.
