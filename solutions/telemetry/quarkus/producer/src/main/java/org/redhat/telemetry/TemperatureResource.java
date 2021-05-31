@@ -17,7 +17,7 @@ public class TemperatureResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public String postTemperature(Temperature temperature) {
         producer.produce(temperature);
-        return "Produced temperature: " + temperature.getValue();
 
+        return "Produced temperature: " + temperature.getValue();
     }
 }

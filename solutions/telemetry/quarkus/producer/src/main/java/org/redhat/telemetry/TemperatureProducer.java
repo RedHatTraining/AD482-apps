@@ -22,7 +22,3 @@ public class TemperatureProducer {
     }
 
 }
-
-
-
-
