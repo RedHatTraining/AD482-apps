@@ -1,6 +1,8 @@
 # Kafka Basic Producer App
 
-First, build the app:
+First, set your configuration in `ProducerApp.java`.
+
+Build the app:
 
 ```
 ./mvnw package

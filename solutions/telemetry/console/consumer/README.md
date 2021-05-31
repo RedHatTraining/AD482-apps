@@ -1,5 +1,7 @@
 # Kafka Basic Consumer App
 
+First, set your configuration in `ConsumerApp.java`.
+
 First, build the app:
 
 ```
