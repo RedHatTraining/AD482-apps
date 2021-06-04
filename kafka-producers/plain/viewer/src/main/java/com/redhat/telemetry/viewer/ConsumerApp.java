@@ -47,7 +47,7 @@ public class ConsumerApp
             ConsumerRecords<Void, Integer> records = consumer.poll(Duration.ofMillis(10000));
 
             for (ConsumerRecord<Void, Integer> record : records) {
-                System.out.println("Received temperature: " + record.value());
+                System.out.println("Received total-connected-devices: " + record.value());
             }
         }
     }
