@@ -46,5 +46,5 @@ if __name__ == "__main__":
         print(f"\tKey: {message.key.decode('utf-8')}")
         print(f"\tPartition: {message.partition}")
         print(f"\tMeasurement: {message.value}")
-        print('----')
+        print('>>>>')
 
