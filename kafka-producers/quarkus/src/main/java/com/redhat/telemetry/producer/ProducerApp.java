@@ -17,17 +17,6 @@ public class ProducerApp {
 
     private final Random random = new Random();
 
-    @Outgoing("device-temperatures")
-    public Multi<Record<String, Integer>> generate() {
-        return Multi.createFrom().ticks().every(Duration.ofSeconds(3))
-                .onOverflow().drop()
-                .map(tick -> {
-                    String currentDevice = "device-" + random.nextInt(10);
-                    int currentMeasure = random.nextInt(100);
+    // @todo: Implement the Kafka producer
 
-                    LOG.infov("Device ID: {0}, measure: {1}", currentDevice, currentMeasure);
-
-                    return Record.of(currentDevice, currentMeasure);
-                });
-    }
 }
