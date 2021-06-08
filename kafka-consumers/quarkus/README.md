@@ -8,5 +8,4 @@ Run the Quarkus app
 ./mvnw clean quarkus:dev
 ```
 
-Navigate to http://localhost:8080/humidity to see the data stream:
-
+Navigate to http://localhost:8080/humidity to see the aggregated data stats.
