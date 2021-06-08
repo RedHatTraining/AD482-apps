@@ -26,7 +26,10 @@ public class ProducerApp {
                     String currentDevice = "device-" + random.nextInt(10);
                     int currentMeasure = random.nextInt(100);
 
-                    LOG.infov("Device ID: {0}, measure: {1}", currentDevice, currentMeasure);
+                    LOG.infov("Device ID: {0}, measure: {1}",
+                            currentDevice,
+                            currentMeasure
+                    );
 
                     return Record.of(currentDevice, currentMeasure);
                 });
