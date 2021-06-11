@@ -1,0 +1,12 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: call-detail-records
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 24
+  replicas: 2
+  config:
+    retention.ms: 2629800000
+    segment.bytes: 1073741824
