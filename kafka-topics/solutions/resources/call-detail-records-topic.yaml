@@ -4,7 +4,6 @@ metadata:
   name: call-detail-records
   labels:
     strimzi.io/cluster: my-cluster
-  namespace: RHT_OCP4_DEV_USER-kafka-cluster
 spec:
   partitions: 12
   replicas: 2

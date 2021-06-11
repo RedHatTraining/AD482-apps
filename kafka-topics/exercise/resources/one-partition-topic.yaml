@@ -4,7 +4,6 @@ metadata:
   name: one-partition-topic
   labels:
     strimzi.io/cluster: my-cluster
-  namespace: RHT_OCP4_DEV_USER-kafka-cluster
 spec:
   partitions: 1
   replicas: 1
