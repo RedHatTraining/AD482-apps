@@ -41,8 +41,11 @@ public class CRDProducer {
         Producer<Integer, String> producer = new KafkaProducer<>(getKafkaProperties());
 
         for (int i = 1; i <= 7; i++) {
+
+            CallDetailRecord callDetailRecord = new CallDetailRecord(i, "Call record-" + i);
+
             ProducerRecord<Integer, String> record = new ProducerRecord<>(
-                    "call-detail-records", i,  new CallDetailRecord(i, "Call record-" + i).toString()
+                    "call-detail-records", callDetailRecord.getUserId(), callDetailRecord.toString()
             );
 
             producer.send(record);
