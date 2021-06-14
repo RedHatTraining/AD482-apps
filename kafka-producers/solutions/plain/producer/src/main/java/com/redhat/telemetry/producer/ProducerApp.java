@@ -33,11 +33,6 @@ public class ProducerApp {
         // @todo: configure the SSL connection
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
         props.put(
-                SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG,
-                "ABSOLUTE_PATH_TO_WORKSPACE_FOLDER/keystore.jks"
-        );
-        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, "password");
-        props.put(
                 SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG,
                 "ABSOLUTE_PATH_TO_WORKSPACE_FOLDER/truststore.jks"
         );

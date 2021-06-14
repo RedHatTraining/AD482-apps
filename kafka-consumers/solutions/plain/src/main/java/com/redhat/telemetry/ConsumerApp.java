@@ -37,8 +37,6 @@ public class ConsumerApp
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.IntegerDeserializer");
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
-        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, "/PATH/TO/keystore.jks");
-        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, "password");
         props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, "/PATH/TO/truststore.jks");
         props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, "password");
 
