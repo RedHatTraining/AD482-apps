@@ -1,4 +1,4 @@
-package com.redhat.crd.model;
+package com.redhat.cdr.model;
 
 import java.io.Serializable;
 

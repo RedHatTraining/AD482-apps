@@ -1,4 +1,4 @@
-package com.redhat.crd.config.model;
+package com.redhat.cdr.config.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

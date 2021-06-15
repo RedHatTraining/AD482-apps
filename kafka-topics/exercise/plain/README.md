@@ -9,5 +9,5 @@
 ##Running the Application
 
 ```
-java -jar target/crd-producer-1.0-SNAPSHOT.jar
+java -jar target/cdr-producer-1.0-SNAPSHOT.jar
 ```

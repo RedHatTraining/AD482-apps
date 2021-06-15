@@ -1,9 +1,9 @@
-package com.redhat.crd;
+package com.redhat.cdr;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.redhat.crd.config.model.ClassroomConfig;
-import com.redhat.crd.model.CallDetailRecord;
+import com.redhat.cdr.config.model.ClassroomConfig;
+import com.redhat.cdr.model.CallDetailRecord;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.config.SslConfigs;
@@ -18,9 +18,9 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 
-public class CRDProducer {
+public class CDRProducer {
 
-    private static final Logger logger = LoggerFactory.getLogger(CRDProducer.class);
+    private static final Logger logger = LoggerFactory.getLogger(CDRProducer.class);
 
     public static Properties getKafkaProperties() {
 
