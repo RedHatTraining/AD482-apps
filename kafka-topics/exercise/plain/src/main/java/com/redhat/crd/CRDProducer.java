@@ -5,19 +5,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redhat.crd.config.model.ClassroomConfig;
 import com.redhat.crd.model.CallDetailRecord;
 import org.apache.kafka.clients.CommonClientConfigs;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+
 
 public class CRDProducer {
+
+    private static final Logger logger = LoggerFactory.getLogger(CRDProducer.class);
 
     public static Properties getKafkaProperties() {
 
@@ -37,7 +40,7 @@ public class CRDProducer {
         return props;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         Producer<Integer, String> producer = new KafkaProducer<>(getKafkaProperties());
 
         for (int i = 1; i <= 7; i++) {
@@ -48,19 +51,26 @@ public class CRDProducer {
                     "call-detail-records", callDetailRecord.getUserId(), callDetailRecord.toString()
             );
 
-            producer.send(record);
-            printRecord(record);
+            producer.send(record, new Callback() {
+                public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+                    // executes every time a record is successfully sent or an exception is thrown
+                    if (e == null) {
+                        // the record was successfully sent
+                        System.out.println("Sent record:");
+                        System.out.println("\tTopic = " + recordMetadata.topic());
+                        System.out.println("\tPartition = " + recordMetadata.partition());
+                        System.out.println("\tKey = " + record.key());
+                        System.out.println("\tValue = " + record.value());
+                    } else {
+                        logger.error("Error while producing", e);
+                    }
+                }
+            }).get();
+
         }
 
         producer.flush();
         producer.close();
-    }
-
-    private static void printRecord(ProducerRecord record) {
-        System.out.println("Sent record:");
-        System.out.println("\tTopic = " + record.topic());
-        System.out.println("\tKey = " + record.key());
-        System.out.println("\tValue = " + record.value());
     }
 
     private static ClassroomConfig getClassroomConfig() {
@@ -70,7 +80,8 @@ public class CRDProducer {
                     new File(System.getProperty("user.home") + "/.grading/ad482-workspace.json"),
                     ClassroomConfig.class);
         } catch (IOException e) {
-            throw new RuntimeException("Make sure to run 'lab start eda-setup' in your workspace directory ", e);
+            logger.error("Make sure to run 'lab start eda-setup' in your workspace directory", e);
+            return null;
         }
     }
 
