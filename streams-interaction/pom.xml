@@ -30,10 +30,7 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-kafka-streams</artifactId>
-    </dependency>
+    <!-- TODO: add Kafka streams extension -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jackson</artifactId>
