@@ -42,6 +42,8 @@ public class AccountResource {
 
     // @todo: add emitter for the bank account creation events
 
+    // @todo: add emitter for the bank account balance events
+
     @GET
     public List<BankAccount> get() {
         return BankAccount.listAll(Sort.by("id"));
@@ -214,5 +216,15 @@ public class AccountResource {
         );
 
         // @todo: Send an event about the bank account creation
+    }
+
+    private void notifyAboutBalanceChange(BankAccount entity)
+    {
+        LOGGER.info(
+                "Balance updated for account - ID: " + entity.id
+                        + ", new balance: " + entity.balance
+        );
+
+        // @todo: Send an event about the balance change
     }
 }
