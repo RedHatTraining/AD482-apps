@@ -42,7 +42,9 @@ public class AccountResource {
 
     // @todo: add emitter for the bank account creation events
     @Inject @Channel("bank-account-creation-out")
-    Emitter<Record<Long, BankAccountWasCreated>> emitter;
+    Emitter<Record<Long, BankAccountWasCreated>> creationEmitter;
+
+    // @todo: add emitter for the bank account balance events
 
     @GET
     public List<BankAccount> get() {
@@ -216,14 +218,24 @@ public class AccountResource {
         );
 
         // @todo: Send an event about the bank account creation
-        emitter.send(
+        creationEmitter.send(
                 Record.of(
                         bankAccount.id,
                         new BankAccountWasCreated(
-                            bankAccount.id,
-                            bankAccount.balance
+                                bankAccount.id,
+                                bankAccount.balance
                         )
-                    )
+                )
         );
+    }
+
+    private void notifyAboutBalanceChange(BankAccount entity)
+    {
+        LOGGER.info(
+                "Balance updated for account - ID: " + entity.id
+                        + ", new balance: " + entity.balance
+        );
+
+        // @todo: Send an event about the balance change
     }
 }

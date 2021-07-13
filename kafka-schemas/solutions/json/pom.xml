@@ -54,7 +54,6 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-jackson</artifactId>
         </dependency>
-        <!-- Testing: -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
@@ -65,8 +64,8 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- @todo: add registry dependency -->
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -101,9 +100,9 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- @todo: add AVRO plugin -->
         </plugins>
     </build>
-
     <profiles>
         <profile>
             <!-- Optionally activate this profile to compile the demo into native! -->
