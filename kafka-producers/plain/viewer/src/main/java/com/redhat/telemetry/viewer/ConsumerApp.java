@@ -25,8 +25,6 @@ public class ConsumerApp
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.IntegerDeserializer");
 
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, producerProperties.getProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG));
-        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, producerProperties.getProperty(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG));
-        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, producerProperties.getProperty(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG));
         props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, producerProperties.getProperty(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG));
         props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, producerProperties.getProperty(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG));
 
