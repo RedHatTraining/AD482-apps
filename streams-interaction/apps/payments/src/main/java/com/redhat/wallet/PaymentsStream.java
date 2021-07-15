@@ -29,6 +29,6 @@ public class PaymentsStream {
 
         // TODO: process the stream and send the result to the "large-payments" topic
 
-        // TODO: Make the builder return the topology
+        // TODO: return the topology
     }
 }
