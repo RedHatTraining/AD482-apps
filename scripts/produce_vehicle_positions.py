@@ -1,3 +1,8 @@
+"""
+Run this script in the virtual environment where
+rht-labs-ad482 is installed
+"""
+
 from pprint import pprint
 from random import uniform, choice
 from ad482.common import kafka
