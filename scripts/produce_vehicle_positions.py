@@ -59,7 +59,7 @@ if __name__ == "__main__":
         TOPIC,
         generate_vehicle_positions(),
         workspace.config,
-        value_serializer=serdes.string_serializer,
+        value_serializer=serdes.json_serializer,
         sleep_seconds=3,
         callback=print_produced
     )
