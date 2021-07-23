@@ -45,9 +45,9 @@ public class AmountWasDepositedPipeline extends StreamProcessor {
         builder.stream(
                 AMOUNT_WAS_DEPOSITED_TOPIC,
                 Consumed.with(Serdes.Long(), depositEventSerde)
-        ).filter((key, deposit) -> {
-            return deposit.amount > 1000;
-        }).map((key, deposit) -> {
+        ).filter(
+                (key, deposit) -> deposit.amount > 1000
+        ).map((key, deposit) -> {
             LOGGER.info(
                     "HighValueDepositWasDetected - Account ID:" + deposit.bankAccountId
                     + " Amount:" + deposit.amount
