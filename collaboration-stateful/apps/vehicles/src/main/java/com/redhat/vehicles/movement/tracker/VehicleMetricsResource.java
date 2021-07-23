@@ -22,6 +22,10 @@ public class VehicleMetricsResource {
 
     @GET
     public List<VehicleMetrics> list() {
+        List<VehicleMetrics> vehicleMetrics = new ArrayList<>();
+
         // TODO: query the store
+
+        return vehicleMetrics;
     }
 }
