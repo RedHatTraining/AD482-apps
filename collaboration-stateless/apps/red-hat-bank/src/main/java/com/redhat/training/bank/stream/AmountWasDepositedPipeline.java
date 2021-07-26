@@ -31,9 +31,13 @@ public class AmountWasDepositedPipeline extends StreamProcessor {
     private KafkaStreams streams;
 
     void onStart(@Observes StartupEvent startupEvent) {
-        // TODO: Add a streams builder
+        StreamsBuilder builder = new StreamsBuilder();
 
-        // TODO: Create SerDes
+        ObjectMapperSerde<AmountWasDeposited> depositEventSerde
+                = new ObjectMapperSerde<>(AmountWasDeposited.class);
+
+        ObjectMapperSerde<HighValueDepositWasDetected> highValueEventSerde
+                = new ObjectMapperSerde<>(HighValueDepositWasDetected.class);
 
         // TODO: Build the stream topology
 

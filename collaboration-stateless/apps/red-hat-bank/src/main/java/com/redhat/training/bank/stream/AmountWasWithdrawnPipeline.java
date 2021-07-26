@@ -36,9 +36,19 @@ public class AmountWasWithdrawnPipeline extends StreamProcessor {
     private KafkaStreams streams;
 
     void onStart(@Observes StartupEvent startupEvent) {
-        // TODO: Add a streams builder
+        StreamsBuilder builder = new StreamsBuilder();
 
-        // TODO: Create SerDes
+        ObjectMapperSerde<AmountWasWithdrawn> withdrawalEventSerde
+                = new ObjectMapperSerde<>(AmountWasWithdrawn.class);
+
+        ObjectMapperSerde<LowRiskWithdrawnWasDetected> lowRiskEventSerde
+                = new ObjectMapperSerde<>(LowRiskWithdrawnWasDetected.class);
+
+        ObjectMapperSerde<ModerateRiskWithdrawnWasDetected> moderateRiskEventSerde
+                = new ObjectMapperSerde<>(ModerateRiskWithdrawnWasDetected.class);
+
+        ObjectMapperSerde<HighRiskWithdrawnWasDetected> highRiskEventSerde
+                = new ObjectMapperSerde<>(HighRiskWithdrawnWasDetected.class);
 
         // TODO: Add inverse filter
 
