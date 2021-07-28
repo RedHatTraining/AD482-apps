@@ -1,4 +1,4 @@
-package com.redhat.vehicles;
+package com.redhat.vehicles.inventory;
 
 public class Vehicle {
     public int id;

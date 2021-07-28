@@ -1,4 +1,4 @@
-package com.redhat.vehicles.movement.events;
+package com.redhat.vehicles.events;
 
 /**
  * This event occurs when a vehicle moves
@@ -8,7 +8,6 @@ public class VehicleMoved {
     public float latitude;
     public float longitude;
     public float elevation; // In meters
-
 
     public VehicleMoved() {}
 

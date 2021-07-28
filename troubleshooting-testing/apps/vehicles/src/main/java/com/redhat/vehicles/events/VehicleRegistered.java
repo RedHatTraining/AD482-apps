@@ -1,4 +1,4 @@
-package com.redhat.vehicles;
+package com.redhat.vehicles.events;
 
 public class VehicleRegistered {
     public int id;
