@@ -1,0 +1,55 @@
+package com.redhat.customers.stream;
+
+import com.redhat.customers.event.PotentialCustomersAverageWasCalculated;
+import com.redhat.customers.event.PotentialCustomersWereDetected;
+import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
+import io.quarkus.runtime.ShutdownEvent;
+import io.quarkus.runtime.StartupEvent;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.kstream.*;
+import org.jboss.logging.Logger;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Produces;
+import java.time.Duration;
+
+@ApplicationScoped
+public class ProcessLateEventsWithSlidingWindows extends StreamProcessor {
+    private static final Logger LOGGER = Logger.getLogger(ProcessLateEventsWithSlidingWindows.class);
+
+    // Reading topic
+    static final String POTENTIAL_CUSTOMERS_TOPIC = "potential-customers-detected";
+
+    // Writing topic
+    static final String AVERAGE_CUSTOMERS_TOPIC = "potential-customers-average";
+
+    @Produces
+    private KafkaStreams streams;
+
+    void onStart(@Observes StartupEvent startupEvent) {
+        StreamsBuilder builder = new StreamsBuilder();
+
+        ObjectMapperSerde<PotentialCustomersWereDetected> customersEventSerde
+                = new ObjectMapperSerde<>(PotentialCustomersWereDetected.class);
+
+        ObjectMapperSerde<PotentialCustomersAverageWasCalculated> customersAverageSerde
+                = new ObjectMapperSerde<>(PotentialCustomersAverageWasCalculated.class);
+
+        // TODO: Build the stream topology
+
+        streams = new KafkaStreams(
+                builder.build(),
+                generateStreamConfig()
+        );
+
+        streams.start();
+    }
+
+    void onStop(@Observes ShutdownEvent shutdownEvent) {
+        streams.close();
+    }
+}
