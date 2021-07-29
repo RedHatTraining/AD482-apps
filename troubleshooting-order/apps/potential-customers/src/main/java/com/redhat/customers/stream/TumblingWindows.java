@@ -18,8 +18,8 @@ import javax.enterprise.inject.Produces;
 import java.time.Duration;
 
 @ApplicationScoped
-public class DiscardLateEventsWithTumblingWindows extends StreamProcessor {
-    private static final Logger LOGGER = Logger.getLogger(DiscardLateEventsWithTumblingWindows.class);
+public class TumblingWindows extends StreamProcessor {
+    private static final Logger LOGGER = Logger.getLogger(TumblingWindows.class);
 
     // Reading topic
     static final String POTENTIAL_CUSTOMERS_TOPIC = "potential-customers-detected";
@@ -35,16 +35,6 @@ public class DiscardLateEventsWithTumblingWindows extends StreamProcessor {
                 = new ObjectMapperSerde<>(PotentialCustomersWereDetected.class);
 
         // TODO: Build the stream topology
-        builder.stream(
-                POTENTIAL_CUSTOMERS_TOPIC,
-                Consumed.with(Serdes.String(), customersEventSerde)
-        ).groupByKey()
-        .windowedBy(
-                TimeWindows.of(Duration.ofSeconds(WINDOW_SIZE))
-                        .grace(Duration.ofSeconds(0))
-        ).count()
-        .toStream()
-        .print(Printed.toSysOut());
 
         streams = new KafkaStreams(
                 builder.build(),
