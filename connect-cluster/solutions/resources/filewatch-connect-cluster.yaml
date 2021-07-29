@@ -1,0 +1,30 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  annotations:
+    strimzi.io/use-connector-resources: 'true'
+  name: filewatch-connect-cluster
+spec:
+  bootstrapServers: 'my-cluster-kafka-bootstrap:9092'
+  build:
+    output:
+      image: 'quay.io/YOUR_QUAY_USERNAME/filewatch-connect-cluster:latest'
+      pushSecret: filewatch-connect-cluster-push-secret
+      type: docker
+    plugins:
+      - artifacts:
+          - type: tgz
+            url: >-
+              https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-file-watch-kafka-connector/0.10.1/camel-file-watch-kafka-connector-0.10.1-package.tar.gz
+        name: filewatch-source-connector
+  config:
+    config.storage.topic: filewatch-connect-cluster-configs
+    offset.storage.topic: filewatch-connect-cluster-offsets
+    status.storage.topic: filewatch-connect-cluster-status
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.storage.StringConverter
+    config.storage.replication.factor: 1
+    offset.storage.replication.factor: 1
+    status.storage.replication.factor: 1
+  replicas: 1
+  version: 2.7.0

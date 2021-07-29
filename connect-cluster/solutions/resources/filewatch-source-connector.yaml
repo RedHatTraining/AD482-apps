@@ -1,0 +1,11 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: filewatch-source-connector
+  labels:
+    strimzi.io/cluster: filewatch-connect-cluster
+spec:
+  class: org.apache.camel.kafkaconnector.filewatch.CamelFilewatchSourceConnector
+  config:
+    camel.source.path.path: /tmp
+  tasksMax: 1
