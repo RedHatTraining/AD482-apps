@@ -48,16 +48,8 @@ class MovementTrackerTopologyTest {
         testDriver.close();
     }
 
-    @Test
-    public void testTopologySendsVehiclesToStore() throws JsonProcessingException {
-        // TODO: test VehicleRegistered events create vehicles in the store
-    }
+    // TODO: test VehicleRegistered events create vehicles in the store
 
-
-    @Test
-    public void testVehicleMovementsCountEqualsEventsCount() throws JsonProcessingException {
-        // TODO: test VehicleMetrics counts VehicleMoved events for each vehicle
-    }
-
+    // TODO: test VehicleMetrics counts VehicleMoved events for each vehicle
 
 }

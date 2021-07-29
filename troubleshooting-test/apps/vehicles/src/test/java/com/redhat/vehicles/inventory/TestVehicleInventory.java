@@ -23,14 +23,8 @@ public class TestVehicleInventory {
         vehicleManager = new VehicleInventory();
     }
 
-    @Test
-    public void testRegisterThrowsExceptionIfTypeIsEmpty() {
-        // TODO: implement exception test case
-    }
+    // TODO: implement exception test case
 
-    @Test
-    public void testRegisterReturnsVehicleRegistered() throws InvalidVehicleException {
-        // TODO: implement VehicleRegistered test case
-    }
+    // TODO: implement VehicleRegistered test case
 
 }
