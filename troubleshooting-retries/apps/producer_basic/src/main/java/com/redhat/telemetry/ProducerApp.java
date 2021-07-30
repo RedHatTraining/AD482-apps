@@ -43,15 +43,14 @@ public class ProducerApp {
 
         // props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 0);
 
-        int ms = 150;
-
         props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, 30000);
-        props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 1000);
-        // max.in.flight.requests.per.connection
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 0);
-        props.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
-        props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, ms);
-        props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 0);
+        // props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 1000);
+        // // max.in.flight.requests.per.connection
+        // props.put(ProducerConfig.LINGER_MS_CONFIG, 0);
+        // // props.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
+        props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 110);
+        // props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 0);
+        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
 
         return props;
     }
@@ -63,7 +62,7 @@ public class ProducerApp {
                 configureProperties()
         );
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             ProducerRecord<Void, Integer> record = new ProducerRecord<>(
                     "retries-a",
                     (int)(System.currentTimeMillis() / 1000)

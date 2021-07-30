@@ -52,13 +52,14 @@ if __name__ == "__main__":
         print(f"\tMeasurement: {message.value}")
         print("-------------------------------------------------")
 
-        if True or len(measures) % 10 == 0:
-            print(len(measures), "received")
-
         if message.value in measures:
             print("DUPLICATED!!!!!!!!!")
 
         measures.append(message.value)
+
+        print(len(measures), "received")
+
+
 
 
 
