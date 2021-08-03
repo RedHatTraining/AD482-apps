@@ -4,7 +4,6 @@ Run this script in the virtual environment where
 rht-labs-ad482 is installed
 """
 
-from time import sleep
 import argparse
 from kafka import KafkaConsumer
 
@@ -52,7 +51,3 @@ if __name__ == "__main__":
 
         values.append(message.value)
         print("Messages received:", len(values))
-
-
-
-
