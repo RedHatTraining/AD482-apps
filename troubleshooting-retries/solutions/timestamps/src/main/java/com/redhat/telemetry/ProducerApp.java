@@ -1,8 +1,13 @@
 package com.redhat.telemetry;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.Callback;
@@ -12,17 +17,22 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.config.SslConfigs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProducerApp {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProducerApp.class);
+
     public static Properties configureProperties() {
+
+        ClassroomConfig classroomConfig = getClassroomConfig();
         Properties props = new Properties();
 
-        // TODO: configure the Kafka bootstrap server
         props.put(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-            "my-cluster-kafka-bootstrap-your-user-kafka-cluster.apps.cluster.example.com:443"
+            classroomConfig.getBoostrapServer() + ":" + classroomConfig.getBootstrapPort()
         );
-
         props.put(
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
             "org.apache.kafka.common.serialization.StringSerializer"
@@ -31,17 +41,12 @@ public class ProducerApp {
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
             "org.apache.kafka.common.serialization.LongSerializer"
         );
-
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
-
-        // TODO: configure the truststore path
         props.put(
             SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG,
-            "/path/to/AD482/truststore.jks"
+            classroomConfig.getWorkspacePath() + "/truststore.jks"
         );
-
         props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, "password");
-
         props.put(ProducerConfig.ACKS_CONFIG, "all");
 
         // TODO: configure timeouts
@@ -88,6 +93,19 @@ public class ProducerApp {
         System.out.println("Successfully sent messages: " + sentValues.size());
 
         producer.close();
+    }
+
+
+    private static ClassroomConfig getClassroomConfig() {
+        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            return objectMapper.readValue(
+                    new File(System.getProperty("user.home") + "/.grading/ad482-workspace.json"),
+                    ClassroomConfig.class);
+        } catch (IOException e) {
+            logger.error("Make sure to run 'lab start eda-setup' in your workspace directory", e);
+            return null;
+        }
     }
 
 }
