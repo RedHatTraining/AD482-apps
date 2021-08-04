@@ -47,7 +47,7 @@ if __name__ == "__main__":
         print("\nNEW VALUE:", message.value)
 
         if message.value in values:
-            print("DUPLICATED!")
+            print("DUPLICATE!")
 
         values.append(message.value)
         print("Messages received:", len(values))
