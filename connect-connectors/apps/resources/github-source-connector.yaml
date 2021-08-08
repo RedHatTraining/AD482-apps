@@ -1,0 +1,18 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+  name: github-source-connector
+spec:
+  class: org.apache.camel.kafkaconnector.github.CamelGithubSourceConnector
+  config:
+    camel.source.endpoint.oauthToken: _YOUR_GITHUB_TOKEN_
+    camel.source.endpoint.repoName: ad482-connectors
+    camel.source.endpoint.repoOwner: _YOUR_GITHUB_USERNAME_
+    camel.source.path.branchName: main
+    camel.source.path.type: event
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    topics: github-events
+  tasksMax: 1
