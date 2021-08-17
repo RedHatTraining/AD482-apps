@@ -1,0 +1,22 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+  name: jdbc-source-connector
+spec:
+  class: io.confluent.connect.jdbc.JdbcSourceConnector
+  config:
+    connection.url: jdbc:postgresql://postgresql:5432/accountantsdb?user=postgres&password=postgres
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable: false
+    value.converter.schemas.enable: false
+    topic.prefix: postgre-
+    table.whitelist: accountants
+    mode: incrementing
+    incrementing.column.name: id
+    transforms: MaskField
+    transforms.MaskField.type: org.apache.kafka.connect.transforms.MaskField$Value
+    transforms.MaskField.fields: ssn
+  tasksMax: 1
