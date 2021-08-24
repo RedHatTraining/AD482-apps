@@ -71,14 +71,13 @@ public class MovementProcessor {
                         .exceptionally(error -> {
                             error.printStackTrace();
                             // TODO: abort transaction
-                            producer.abortTransaction();
                             System.exit(-1);
                             return null;
                         })
                 );
             }
 
-            waitForCompletion(futures);
+            // TODO: wait for async calculations to complete
 
             // TODO: send offsets and commit transaction
         }
