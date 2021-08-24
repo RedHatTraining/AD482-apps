@@ -25,11 +25,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     events = [
-        { "distance": 4, "time": 2 },
-        { "distance": 45, "time": 20 },
+        { "distance": 10, "time": 5 },
+        { "distance": 20, "time": 20 },
         { "distance": 0, "time": 0 },
-        { "distance": 39, "time": 10 },
-        { "distance": 23, "time": 12 },
+        { "distance": 40, "time": 10 },
+        { "distance": 50, "time": 5 },
     ]
 
     kafka.produce_many(

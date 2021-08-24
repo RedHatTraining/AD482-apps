@@ -1,0 +1,45 @@
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ad482-amq-streams-18-topic
+  annotations:
+    description: "AD482 AMQ Streams 1.8 Kafka Topic Template"
+objects:
+- apiVersion: kafka.strimzi.io/v1beta2
+  kind: KafkaTopic
+  metadata:
+    name: "${TOPIC_NAME}"
+    labels:
+      strimzi.io/cluster: "${CLUSTER_NAME}"
+  spec:
+    partitions: "${{PARTITIONS}}"
+    replicas: "${{REPLICAS}}"
+    config:
+      retention.ms: "${{RETENTION_MILLIS}}"
+      segment.bytes: "${{SEGMENT_BYTES}}"
+parameters:
+- name: TOPIC_NAME
+  displayName: Topic name
+  description: The name assigned to the topic
+  required: true
+- name: CLUSTER_NAME
+  displayName: Cluster Name
+  description: The name of the Kafka cluster
+  value: my-cluster
+- name: PARTITIONS
+  displayName: Partitions
+  description: Number of partitions for the topic
+  value: "1"
+- name: REPLICAS
+  displayName: Replicas
+  description: Replication factor for the topic
+  value: "1"
+- name: RETENTION_MILLIS
+  displayName: Retention
+  description: Retention in milliseconds
+  value: "604800000"
+- name: SEGMENT_BYTES
+  displayName: Segment Bytes
+  description: Segment size in bytes for the topic log
+  value: "1073741824"
