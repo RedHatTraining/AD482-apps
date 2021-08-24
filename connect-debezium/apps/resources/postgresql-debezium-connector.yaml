@@ -13,6 +13,7 @@ spec:
     database.user: postgres
     database.password: postgres
     database.dbname: accountantsdb
+    database.server.name: accountantsdb1
     schema.include.list : public
     table.include.list: public.accountants_outbox
     tombstones.on.delete: false
