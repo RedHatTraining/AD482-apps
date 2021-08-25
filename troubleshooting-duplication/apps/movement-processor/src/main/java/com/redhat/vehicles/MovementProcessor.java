@@ -126,7 +126,9 @@ public class MovementProcessor {
             ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
             classroomConfig.getBoostrapServer() + ":" + classroomConfig.getBootstrapPort()
         );
+
         // TODO: change consumer group
+        
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "MovementReported-consumer-group");
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
         props.put(
