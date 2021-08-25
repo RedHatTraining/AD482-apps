@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>🐜AccountAnts🐜</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.8/wing.min.css"/>
+    <style>
+        input[type=number] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            -webkit-transition: .5s;
+            transition: .5s;
+            outline: 0;
+            font-family: 'Open Sans', serif;
+        }
+        .btn.light {
+            background: #fff;
+            color: #333030;
+            border: 1px solid #333030;
+        }
+    </style>
+    <!-- Load AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript">
+      var app = angular.module("accountantManagement", []);
+
+      //Controller Part
+      app.controller("accountantManagementController", function ($scope, $http) {
+
+        //Initialize page with default data which is blank in this example
+        $scope.accountants = [];
+
+        $scope.form = {
+          id: -1,
+          status: ""
+        };
+
+        //Now load the data from server
+        _refreshPageData();
+
+        //HTTP POST/PUT methods for add/edit accountants
+        $scope.update = function () {
+          var method = "";
+          var url = "";
+          var data = {};
+          if ($scope.form.id == -1) {
+            //Id is absent so add accountants - POST operation
+            method = "POST";
+            url = '/accountants';
+          } else {
+              //If Id is present, it's edit operation - PUT operation
+              method = "PUT";
+              url = '/accountants/' + $scope.form.id;
+              data.status = $scope.form.status;
+          }
+
+          $http({
+            method: method,
+            url: url,
+            data: angular.toJson(data),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(_success, _error);
+        };
+
+        $scope.edit = function (accountant) {
+          $scope.form.id = accountant.id;
+          $scope.form.status = accountant.status;
+        };
+
+          /* Private Methods */
+        //HTTP GET- get all accountants collection
+        function _refreshPageData() {
+          $http({
+            method: 'GET',
+            url: '/accountants'
+          }).then(function successCallback(response) {
+            $scope.accountants = response.data;
+          }, function errorCallback(response) {
+            console.log(response.statusText);
+          });
+        }
+
+        function _success(response) {
+          _refreshPageData();
+          _clearForm()
+        }
+
+        function _error(response) {
+          alert(response.data.message || response.statusText);
+        }
+
+        //Clear the form
+        function _clearForm() {
+          $scope.form.status = "";
+          $scope.form.id = -1;
+        }
+      });
+    </script>
+</head>
+<body ng-app="accountantManagement" ng-controller="accountantManagementController">
+
+<div class="container">
+    <h1>🐜AccountAnts🐜</h1>
+    <h3>Create/Update an Accountant</h3>
+    <form ng-submit="update()">
+        <div class="row" ng-hide="form.id == -1">
+            <div class="col-6">
+                <label for="statusSingleSelect"> Accountant Status: </label><br>
+                <select id="statusSingleSelect" ng-model="form.status">
+                    <option value="JOINED">JOINED</option>
+                    <option value="PROMOTED">PROMOTED</option>
+                    <option value="QUIT">QUIT</option>
+                </select>
+            </div>
+        </div>
+        <input ng-model="form.input"  type="submit" value="{{ form.id == -1 ? 'Create' : 'Update' }}"/>
+    </form>
+
+    <h3>Accountant List</h3>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-1">ID</div>
+        <div class="col-1">Name</div>
+        <div class="col-2">SSN</div>
+        <div class="col-2">Status</div>
+        <div class="col-2"></div>
+    </div>
+    <div class="row" ng-repeat="accountant in accountants">
+        <div class="col-1">🐜</div>
+        <div class="col-1">{{ accountant.id }}</div>
+        <div class="col-1">{{ accountant.username }}</div>
+        <div class="col-2">{{ accountant.ssn }}</div>
+        <div class="col-2">{{ accountant.status }}</div>
+        <div class="col-2"><a ng-click="edit( accountant )" class="btn light">Edit Status</a></div>
+    </div>
+</div>
+
+</body>
+</html>
