@@ -11,14 +11,11 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.*;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Produces;
 
 @ApplicationScoped
 public class AmountWasWithdrawnPipeline extends StreamProcessor {
@@ -32,8 +29,11 @@ public class AmountWasWithdrawnPipeline extends StreamProcessor {
     static final String MODERATE_RISK_WITHDRAWN_TOPIC = "moderate-risk-withdrawn-alert";
     static final String HIGH_RISK_WITHDRAWN_TOPIC = "high-risk-withdrawn-alert";
 
-    @Produces
     private KafkaStreams streams;
+
+    private ObjectMapperSerde<LowRiskWithdrawnWasDetected> lowRiskEventSerde;
+    private ObjectMapperSerde<ModerateRiskWithdrawnWasDetected> moderateRiskEventSerde;
+    private ObjectMapperSerde<HighRiskWithdrawnWasDetected> highRiskEventSerde;
 
     void onStart(@Observes StartupEvent startupEvent) {
         StreamsBuilder builder = new StreamsBuilder();
@@ -41,29 +41,55 @@ public class AmountWasWithdrawnPipeline extends StreamProcessor {
         ObjectMapperSerde<AmountWasWithdrawn> withdrawalEventSerde
                 = new ObjectMapperSerde<>(AmountWasWithdrawn.class);
 
-        ObjectMapperSerde<LowRiskWithdrawnWasDetected> lowRiskEventSerde
-                = new ObjectMapperSerde<>(LowRiskWithdrawnWasDetected.class);
-
-        ObjectMapperSerde<ModerateRiskWithdrawnWasDetected> moderateRiskEventSerde
-                = new ObjectMapperSerde<>(ModerateRiskWithdrawnWasDetected.class);
-
-        ObjectMapperSerde<HighRiskWithdrawnWasDetected> highRiskEventSerde
-                = new ObjectMapperSerde<>(HighRiskWithdrawnWasDetected.class);
+        lowRiskEventSerde = new ObjectMapperSerde<>(LowRiskWithdrawnWasDetected.class);
+        moderateRiskEventSerde = new ObjectMapperSerde<>(ModerateRiskWithdrawnWasDetected.class);
+        highRiskEventSerde = new ObjectMapperSerde<>(HighRiskWithdrawnWasDetected.class);
 
         // TODO: Add inverse filter
 
         // TODO: Split the stream
 
-        // TODO: Map the low risk branch to a new Event and send to a topic
-
-        // TODO: Map the moderate risk branch to a new Event and send to a topic
-
-        // TODO: Map the high risk branch to a new Event and send to a topic
-
         // TODO: Create a Kafka streams and start it
+    }
+
+    private void processLowAmountEvents(KStream<Long, AmountWasWithdrawn> stream) {
+        // TODO: process the low amount branch
+    }
+
+    private void processModerateAmountEvents(KStream<Long, AmountWasWithdrawn> stream) {
+        // TODO: process the moderate amount branch
+    }
+
+    private void processHighAmountEvents(KStream<Long, AmountWasWithdrawn> stream) {
+        // TODO: process the high amount branch
     }
 
     void onStop(@Observes ShutdownEvent shutdownEvent) {
         // TODO: Close the stream on shutdown
+    }
+
+    // Helper methods
+    private void logLowRiskWithdrawn(Long bankAccountId, Long amount) {
+        LOGGER.infov(
+                "Low Risk Withdrawn - Account ID: {0} Amount: {1}",
+                bankAccountId,
+                amount
+        );
+    }
+
+    private void logModerateRiskWithdrawn(Long bankAccountId, Long amount) {
+        LOGGER.infov(
+                "Moderate Risk Withdrawn - Account ID: {0} Amount: {1}",
+                bankAccountId,
+                amount
+        );
+    }
+
+    private void logHighRiskWithdrawn(Long bankAccountId, Long amount) {
+        LOGGER.infov(
+                "High Risk Withdrawn - Account ID: {0} Amount: {1}",
+                bankAccountId,
+                amount
+        );
     }
 }
