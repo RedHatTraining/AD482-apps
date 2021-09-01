@@ -15,8 +15,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 
 public class ConsumerApp
 {
-    public static void main( String[] args )
-    {
+    public static void main(String[] args) {
         Consumer<Void,Integer> consumer = new KafkaConsumer<>(configureProperties());
         consumer.subscribe(Collections.singletonList("humidity-conditions"));
 
