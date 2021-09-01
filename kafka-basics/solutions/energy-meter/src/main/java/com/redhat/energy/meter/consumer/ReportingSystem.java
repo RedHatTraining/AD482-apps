@@ -99,10 +99,8 @@ public class ReportingSystem extends Config {
                 processedRecords++;
 
                 if (processedRecords % 5 == 0) {
-
                     printAggregation(aggregatedEnergy);
                     saveAggregationToFile(aggregatedEnergy);
-
                     aggregatedEnergy = 0;
                 }
             }
