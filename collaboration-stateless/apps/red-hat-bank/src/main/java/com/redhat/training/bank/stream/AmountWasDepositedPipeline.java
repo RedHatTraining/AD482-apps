@@ -45,4 +45,13 @@ public class AmountWasDepositedPipeline extends StreamProcessor {
     void onStop(@Observes ShutdownEvent shutdownEvent) {
         // TODO: Close the stream on shutdown
     }
+
+    // Helper methods
+    private void logHighValueDepositAlert(Long bankAccountId, Long amount) {
+        LOGGER.infov(
+                "HighValueDepositWasDetected - Account ID: {0} Amount: {1}",
+                bankAccountId,
+                amount
+        );
+    }
 }
