@@ -15,7 +15,6 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Produces;
 
 @ApplicationScoped
 public class AmountWasDepositedPipeline extends StreamProcessor {
@@ -27,7 +26,6 @@ public class AmountWasDepositedPipeline extends StreamProcessor {
     // Writing topic
     static final String HIGH_VALUE_DEPOSIT_TOPIC = "high-value-deposit-alert";
 
-    @Produces
     private KafkaStreams streams;
 
     void onStart(@Observes StartupEvent startupEvent) {
@@ -41,28 +39,26 @@ public class AmountWasDepositedPipeline extends StreamProcessor {
 
         // TODO: Build the stream topology
         builder.stream(
-                AMOUNT_WAS_DEPOSITED_TOPIC,
-                Consumed.with(Serdes.Long(), depositEventSerde)
+            AMOUNT_WAS_DEPOSITED_TOPIC,
+            Consumed.with(Serdes.Long(), depositEventSerde)
         ).filter(
-                (key, deposit) -> deposit.amount > 1000
+            (key, deposit) -> deposit.amount > 1000
         ).map((key, deposit) -> {
-            LOGGER.info(
-                    "HighValueDepositWasDetected - Account ID:" + deposit.bankAccountId
-                    + " Amount:" + deposit.amount
-            );
+            logHighValueDepositAlert(deposit.bankAccountId, deposit.amount);
+
             return new KeyValue<>(
-                    deposit.bankAccountId,
-                    new HighValueDepositWasDetected(deposit.bankAccountId, deposit.amount)
+                deposit.bankAccountId,
+                new HighValueDepositWasDetected(deposit.bankAccountId, deposit.amount)
             );
         }).to(
-                HIGH_VALUE_DEPOSIT_TOPIC,
-                Produced.with(Serdes.Long(), highValueEventSerde)
+            HIGH_VALUE_DEPOSIT_TOPIC,
+            Produced.with(Serdes.Long(), highValueEventSerde)
         );
 
         // TODO: Create a Kafka streams and start it
         streams = new KafkaStreams(
-                builder.build(),
-                generateStreamConfig()
+            builder.build(),
+            generateStreamConfig()
         );
 
         streams.start();
@@ -71,5 +67,14 @@ public class AmountWasDepositedPipeline extends StreamProcessor {
     void onStop(@Observes ShutdownEvent shutdownEvent) {
         // TODO: Close the stream on shutdown
         streams.close();
+    }
+
+    // Helper methods
+    private void logHighValueDepositAlert(Long bankAccountId, Long amount) {
+        LOGGER.infov(
+                "HighValueDepositWasDetected - Account ID: {0} Amount: {1}",
+                bankAccountId,
+                amount
+        );
     }
 }

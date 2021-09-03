@@ -32,16 +32,16 @@ public class BankAccountWasCreatedPipeline extends  StreamProcessor {
 
         // TODO: Update the account type on each event
         builder.stream(
-                BANK_ACCOUNT_WAS_CREATED_TOPIC,
-                Consumed.with(Serdes.Long(), eventSerde)
+            BANK_ACCOUNT_WAS_CREATED_TOPIC,
+            Consumed.with(Serdes.Long(), eventSerde)
         ).foreach((key, creation) -> {
             updateAccountTypeFromEvent(creation);
         });
 
         // TODO: Create a Kafka streams and start it
         streams = new KafkaStreams(
-                builder.build(),
-                generateStreamConfig()
+            builder.build(),
+            generateStreamConfig()
         );
 
         streams.start();
@@ -59,12 +59,13 @@ public class BankAccountWasCreatedPipeline extends  StreamProcessor {
 
         if (entity != null) {
             entity.profile = event.balance < 100000 ? "regular" : "premium";
-            LOGGER.info(
-                    "Updated Bank Account - ID: "
-                    + event.id + " - Type: " + entity.profile
+            LOGGER.infov(
+                    "Updated Bank Account - ID: {0} - Type: {1}",
+                    event.id,
+                    entity.profile
             );
         } else {
-            LOGGER.info("Bank Account with id " + event.id + " not found!");
+            LOGGER.infov("Bank Account with id {0} not found!", event.id);
         }
     }
 }

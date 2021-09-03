@@ -15,7 +15,6 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Produces;
 
 @ApplicationScoped
 public class AmountWasDepositedPipeline extends StreamProcessor {
@@ -27,7 +26,6 @@ public class AmountWasDepositedPipeline extends StreamProcessor {
     // Writing topic
     static final String HIGH_VALUE_DEPOSIT_TOPIC = "high-value-deposit-alert";
 
-    @Produces
     private KafkaStreams streams;
 
     void onStart(@Observes StartupEvent startupEvent) {
@@ -46,5 +44,14 @@ public class AmountWasDepositedPipeline extends StreamProcessor {
 
     void onStop(@Observes ShutdownEvent shutdownEvent) {
         // TODO: Close the stream on shutdown
+    }
+
+    // Helper methods
+    private void logHighValueDepositAlert(Long bankAccountId, Long amount) {
+        LOGGER.infov(
+                "HighValueDepositWasDetected - Account ID: {0} Amount: {1}",
+                bankAccountId,
+                amount
+        );
     }
 }
