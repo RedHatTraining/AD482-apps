@@ -17,7 +17,7 @@ public class ProducerApp {
 
     private final Random random = new Random();
 
-    // @todo: Implement the Kafka producer
+    // @TODO: Implement the Kafka producer
     @Outgoing("device-temperatures")
     public Multi<Record<String, Integer>> generate() {
         return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
