@@ -14,17 +14,17 @@ public class ProducerApp {
     public static Properties configureProperties() {
         Properties props = new Properties();
 
-        // @TODO: configure the bootstrap server
+        // TODO: configure the bootstrap server
 
-        // @TODO: configure the key and value serializers
+        // TODO: configure the key and value serializers
 
-        // @TODO: configure the SSL connection
+        // TODO: configure the SSL connection
 
         return props;
     }
 
     public static void main(String[] args) {
-        // @TODO: Implement the Kafka producer
+        // TODO: Implement the Kafka producer
     }
 
     private static void printRecord(ProducerRecord record) {

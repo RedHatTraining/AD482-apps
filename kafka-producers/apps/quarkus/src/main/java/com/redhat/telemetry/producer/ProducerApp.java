@@ -17,6 +17,6 @@ public class ProducerApp {
 
     private final Random random = new Random();
 
-    // @TODO: Implement the Kafka producer
+    // TODO: Implement the Kafka producer
 
 }
