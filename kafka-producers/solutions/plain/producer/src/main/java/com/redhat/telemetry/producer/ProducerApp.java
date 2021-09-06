@@ -14,13 +14,13 @@ public class ProducerApp {
     public static Properties configureProperties() {
         Properties props = new Properties();
 
-        // @todo: configure the bootstrap server
+        // TODO: configure the bootstrap server
         props.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 "YOUR_KAFKA_BOOTSTRAP_HOST:YOUR_KAFKA_BOOTSTRAP_PORT"
         );
 
-        // @todo: configure the key and value serializers
+        // TODO: configure the key and value serializers
         props.put(
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.StringSerializer"
@@ -30,7 +30,7 @@ public class ProducerApp {
                 "org.apache.kafka.common.serialization.IntegerSerializer"
         );
 
-        // @todo: configure the SSL connection
+        // TODO: configure the SSL connection
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
         props.put(
                 SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG,
@@ -42,7 +42,7 @@ public class ProducerApp {
     }
 
     public static void main(String[] args) {
-        // @todo: Implement the Kafka producer
+        // TODO: Implement the Kafka producer
         Random random = new Random();
         Producer<Void,Integer> producer = new KafkaProducer<>(
                 configureProperties()
