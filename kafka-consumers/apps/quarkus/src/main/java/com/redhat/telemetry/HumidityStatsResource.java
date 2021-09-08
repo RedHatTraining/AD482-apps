@@ -8,6 +8,6 @@ import javax.ws.rs.Path;
 @Path("/humidity")
 public class HumidityStatsResource {
 
-    // @todo: Implement the endpoint to GET humidity stats
+    // TODO: Implement the endpoint to GET humidity stats
 
 }
