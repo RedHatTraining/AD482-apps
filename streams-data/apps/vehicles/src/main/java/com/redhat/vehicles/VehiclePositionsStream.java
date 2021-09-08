@@ -26,7 +26,7 @@ public class VehiclePositionsStream {
     public Topology buildTopology() {
         StreamsBuilder builder = new StreamsBuilder();
 
-        // TODO: create serde to desearialize VehiclePosition messages
+        // TODO: create serde to deserialize VehiclePosition messages
 
         // TODO: Create the stream from the "vehicle-positions" topic
 
