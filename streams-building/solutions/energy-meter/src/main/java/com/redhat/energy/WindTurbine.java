@@ -2,10 +2,15 @@ package com.redhat.energy;
 
 
 class WindTurbine {
-    double description;
-    double latitude;
-    double longitude;
-    int bladesNumber;
-    double height;
-    double radious;
+    public Integer id;
+    public String description;
+    public Integer powerCapacity;
+    public Integer cutOutWindSpeed;
+
+    public WindTurbine(Integer id, String description, Integer powerCapacity, Integer cutOutWindSpeed) {
+        this.id = id;
+        this.description = description;
+        this.powerCapacity = powerCapacity;
+        this.cutOutWindSpeed = cutOutWindSpeed;
+    }
 }
