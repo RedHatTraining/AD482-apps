@@ -27,6 +27,10 @@ public class EnergyMeterResource {
     @Channel("turbines-generated-mwatts")
     Publisher<PowerMeasurement> generatedPowerValues;
 
+    @Inject
+    @Channel("turbine-stats")
+    Publisher<WindTurbineStats> turbineStats;
+
     @GET
     @Path("/")
     public List<WindTurbine> list() {
@@ -56,4 +60,15 @@ public class EnergyMeterResource {
     public Publisher<PowerMeasurement> stream() {
         return generatedPowerValues;
     }
+
+
+    @GET
+    @Path("/measurements-count")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType(MediaType.APPLICATION_JSON)
+    public Publisher<WindTurbineStats> countStream() {
+        return turbineStats;
+    }
+
+
 }

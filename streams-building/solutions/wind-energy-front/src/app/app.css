@@ -8,8 +8,7 @@ html, body, #root {
 }
 
 .turbineGraphicBlades {
-  animation: spin 10s linear infinite;
-  /* animation: none; */
+  animation: spin 1s linear infinite;
   transform-origin: 140px 157px;
 }
 

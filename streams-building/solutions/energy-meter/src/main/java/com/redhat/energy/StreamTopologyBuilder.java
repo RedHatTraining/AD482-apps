@@ -34,9 +34,10 @@ public class StreamTopologyBuilder {
         // TODO:
         ObjectMapperSerde<WindTurbine> turbineSerde = new ObjectMapperSerde<>(WindTurbine.class);
         ObjectMapperSerde<PowerMeasurement> powerMeasurementSerde = new ObjectMapperSerde<>(PowerMeasurement.class);
+        ObjectMapperSerde<WindTurbineStats> statsSerde = new ObjectMapperSerde<>(WindTurbineStats.class);
 
         // TODO:
-        KTable<Integer, WindTurbine> turbines = builder.table(
+        builder.table(
             "turbines",
             Consumed.with(Serdes.Integer(), turbineSerde),
             Materialized.<Integer, WindTurbine, KeyValueStore<Bytes, byte[]>>as("turbinesStore1")
@@ -60,7 +61,7 @@ public class StreamTopologyBuilder {
 
         // TODO: convert to megawatts
         powerValuesStream.map((turbineId, watts) -> {
-            Double megawatts = (double) watts / 10;
+            Double megawatts = (double) watts / 1000000;
             PowerMeasurement measurement = new PowerMeasurement(turbineId, megawatts);
             System.out.println("capacity " + megawatts);
             return KeyValue.pair(turbineId, measurement);
@@ -69,13 +70,19 @@ public class StreamTopologyBuilder {
             Produced.with(Serdes.Integer(), powerMeasurementSerde)
         );
 
-
-
-        // powerValuesStream
-        //     .groupByKey()
-        //     .count()
-        //     .toStream()
-        //     .to("turbines-reported-values");
+        powerValuesStream
+            .groupByKey()
+            .count()
+            .toStream()
+            .map((turbineId, count) -> {
+                WindTurbineStats stats = new WindTurbineStats(turbineId, count);
+                return KeyValue.pair(turbineId, stats);
+            })
+            .to(
+                "turbine-stats",
+                Produced.with(
+                Serdes.Integer(), statsSerde)
+            );
 
         return builder.build();
     }
