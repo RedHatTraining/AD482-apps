@@ -1,0 +1,25 @@
+html, body, #root {
+  height: 100%;
+}
+
+
+.turbineGraphic {
+  margin: 2em 1em ;
+}
+
+.turbineGraphicBlades {
+  animation: spin 10s linear infinite;
+  /* animation: none; */
+  transform-origin: 140px 157px;
+}
+
+
+@keyframes spin {
+  0% {
+      transform: rotate(0);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
+}

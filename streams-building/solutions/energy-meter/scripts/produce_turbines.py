@@ -101,6 +101,6 @@ if __name__ == "__main__":
         workspace.config,
         key_serializer=serdes.int_serializer,
         value_serializer=serdes.int_serializer,
-        sleep_seconds=0.2,
+        sleep_seconds=2,
         callback=print_power_value
     )

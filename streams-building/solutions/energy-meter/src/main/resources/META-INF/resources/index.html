@@ -197,7 +197,7 @@
         console.log("Streams ready!");
 
             // http://localhost:8080/q/health/live
-        let eventSource = new EventSource("http://localhost:8080/turbines/generated-power"); 
+        let eventSource = new EventSource("http://localhost:8080/turbines/generated-power");
         eventSource.onmessage = function(message) {
             const measurement = JSON.parse(message.data);
 
