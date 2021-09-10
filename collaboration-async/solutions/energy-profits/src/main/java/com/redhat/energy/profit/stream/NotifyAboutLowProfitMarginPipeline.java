@@ -65,7 +65,6 @@ public class NotifyAboutLowProfitMarginPipeline extends StreamProcessor {
     }
 
     void onStop(@Observes ShutdownEvent shutdownEvent) {
-        // TODO: Close the stream on shutdown
         streams.close();
     }
 
