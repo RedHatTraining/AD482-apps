@@ -4,7 +4,8 @@ import { WindTurbineCard } from '../components/WindTurbineCard';
 import { getWindTurbines } from "../services/WindTurbinesService";
 import { WindTurbine } from '../models/WindTurbine';
 import { WindTurbineProduction } from '../models/WindTurbineProduction';
-import { WindTurbineStats } from '@app/models/WindTurbineStats';
+import { WindTurbineStats } from '../models/WindTurbineStats';
+import { waitForLiveness } from '../services/LivenessService';
 
 
 interface ProductionByTurbine {
@@ -23,11 +24,13 @@ export function Dashboard(): JSX.Element {
 
 
     useEffect(() => {
-        getWindTurbines().then((turbines) => {
-            setTurbines(turbines);
-            getPowerServerEvents();
-            getPowerStatsEvents();
-        });
+        waitForLiveness()
+            .then(() => getWindTurbines())
+            .then((turbines) => {
+                setTurbines(turbines);
+                getPowerServerEvents();
+                getPowerStatsEvents();
+            });
     }, []);
 
     function getPowerServerEvents() {
@@ -64,7 +67,7 @@ export function Dashboard(): JSX.Element {
 
     return (
         <PageSection>
-            <Title headingLevel="h1" size="lg">Dashboard Page Title!</Title>
+            <Title headingLevel="h1" size="lg">Wind Turbines Dashboard</Title>
             {turbines.map(turbine =>
                 <WindTurbineCard
                     key={turbine.id}

@@ -96,7 +96,7 @@ if __name__ == "__main__":
     )
 
     kafka.produce_many(
-        "turbine-power-generation",
+        "turbine-generated-watts",
         generate_power(turbines),
         workspace.config,
         key_serializer=serdes.int_serializer,

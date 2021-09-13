@@ -28,7 +28,7 @@ public class EnergyMeterResource {
     KafkaStreams streams;
 
     @Inject
-    @Channel("turbines-generated-mwatts")
+    @Channel("turbine-generated-mwatts")
     Publisher<MWattsMeasurement> generatedPowerValues;
 
     @Inject
