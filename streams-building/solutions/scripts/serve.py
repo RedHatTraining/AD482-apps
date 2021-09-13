@@ -5,7 +5,10 @@ import socketserver
 
 PORT = 8081
 
-directory = Path(__file__).parent.joinpath("dist").resolve()
+directory = (Path(__file__)
+    .parent
+    .joinpath(Path("energy-meter-front", "dist")
+    .resolve()))
 
 os.chdir(directory)
 

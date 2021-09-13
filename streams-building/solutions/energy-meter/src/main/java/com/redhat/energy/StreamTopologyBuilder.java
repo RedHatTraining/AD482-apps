@@ -45,14 +45,6 @@ public class StreamTopologyBuilder {
                 .withValueSerde(turbineSerde)
         );
 
-        // // TODO:
-        // GlobalKTable<String, WindTurbine> turbinesg = builder.globalTable( 
-        //     "turbines",
-        //     Consumed.with(stringSerde, turbineSerde),
-        //     Materialized.as("turbinesStore")
-        // );
- 
-
         // TODO:
         KStream<Integer, Integer> powerValuesStream = builder.stream(
             "turbine-power-generation",
