@@ -10,6 +10,6 @@ public class HumidityConditionsConsumer {
 
     public HumidityStats stats = new HumidityStats();
 
-    // @todo: Implement the consumer method
+    // TODO: Implement the consumer method
 
 }
