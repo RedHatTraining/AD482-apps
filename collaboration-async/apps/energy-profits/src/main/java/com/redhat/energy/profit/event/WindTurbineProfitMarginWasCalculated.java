@@ -21,10 +21,6 @@ public class WindTurbineProfitMarginWasCalculated {
     private double round(double value) {
         double scale = Math.pow(10, 4);
 
-        double result = Math.round(value * scale) / scale;
-
-        System.out.println(result);
-
-        return result;
+        return Math.round(value * scale) / scale;
     }
 }
