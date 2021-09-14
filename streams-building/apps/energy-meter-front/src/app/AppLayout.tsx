@@ -1,16 +1,11 @@
 import * as React from 'react';
-import { NavLink, useLocation, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
-  Nav,
-  NavList,
-  NavItem,
-  NavExpandable,
   Page,
   PageHeader,
-  PageSidebar,
   SkipToContent
 } from '@patternfly/react-core';
-import logo from '@app/bgimages/Patternfly-Logo.svg';
+import logo from '@app/images/training_white.png';
 
 interface IAppLayout {
   children: React.ReactNode;
@@ -20,12 +15,6 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
   const [isNavOpen, setIsNavOpen] = React.useState(true);
   const [isMobileView, setIsMobileView] = React.useState(true);
   const [isNavOpenMobile, setIsNavOpenMobile] = React.useState(false);
-  const onNavToggleMobile = () => {
-    setIsNavOpenMobile(!isNavOpenMobile);
-  };
-  const onNavToggle = () => {
-    setIsNavOpen(!isNavOpen);
-  }
   const onPageResize = (props: { mobileView: boolean; windowSize: number }) => {
     setIsMobileView(props.mobileView);
   };
@@ -36,7 +25,7 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
       history.push('/');
     }
     return (
-      <img src={logo} onClick={handleClick} alt="PatternFly Logo" />
+      <img src={logo} className="logo" onClick={handleClick} alt="PatternFly Logo" />
     );
   }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { PageSection, Title } from '@patternfly/react-core';
-import { WindTurbineCard } from '../components/WindTurbineCard';
+import { PageSection, Title, Grid, GridItem } from '@patternfly/react-core';
+import { WindTurbineCard } from './WindTurbineCard';
 import { getWindTurbines } from "../services/WindTurbinesService";
 import { WindTurbine } from '../models/WindTurbine';
 import { WindTurbineProduction } from '../models/WindTurbineProduction';
@@ -68,14 +68,17 @@ export function Dashboard(): JSX.Element {
     return (
         <PageSection>
             <Title headingLevel="h1" size="lg">Wind Turbines Dashboard</Title>
+            <Grid hasGutter>
             {turbines.map(turbine =>
-                <WindTurbineCard
-                    key={turbine.id}
+                <GridItem key={turbine.id}>
+                    <WindTurbineCard
                     turbine={turbine}
                     production={{ megawatts: getTurbineProduction(turbine.id) }}
                     stats={getTurbineStats(turbine.id)}
-                ></WindTurbineCard>
+                    ></WindTurbineCard>
+                </GridItem>
             )}
+            </Grid>
         </PageSection>
     )
 }

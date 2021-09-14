@@ -49,7 +49,7 @@ const WindTurbineCard = (props: WindTurbineProps): JSX.Element => {
 
 	return (
 		<Card id="card-demo-horizontal-split-example" isFlat>
-			<Grid hasGutter span={3}>
+			<Grid hasGutter sm={4} md={3} xl={2}>
 				<GridItem className="turbineGraphic">
 					<svg width="200px" height="200px" viewBox="0.0 0.0 284.0 360.0" xmlns="http://www.w3.org/2000/svg">
 						<clipPath id="p.0">
@@ -90,9 +90,7 @@ const WindTurbineCard = (props: WindTurbineProps): JSX.Element => {
 							</DescriptionListGroup>
 						</DescriptionList>
 					</CardBody>
-					<CardFooter>
-						<Button variant="tertiary">Call to action</Button>
-					</CardFooter>
+					<CardFooter></CardFooter>
 				</GridItem>
 			</Grid>
 		</Card>
