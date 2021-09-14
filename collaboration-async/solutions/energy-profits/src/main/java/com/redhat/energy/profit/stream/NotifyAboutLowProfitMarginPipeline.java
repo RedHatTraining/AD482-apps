@@ -40,18 +40,20 @@ public class NotifyAboutLowProfitMarginPipeline extends StreamProcessor {
 
         // TODO: Build the stream topology
         builder.stream(
-                WIND_TURBINE_PROFIT_MARGINS_TOPIC,
+            WIND_TURBINE_PROFIT_MARGINS_TOPIC,
             Consumed.with(Serdes.Integer(), profitEventSerde)
         ).filter(
             (key, profit) -> profit.profitMargin < 0.10
-        ).map((key, profit) -> {
+        )
+        .map((key, profit) -> {
             logLowProfitMarginAlert(key, profit.profitMargin);
 
             return new KeyValue<>(
                 key,
                 new LowProfitMarginWasDetected(key, profit.profitMargin)
             );
-        }).to(
+        })
+        .to(
             LOW_PROFIT_MARGIN_TOPIC,
             Produced.with(Serdes.Integer(), alertsEventSerde)
         );
@@ -61,6 +63,8 @@ public class NotifyAboutLowProfitMarginPipeline extends StreamProcessor {
             generateStreamConfig()
         );
 
+        // Starting from a clean state
+        streams.cleanUp();
         streams.start();
     }
 

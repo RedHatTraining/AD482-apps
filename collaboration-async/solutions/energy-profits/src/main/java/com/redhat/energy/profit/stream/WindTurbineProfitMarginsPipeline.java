@@ -126,6 +126,8 @@ public class WindTurbineProfitMarginsPipeline extends StreamProcessor {
             generateStreamConfig()
         );
 
+        // Starting from a clean state
+        streams.cleanUp();
         streams.start();
     }
 

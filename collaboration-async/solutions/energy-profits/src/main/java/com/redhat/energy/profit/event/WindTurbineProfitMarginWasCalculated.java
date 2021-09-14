@@ -13,8 +13,18 @@ public class WindTurbineProfitMarginWasCalculated {
     }
 
     private Double calculateProfitMargin() {
-        profitMargin = (averageExpenses - averageEarnings) / averageExpenses;
+        profitMargin = this.round((averageExpenses - averageEarnings) / averageExpenses);
 
         return profitMargin;
+    }
+
+    private double round(double value) {
+        double scale = Math.pow(10, 4);
+
+        double result = Math.round(value * scale) / scale;
+
+        System.out.println(result);
+
+        return result;
     }
 }
