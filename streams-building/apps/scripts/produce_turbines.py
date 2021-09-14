@@ -4,7 +4,7 @@ rht-labs-ad482 is installed
 """
 
 from pprint import pprint
-from random import random, uniform
+from random import uniform, choice
 from typing import List
 from ad482.common import kafka
 from ad482.common.kafka import serdes
@@ -60,9 +60,9 @@ class WindTurbine:
 
 def generate_power(turbines: List[WindTurbine]):
     while True:
-        for turbine in turbines:
-            turbine.rotate()
-            yield (turbine.id, turbine.power)
+        turbine = choice(turbines)
+        turbine.rotate()
+        yield (turbine.id, turbine.power)
 
 
 def print_turbine(topic, record):
@@ -101,6 +101,6 @@ if __name__ == "__main__":
         workspace.config,
         key_serializer=serdes.int_serializer,
         value_serializer=serdes.int_serializer,
-        sleep_seconds=0.5,
+        sleep_seconds=1,
         callback=print_power_value
     )
