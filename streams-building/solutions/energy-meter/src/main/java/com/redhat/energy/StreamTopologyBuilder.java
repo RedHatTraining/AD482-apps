@@ -52,6 +52,7 @@ public class StreamTopologyBuilder {
         wattsValuesStream.map((turbineId, watts) -> {
             Double megawatts = (double) watts / 1000000;
             MWattsMeasurement measurement = new MWattsMeasurement(turbineId, megawatts);
+            System.out.println("MAP - Turbine: " + turbineId +  " | " + watts + " Watts -> " + megawatts + " MWatts");
             return KeyValue.pair(turbineId, measurement);
         }).to(
             "turbine-generated-mwatts",
@@ -68,6 +69,7 @@ public class StreamTopologyBuilder {
             .toStream()
             .map((turbineId, count) -> {
                 WindTurbineStats stats = new WindTurbineStats(turbineId, count);
+                System.out.println("COUNT - Turbine: " + turbineId + " | Count:" + count);
                 return KeyValue.pair(turbineId, stats);
             })
             .to(
