@@ -1,18 +1,15 @@
-# Patternfly Seed
+# Wind Turbines Dashboard
 
-Patternfly Seed is an open source build scaffolding utility for web apps. The primary purpose of this project is to give developers a jump start when creating new projects that will use patternfly. A secondary purpose of this project is to serve as a reference for how to configure various aspects of an application that uses patternfly, webpack, react, typescript, etc.
+This is a simple React frontend app to show wind turbines data.
 
-Out of the box you'll get an app layout with chrome (header/sidebar), routing, build pipeline, test suite, and some code quality tools. Basically, all the essentials.
+Because students might not have Node.js installed, we need to provide them with the _built_ webapp.
 
-<img width="1058" alt="Out of box dashboard view of patternfly seed" src="https://user-images.githubusercontent.com/5942899/103803761-03a0a500-501f-11eb-870a-345d7d035e6b.png">
+Run `npm run build` before pushing changes.
+This will generate the `dist` folder.
+This folder is included in the repository.
 
-## Quick-start
+Students can therefore serve the application by just running `python scripts/serve-frontend.py`.
 
-```bash
-git clone https://github.com/patternfly/patternfly-react-seed
-cd patternfly-react-seed
-npm install && npm run start:dev
-```
 ## Development scripts
 ```sh
 # Install development/build dependencies

@@ -1,4 +1,4 @@
-package com.redhat.energy;
+package com.redhat.energy.records;
 
 import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer;
 

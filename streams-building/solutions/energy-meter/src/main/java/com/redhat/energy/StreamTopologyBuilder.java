@@ -1,22 +1,19 @@
 package com.redhat.energy;
 
-import java.io.Console;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
+import com.redhat.energy.records.MWattsMeasurement;
+import com.redhat.energy.records.WindTurbine;
+import com.redhat.energy.records.WindTurbineStats;
+
 import org.apache.kafka.common.utils.Bytes;
-import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.GlobalKTable;
-import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KGroupedStream;
-import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
@@ -26,43 +23,46 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 @ApplicationScoped
 public class StreamTopologyBuilder {
 
-
     @Produces
     public Topology buildTopology() {
         StreamsBuilder builder = new StreamsBuilder();
 
-        // TODO:
+        // TODO: Create wind turbine serde
         ObjectMapperSerde<WindTurbine> turbineSerde = new ObjectMapperSerde<>(WindTurbine.class);
-        ObjectMapperSerde<PowerMeasurement> powerMeasurementSerde = new ObjectMapperSerde<>(PowerMeasurement.class);
-        ObjectMapperSerde<WindTurbineStats> statsSerde = new ObjectMapperSerde<>(WindTurbineStats.class);
 
-        // TODO:
+        // TODO: read the "turbines" topic as a KTable
         builder.table(
             "turbines",
             Consumed.with(Serdes.Integer(), turbineSerde),
-            Materialized.<Integer, WindTurbine, KeyValueStore<Bytes, byte[]>>as("turbinesStore1")
+            Materialized.<Integer, WindTurbine, KeyValueStore<Bytes, byte[]>>as("turbines-store")
                 .withKeySerde(Serdes.Integer())
                 .withValueSerde(turbineSerde)
         );
 
-        // TODO:
-        KStream<Integer, Integer> powerValuesStream = builder.stream(
-            "turbine-power-generation",
+        // TODO: read the "turbine-generated-watts" topic as a KStream
+        KStream<Integer, Integer> wattsValuesStream = builder.stream(
+            "turbine-generated-watts",
             Consumed.with(Serdes.Integer(), Serdes.Integer())
         );
 
-        // TODO: convert to megawatts
-        powerValuesStream.map((turbineId, watts) -> {
+        // TODO: Create MWattsMeasurement serde
+        ObjectMapperSerde<MWattsMeasurement> mwattsMeasurementSerde = new ObjectMapperSerde<>(MWattsMeasurement.class);
+
+        // TODO: map the watts stream into a new mwatts stream
+        wattsValuesStream.map((turbineId, watts) -> {
             Double megawatts = (double) watts / 1000000;
-            PowerMeasurement measurement = new PowerMeasurement(turbineId, megawatts);
-            System.out.println("capacity " + megawatts);
+            MWattsMeasurement measurement = new MWattsMeasurement(turbineId, megawatts);
             return KeyValue.pair(turbineId, measurement);
         }).to(
-            "turbines-generated-mwatts",
-            Produced.with(Serdes.Integer(), powerMeasurementSerde)
+            "turbine-generated-mwatts",
+            Produced.with(Serdes.Integer(), mwattsMeasurementSerde)
         );
 
-        powerValuesStream
+        // TODO: Create WindTurbineStats serde
+        ObjectMapperSerde<WindTurbineStats> statsSerde = new ObjectMapperSerde<>(WindTurbineStats.class);
+
+        // TODO: count measurements by turbine and write results to a new stream
+        wattsValuesStream
             .groupByKey()
             .count()
             .toStream()
@@ -72,8 +72,7 @@ public class StreamTopologyBuilder {
             })
             .to(
                 "turbine-stats",
-                Produced.with(
-                Serdes.Integer(), statsSerde)
+                Produced.with(Serdes.Integer(), statsSerde)
             );
 
         return builder.build();

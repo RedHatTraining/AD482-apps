@@ -1,7 +1,7 @@
-package com.redhat.energy;
+package com.redhat.energy.records;
+
 
 public class WindTurbineStats {
-
     public Integer turbineId;
     public Long count;
 

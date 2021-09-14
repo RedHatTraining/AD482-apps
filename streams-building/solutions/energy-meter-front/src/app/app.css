@@ -2,9 +2,13 @@ html, body, #root {
   height: 100%;
 }
 
+.logo {
+  width: 8em;
+}
 
 .turbineGraphic {
   margin: 2em 1em ;
+  text-align: center;
 }
 
 .turbineGraphicBlades {

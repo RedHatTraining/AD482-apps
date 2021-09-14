@@ -1,4 +1,8 @@
-package com.redhat.energy;
+package com.redhat.energy.api;
+
+import com.redhat.energy.records.MWattsMeasurement;
+import com.redhat.energy.records.WindTurbine;
+import com.redhat.energy.records.WindTurbineStats;
 
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StoreQueryParameters;
@@ -24,8 +28,8 @@ public class EnergyMeterResource {
     KafkaStreams streams;
 
     @Inject
-    @Channel("turbines-generated-mwatts")
-    Publisher<PowerMeasurement> generatedPowerValues;
+    @Channel("turbine-generated-mwatts")
+    Publisher<MWattsMeasurement> generatedPowerValues;
 
     @Inject
     @Channel("turbine-stats")
@@ -39,7 +43,7 @@ public class EnergyMeterResource {
         ReadOnlyKeyValueStore<Integer, WindTurbine> store = streams
             .store(
                 StoreQueryParameters.fromNameAndType(
-                    "turbinesStore1",
+                    "turbines-store",
                     QueryableStoreTypes.<Integer, WindTurbine>keyValueStore()
                 )
             );
@@ -57,7 +61,7 @@ public class EnergyMeterResource {
     @Path("/generated-power")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
-    public Publisher<PowerMeasurement> stream() {
+    public Publisher<MWattsMeasurement> stream() {
         return generatedPowerValues;
     }
 

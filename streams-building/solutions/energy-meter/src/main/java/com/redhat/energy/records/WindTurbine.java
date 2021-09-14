@@ -1,7 +1,6 @@
-package com.redhat.energy;
+package com.redhat.energy.records;
 
-
-class WindTurbine {
+public class WindTurbine {
     public Integer id;
     public String description;
     public Integer powerCapacity;
