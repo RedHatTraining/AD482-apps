@@ -12,20 +12,13 @@ interface IAppLayout {
 }
 
 const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
-  const [isNavOpen, setIsNavOpen] = React.useState(true);
-  const [isMobileView, setIsMobileView] = React.useState(true);
-  const [isNavOpenMobile, setIsNavOpenMobile] = React.useState(false);
-  const onPageResize = (props: { mobileView: boolean; windowSize: number }) => {
-    setIsMobileView(props.mobileView);
-  };
-
   function LogoImg() {
     const history = useHistory();
     function handleClick() {
       history.push('/');
     }
     return (
-      <img src={logo} className="logo" onClick={handleClick} alt="PatternFly Logo" />
+      <img src={logo} className="logo" onClick={handleClick} alt="RH Training Logo" />
     );
   }
 
@@ -50,7 +43,6 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
     <Page
       mainContainerId={pageId}
       header={Header}
-      onPageResize={onPageResize}
       skipToContent={PageSkipToContent}>
       {children}
     </Page>
