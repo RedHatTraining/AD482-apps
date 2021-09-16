@@ -62,7 +62,7 @@ public class WindTurbineProfitMarginsPipeline extends StreamProcessor {
 
         // TODO: Create a KStream for the expense events
 
-        // TODO: Calculate the average expenses
+        // TODO: Aggregate the expenses
 
         // TODO: Calculate the average expenses
 

@@ -92,7 +92,7 @@ public class WindTurbineProfitMarginsPipeline extends StreamProcessor {
             Consumed.with(Serdes.Integer(), expenseEventSerde)
         );
 
-        // TODO: Calculate the average expenses
+        // TODO: Aggregate the expenses
         KTable<Integer, AverageData> aggregatedExpenses = expensesStream
         .groupByKey()
         .aggregate(
