@@ -12,10 +12,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.jboss.logging.Logger;
 
@@ -57,11 +54,19 @@ public class WindTurbineProfitMarginsPipeline extends StreamProcessor {
                 = new ObjectMapperSerde<>(WindTurbineProfitMarginWasCalculated.class);
 
 
-        // TODO: Build the stream topology for the earnings
+        // TODO: Create a KStream for the earning events
 
-        // TODO: Build the stream topology for the expenses
+        // TODO: Aggregate the earnings
 
-        // TODO: Build the stream topology for the profit margins
+        // TODO: Calculate the average earnings
+
+        // TODO: Create a KStream for the expense events
+
+        // TODO: Calculate the average expenses
+
+        // TODO: Calculate the average expenses
+
+        // TODO: Calculate the profit margins
 
         streams = new KafkaStreams(
             builder.build(),

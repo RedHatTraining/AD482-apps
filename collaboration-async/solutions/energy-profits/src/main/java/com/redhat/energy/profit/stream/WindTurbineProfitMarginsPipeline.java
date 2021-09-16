@@ -12,10 +12,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.jboss.logging.Logger;
 
@@ -57,11 +54,14 @@ public class WindTurbineProfitMarginsPipeline extends StreamProcessor {
                 = new ObjectMapperSerde<>(WindTurbineProfitMarginWasCalculated.class);
 
 
-        // TODO: Build the stream topology for the earnings
-        KTable<Integer, Double> averageEarningsTable = builder.stream(
+        // TODO: Create a KStream for the earning events
+        KStream<Integer, WindTurbineEarningWasAdded> earningsStream = builder.stream(
             WIND_TURBINE_EARNINGS_TOPIC,
             Consumed.with(Serdes.Integer(), earningEventSerde)
-        )
+        );
+
+        // TODO: Aggregate the earnings
+        KTable<Integer, AverageData> aggregatedEarnings = earningsStream
         .groupByKey()
         .aggregate(
             AverageData::new,
@@ -75,8 +75,10 @@ public class WindTurbineProfitMarginsPipeline extends StreamProcessor {
                             as(AGGREGATED_EARNINGS_STORE)
                 .withKeySerde(Serdes.Integer())
                 .withValueSerde(averageDataSerde)
-        )
-        .mapValues(
+        );
+
+        // TODO: Calculate the average earnings
+        KTable<Integer, Double> averageEarningsTable = aggregatedEarnings.mapValues(
             value -> value.sum / value.count,
             Materialized.<Integer, Double, KeyValueStore<Bytes, byte[]>>
                             as(AVERAGE_EARNINGS_STORE)
@@ -84,11 +86,14 @@ public class WindTurbineProfitMarginsPipeline extends StreamProcessor {
                 .withValueSerde(Serdes.Double())
         );
 
-        // TODO: Build the stream topology for the expenses
-        KTable<Integer, Double> averageExpensesTable = builder.stream(
+        // TODO: Create a KStream for the expense events
+        KStream<Integer, WindTurbineExpenseWasAdded> expensesStream = builder.stream(
             WIND_TURBINE_EXPENSES_TOPIC,
             Consumed.with(Serdes.Integer(), expenseEventSerde)
-        )
+        );
+
+        // TODO: Calculate the average expenses
+        KTable<Integer, AverageData> aggregatedExpenses = expensesStream
         .groupByKey()
         .aggregate(
             AverageData::new,
@@ -102,7 +107,10 @@ public class WindTurbineProfitMarginsPipeline extends StreamProcessor {
                             as(AGGREGATED_EXPENSES_STORE)
                 .withKeySerde(Serdes.Integer())
                 .withValueSerde(averageDataSerde)
-        )
+        );
+
+        // TODO: Calculate the average expenses
+        KTable<Integer, Double> averageExpensesTable = aggregatedExpenses
         .mapValues(
             value -> value.sum / value.count,
             Materialized.<Integer, Double, KeyValueStore<Bytes, byte[]>>
@@ -111,7 +119,7 @@ public class WindTurbineProfitMarginsPipeline extends StreamProcessor {
                 .withValueSerde(Serdes.Double())
         );
 
-        // TODO: Build the stream topology for the profit margins
+        // TODO: Calculate the profit margins
         averageEarningsTable.join(
             averageExpensesTable,
             WindTurbineProfitMarginWasCalculated::new
