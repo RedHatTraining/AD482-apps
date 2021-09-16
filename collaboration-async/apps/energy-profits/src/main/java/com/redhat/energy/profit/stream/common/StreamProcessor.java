@@ -36,7 +36,7 @@ public abstract class StreamProcessor {
                 bootstrapServers
         );
 
-        props.put("kafka-streams.commit.interval.ms", 500);
+        props.put("commit.interval.ms", 1000);
 
         return props;
     }
