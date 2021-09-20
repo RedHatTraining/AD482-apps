@@ -8,7 +8,7 @@ spec:
   bootstrapServers: 'my-cluster-kafka-bootstrap:9092'
   build:
     output:
-      image: 'quay.io/YOUR_QUAY_USERNAME/filewatch-connect-cluster:latest'
+      image: 'quay.io/YOUR_QUAY_USERNAME/ad482-filewatch-connect-cluster:latest'
       pushSecret: filewatch-connect-cluster-push-secret
       type: docker
     plugins:
