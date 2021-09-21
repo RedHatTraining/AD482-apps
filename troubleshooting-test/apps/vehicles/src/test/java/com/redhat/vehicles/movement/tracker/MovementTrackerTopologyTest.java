@@ -43,9 +43,11 @@ class MovementTrackerTopologyTest {
     public void setup() {
         // TODO: pass the VehicleMovementTracker topology to the test driver
 
-        // TODO: Create test output topics
+        // TODO: Create test input topics
 
         // TODO: Create test stores
+
+        // TODO: Create test output topic
     }
 
     @AfterEach
@@ -57,6 +59,6 @@ class MovementTrackerTopologyTest {
 
     // TODO: test VehicleMetrics counts VehicleMoved events for each vehicle
 
-    // TODO: test VehicleMoved and VehicleRegistered events are joined
+    // TODO: test VehicleMoved and VehicleRegistered events are joined and sent to output topic
 
 }

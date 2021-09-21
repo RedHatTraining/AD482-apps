@@ -8,6 +8,8 @@ public class VehicleStatus {
     public float longitude;
     public float elevation; // In meters
 
+    public VehicleStatus() {}
+
     public VehicleStatus(Vehicle vehicle, float latitude, float longitude, float elevation) {
         this.vehicle = vehicle;
         this.latitude = latitude;
