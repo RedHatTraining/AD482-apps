@@ -45,7 +45,7 @@ class MovementTrackerTopologyTest {
         tracker = new VehicleMovementTracker();
         testDriver = new TopologyTestDriver(tracker.buildTopology());
 
-        // TODO: Create test  topics
+        // TODO: Create test input topics
         vehicleRegisteredSerde = new ObjectMapperSerde<>(VehicleRegistered.class);
         vehicleMovedSerde = new ObjectMapperSerde<>(VehicleMoved.class);
         vehicleRegisteredTopic = testDriver.createInputTopic(
