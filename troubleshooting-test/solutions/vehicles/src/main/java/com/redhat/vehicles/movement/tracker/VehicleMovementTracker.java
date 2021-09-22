@@ -15,6 +15,7 @@ import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
@@ -37,6 +38,9 @@ public class VehicleMovementTracker {
         );
         ObjectMapperSerde<VehicleMoved> vehicleMovedSerde = new ObjectMapperSerde<>(
             VehicleMoved.class
+        );
+        ObjectMapperSerde<VehicleStatus> vehicleStatusSerde = new ObjectMapperSerde<>(
+            VehicleStatus.class
         );
 
         GlobalKTable<Integer, Vehicle> vehiclesTable = builder.globalTable(
@@ -61,9 +65,11 @@ public class VehicleMovementTracker {
                     vehicleMoved.elevation
             ));
 
-        vehicleStatusStream.foreach((vehicleId, vehiclePosition) -> {
-            System.out.println(vehiclePosition);
-        });
+        // TODO: materialize vehicleStatusStream to the "vehicle-status" topic
+        vehicleStatusStream.to(
+            "vehicle-status",
+            Produced.with(intSerde, vehicleStatusSerde)
+        );
 
         vehicleStatusStream.groupByKey().aggregate(
             VehicleMetrics::new,

@@ -23,10 +23,9 @@ public class TestVehicleInventory {
         vehicleManager = new VehicleInventory();
     }
 
+    // TODO: implement exception test case
     @Test
     public void testRegisterThrowsExceptionIfTypeIsEmpty() {
-        // TODO: implement exception test case
-
         // Given
         Vehicle vehicle = new Vehicle(2, "", "Test Car");
 
@@ -39,10 +38,9 @@ public class TestVehicleInventory {
         assertThat(exception.getMessage(), containsString("Invalid vehicle"));
     }
 
+    // TODO: implement VehicleRegistered test case
     @Test
     public void testRegisterReturnsVehicleRegistered() throws InvalidVehicleException {
-        // TODO: implement VehicleRegistered test case
-
         // Given
         Vehicle vehicle = new Vehicle(2, "car", "Test Car");
 
