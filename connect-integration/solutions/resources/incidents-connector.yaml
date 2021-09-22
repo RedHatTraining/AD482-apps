@@ -1,0 +1,22 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+  name: incidents-connector
+spec:
+  class: org.apache.camel.kafkaconnector.elasticsearchrest.CamelElasticsearchrestSinkConnector
+  config:
+    camel.sink.endpoint.hostAddresses: 'elasticsearch-es-http:9200'
+    camel.sink.endpoint.operation: Index
+    camel.sink.path.clusterName: elasticsearch
+    camel.sink.endpoint.indexName: incidents
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable: false
+    value.converter.schemas.enable: false
+    topics: repair-request.events
+    errors.log.enable: true
+    errors.log.include.messages: true
+    errors.tolerance: all
+  tasksMax: 1

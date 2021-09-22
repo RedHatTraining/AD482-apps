@@ -1,0 +1,20 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  annotations:
+    strimzi.io/use-connector-resources: 'true'
+  name: my-connect-cluster
+spec:
+  bootstrapServers: 'my-cluster-kafka-bootstrap:9092'
+  image: 'quay.io/redhattraining/ad482-ch05s09-connect-cluster:latest'
+  config:
+    config.storage.topic: my-connect-cluster-configs
+    offset.storage.topic: my-connect-cluster-offsets
+    status.storage.topic: my-connect-cluster-status
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.storage.StringConverter
+    config.storage.replication.factor: 1
+    offset.storage.replication.factor: 1
+    status.storage.replication.factor: 1
+  replicas: 1
+  version: 2.8.0

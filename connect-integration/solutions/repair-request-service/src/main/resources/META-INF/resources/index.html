@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>💧WaterLeak Inc. - Repair Requests🔧</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.8/wing.min.css"/>
+    <style>
+        input[type=number] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            -webkit-transition: .5s;
+            transition: .5s;
+            outline: 0;
+            font-family: 'Open Sans', serif;
+        }
+
+        .btn.light {
+            background: #fff;
+            color: #333030;
+            border: 1px solid #333030;
+        }
+    </style>
+    <!-- Load AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript">
+        var app = angular.module("RequestManagement", []);
+
+        //Controller Part
+        app.controller("RequestManagementController", function ($scope, $http) {
+
+            //Initialize page with default data which is blank in this example
+            $scope.repairRequests = [];
+
+            $scope.form = {
+                id: -1,
+                requesterName: ""
+            };
+
+            //Now load the data from server
+            _refreshPageData();
+
+            //HTTP POST/PUT methods for add/edit repairRequests
+            $scope.update = function () {
+                var method = "";
+                var url = "";
+                var data = {};
+                if ($scope.form.id == -1) {
+                    //Id is absent so add repairRequests - POST operation
+                    method = "POST";
+                    url = '/requests';
+                    data.requesterName = $scope.form.requesterName;
+                }
+
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(_success, _error);
+            };
+
+            /* Private Methods */
+
+            //HTTP GET- get all repairRequests collection
+            function _refreshPageData() {
+                $http({
+                    method: 'GET',
+                    url: '/requests'
+                }).then(function successCallback(response) {
+                    $scope.repairRequests = response.data;
+                }, function errorCallback(response) {
+                    console.log(response.statusText);
+                });
+            }
+
+            function _success(response) {
+                _refreshPageData();
+                _clearForm()
+            }
+
+            function _error(response) {
+                alert(response.data.message || response.statusText);
+            }
+
+            //Clear the form
+            function _clearForm() {
+                $scope.form.requesterName = "";
+                $scope.form.id = -1;
+            }
+        });
+    </script>
+</head>
+<body ng-app="RequestManagement" ng-controller="RequestManagementController">
+
+<div class="container">
+    <h1>🔧Repair Requests🔧</h1>
+    <h3>Create a repair request</h3>
+    <form ng-submit="update()">
+        <div class="row">
+            <div class="col-6">
+                <input id="requesterName" type="text" placeholder="Requester Name" ng-model="form.requesterName"
+                       ng-required="true" size="60"/>
+            </div>
+        </div>
+        <input type="submit" value="Create"/>
+    </form>
+
+    <h3>Requests</h3>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-1">ID</div>
+        <div class="col-2">Requester</div>
+        <div class="col-2">Status</div>
+        <div class="col-3">Assigned Plumber Id</div>
+    </div>
+    <div class="row" ng-repeat="repairRequest in repairRequests">
+        <div class="col-1">🔧</div>
+        <div class="col-1">{{ repairRequest.id }}</div>
+        <div class="col-2">{{ repairRequest.requesterName }}</div>
+        <div class="col-2">{{ repairRequest.status }}</div>
+        <div class="col-3">{{ repairRequest.plumberId }}</div>
+    </div>
+</div>
+
+</body>
+</html>
