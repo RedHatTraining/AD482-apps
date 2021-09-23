@@ -84,7 +84,7 @@ const WindTurbineCard = (props: WindTurbineProps): JSX.Element => {
 								<DescriptionListDescription>{props.production.megawatts} Mwatts</DescriptionListDescription>
 							</DescriptionListGroup>
 							<DescriptionListGroup>
-								<DescriptionListTerm>Total reported values</DescriptionListTerm>
+								<DescriptionListTerm>Reported values (last 10 seconds)</DescriptionListTerm>
 								<DescriptionListDescription>{props.stats.count}</DescriptionListDescription>
 							</DescriptionListGroup>
 						</DescriptionList>

@@ -1,5 +1,7 @@
 package com.redhat.energy;
 
+import java.time.Duration;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
@@ -16,7 +18,10 @@ import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.Suppressed;
+import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.state.KeyValueStore;
+import static org.apache.kafka.streams.kstream.Suppressed.BufferConfig.unbounded;
 
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
@@ -65,9 +70,17 @@ public class StreamTopologyBuilder {
         // TODO: count measurements by turbine and write results to a new stream
         wattsValuesStream
             .groupByKey()
+            .windowedBy(
+                TimeWindows
+                    .of(Duration.ofSeconds(10))
+                    .advanceBy(Duration.ofSeconds(10))
+                    .grace(Duration.ofSeconds(20))
+            )
             .count()
+            .suppress(Suppressed.untilWindowCloses(unbounded()))
             .toStream()
-            .map((turbineId, count) -> {
+            .map((windowedTurbineId, count) -> {
+                Integer turbineId = windowedTurbineId.key();
                 WindTurbineStats stats = new WindTurbineStats(turbineId, count);
                 System.out.println("COUNT - Turbine: " + turbineId + " | Count:" + count);
                 return KeyValue.pair(turbineId, stats);

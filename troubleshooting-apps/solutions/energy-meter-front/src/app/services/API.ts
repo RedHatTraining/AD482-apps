@@ -1,3 +1,4 @@
+import { resolve } from "webpack.dev";
 import wretch from "wretch";
 
 export enum ServiceName {
@@ -10,9 +11,27 @@ const serviceUrlMap: { [key in ServiceName]: string } = {
 };
 console.log("Backend URL:", serviceUrlMap);
 
+
 export function getRESTClient(serviceName: ServiceName) {
     // `wretch` is a thin wrapper around the `fetch` API available in most modern browsers
     return wretch(serviceUrlMap[serviceName]);
+}
+
+
+export function getSSEClient(serviceName: ServiceName) {
+
+    const baseUrl = serviceUrlMap[serviceName];
+
+    return {
+        open<T>(path: string, onData: (data: T) => void) {
+            const url = new URL(path, baseUrl);
+            const eventSource = new EventSource(url);
+            eventSource.onmessage = (message) => {
+                const data: T = JSON.parse(message.data)
+                onData(data)
+            }
+        }
+    };
 }
 
 // wretch().catcher(...) can't handle rejections due to no response from server
@@ -20,4 +39,3 @@ window.addEventListener("unhandledrejection", (event) => {
     const message = `caught error: ${event.reason}`;
     console.error(message);
 });
-

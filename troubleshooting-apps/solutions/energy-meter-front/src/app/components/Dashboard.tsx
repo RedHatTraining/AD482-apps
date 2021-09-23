@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { PageSection, Title, Grid, GridItem } from '@patternfly/react-core';
 import { WindTurbineCard } from './WindTurbineCard';
 import { getWindTurbines } from "../services/WindTurbinesService";
+import { subscribeToPowerEvents } from "../services/PowerEventsService";
+import { subscribeToStatsEvents } from "../services/StatsEventsService ";
 import { WindTurbine } from '../models/WindTurbine';
-import { WindTurbineProduction } from '../models/WindTurbineProduction';
 import { WindTurbineStats } from '../models/WindTurbineStats';
 import { waitForLiveness } from '../services/LivenessService';
 
@@ -34,25 +35,21 @@ export function Dashboard(): JSX.Element {
     }, []);
 
     function getPowerServerEvents() {
-        const eventSource = new EventSource("http://localhost:8080/turbines/generated-power");
-        eventSource.onmessage = (message) => {
-            const production: WindTurbineProduction = JSON.parse(message.data);
+        subscribeToPowerEvents((event) => {
             setPowerProductionValues(values => ({
                 ...values,
-                [production.turbineId]: production.megawatts
+                [event.turbineId]: event.megawatts
             }));
-        };
+        });
     }
 
     function getPowerStatsEvents() {
-        const eventSource = new EventSource("http://localhost:8080/turbines/measurements-count");
-        eventSource.onmessage = (message) => {
-            const turbineStats: WindTurbineStats = JSON.parse(message.data);
+        subscribeToStatsEvents((turbineStats) => {
             setStats(stats => ({
                 ...stats,
                 [turbineStats.turbineId]: turbineStats
             }));
-        };
+        });
     }
 
     function getTurbineProduction(id: number) {

@@ -6,6 +6,8 @@ public class WindTurbine {
     public Integer powerCapacity;
     public Integer cutOutWindSpeed;
 
+    public WindTurbine() {}
+
     public WindTurbine(Integer id, String description, Integer powerCapacity, Integer cutOutWindSpeed) {
         this.id = id;
         this.description = description;
