@@ -63,7 +63,7 @@
               </filters>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.redhat.energy.TurbineProducerApp</mainClass>
+                  <mainClass>com.redhat.energy.TurbinesDataProducerApp</mainClass>
                 </transformer>
               </transformers>
             </configuration>

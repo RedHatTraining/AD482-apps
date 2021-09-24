@@ -1,15 +1,7 @@
-# Kafka Basic Consumer App
+# Turbine Data Producer Application
 
-First, set your configuration in `ConsumerApp.java`.
-
-Next, build the app:
+To run the application, execute:
 
 ```
-./mvnw package
-```
-
-Finally, run the app:
-
-```
-java -jar target/consumer-1.0-SNAPSHOT.jar
+./mvnw compile exec:java -Dexec.mainClass="com.redhat.energy.TurbinesDataProducerApp"
 ```

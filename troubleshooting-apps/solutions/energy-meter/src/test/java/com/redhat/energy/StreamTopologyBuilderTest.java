@@ -34,27 +34,15 @@ public class StreamTopologyBuilderTest {
 
     @BeforeEach
     public void setup() {
+        // TODO: create the test driver
         StreamTopologyBuilder builder = new StreamTopologyBuilder();
         testDriver = new TopologyTestDriver(builder.buildTopology());
 
-        ObjectMapperSerde<WindTurbine> turbineSerde = new ObjectMapperSerde<>(WindTurbine.class);
-        turbinesStream = testDriver.createInputTopic(
-            "turbines",
-            new IntegerSerializer(),
-            turbineSerde.serializer()
-        );
-
+        // TODO: Create test topics
         wattsStream = testDriver.createInputTopic(
             "turbine-generated-watts",
             new IntegerSerializer(),
             new IntegerSerializer()
-        );
-
-        ObjectMapperSerde<WindTurbineStats> statsSerde = new ObjectMapperSerde<>(WindTurbineStats.class);
-        statsStream = testDriver.createOutputTopic(
-            "turbine-stats",
-            new IntegerDeserializer(),
-            statsSerde.deserializer()
         );
 
         ObjectMapperSerde<MWattsMeasurement> measurementSerde = new ObjectMapperSerde<>(MWattsMeasurement.class);
@@ -70,6 +58,7 @@ public class StreamTopologyBuilderTest {
         testDriver.close();
     }
 
+    // TODO: implement test
     @Test
     public void testMWattsConversion() {
         wattsStream.pipeInput(1, 2500000);

@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.util.Random;
 
 import io.smallrye.mutiny.Multi;
-import io.smallrye.mutiny.Uni;
 
 /**
  * This class simulates a wind turbine reporting wind a power data
@@ -30,23 +29,18 @@ public class Turbine {
     public Multi<TurbineData> start() {
         return Multi
             .createFrom().ticks().every(Duration.ofSeconds(1))
-            .map(tick -> produceData());
+            .map(tick -> produceData(tick));
     }
 
-    private TurbineData produceData() {
+    private TurbineData produceData(Long tick) {
         Long timestamp = Instant.now().getEpochSecond() * 1000;
-
-        Random r = new Random();
-        if (r.nextInt(10) < 5) {
-            timestamp -= 10000;
-            System.out.println("Late!!");
-        }
 
         return new TurbineData(
             id,
             producePowerMeasurement(),
             produceWindMeasurement(),
-            timestamp
+            timestamp,
+            tick
         );
     }
 

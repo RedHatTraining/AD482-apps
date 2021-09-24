@@ -32,10 +32,8 @@ public class StreamTopologyBuilder {
     public Topology buildTopology() {
         StreamsBuilder builder = new StreamsBuilder();
 
-        // TODO: Create wind turbine serde
         ObjectMapperSerde<WindTurbine> turbineSerde = new ObjectMapperSerde<>(WindTurbine.class);
 
-        // TODO: read the "turbines" topic as a KTable
         builder.table(
             "turbines",
             Consumed.with(Serdes.Integer(), turbineSerde),
@@ -44,16 +42,13 @@ public class StreamTopologyBuilder {
                 .withValueSerde(turbineSerde)
         );
 
-        // TODO: read the "turbine-generated-watts" topic as a KStream
         KStream<Integer, Integer> wattsValuesStream = builder.stream(
             "turbine-generated-watts",
             Consumed.with(Serdes.Integer(), Serdes.Integer())
         );
 
-        // TODO: Create MWattsMeasurement serde
         ObjectMapperSerde<MWattsMeasurement> mwattsMeasurementSerde = new ObjectMapperSerde<>(MWattsMeasurement.class);
 
-        // TODO: map the watts stream into a new mwatts stream
         wattsValuesStream.map((turbineId, watts) -> {
             Double megawatts = (double) watts / 1000000;
             MWattsMeasurement measurement = new MWattsMeasurement(turbineId, megawatts);
@@ -64,17 +59,16 @@ public class StreamTopologyBuilder {
             Produced.with(Serdes.Integer(), mwattsMeasurementSerde)
         );
 
-        // TODO: Create WindTurbineStats serde
         ObjectMapperSerde<WindTurbineStats> statsSerde = new ObjectMapperSerde<>(WindTurbineStats.class);
 
-        // TODO: count measurements by turbine and write results to a new stream
         wattsValuesStream
             .groupByKey()
             .windowedBy(
                 TimeWindows
                     .of(Duration.ofSeconds(10))
                     .advanceBy(Duration.ofSeconds(10))
-                    .grace(Duration.ofSeconds(20))
+                    // TODO: adjust grace period
+                    .grace(Duration.ofSeconds(12))
             )
             .count()
             .suppress(Suppressed.untilWindowCloses(unbounded()))
