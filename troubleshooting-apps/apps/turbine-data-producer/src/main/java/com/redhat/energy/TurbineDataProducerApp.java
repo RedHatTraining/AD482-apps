@@ -5,14 +5,13 @@ import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.SslConfigs;
 
-public class TurbinesDataProducerApp {
+public class TurbineDataProducerApp {
 
     public static void main(String[] args) throws InterruptedException {
         // The emitter encapsulates a Kafka producer. Kakfa producer config is passed as a parameter
         Properties config = setProducerConfig();
         PowerMeasurementsEmitter emitter = new PowerMeasurementsEmitter("turbine-generated-watts", config);
         // TODO: Activate the turbine timestamps feature
-        emitter.withTurbineTimestamps();
 
         // Start turbines
         Turbine turbine1 = new Turbine(1, 2000000);
@@ -41,8 +40,7 @@ public class TurbinesDataProducerApp {
 
         props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, 60000);
         // TODO: fix delivery issues
-        props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 30000);
-        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+        props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 10);
 
         return props;
     }

@@ -3,5 +3,5 @@
 To run the application, execute:
 
 ```
-./mvnw compile exec:java -Dexec.mainClass="com.redhat.energy.TurbinesDataProducerApp"
+./mvnw compile exec:java -Dexec.mainClass="com.redhat.energy.TurbineDataProducerApp"
 ```
