@@ -22,14 +22,9 @@ public class RequestCreatedEvent implements ExportedEvent<String, JsonNode> {
         this.timestamp = Instant.now();
     }
 
-    // TODO: Implement the method that initializes a RequestCreatedEvent from a RepairRequest object.
+    // TODO: Implement the method that initializes a RequestCreatedEvent object from a RepairRequest object.
     public static RequestCreatedEvent of(RepairRequest repairRequest) {
-        ObjectNode asJson = mapper.createObjectNode()
-                .put("id", repairRequest.getId())
-                .put("requesterName", repairRequest.getRequesterName())
-                .put("requestDate", repairRequest.getRequestDate().toString())
-                .put("status", repairRequest.getStatus().toString())
-                .put("plumberId", repairRequest.getPlumberId());
+        ObjectNode asJson = null;
         return new RequestCreatedEvent(repairRequest.getId(), asJson);
     }
 

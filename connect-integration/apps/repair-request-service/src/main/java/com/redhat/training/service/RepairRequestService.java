@@ -46,7 +46,6 @@ public class RepairRequestService {
         repairRequest.persist();
 
         // TODO: Fire a RequestCreatedEvent event
-        event.fire(RequestCreatedEvent.of(repairRequest));
 
         return repairRequest.getId();
     }

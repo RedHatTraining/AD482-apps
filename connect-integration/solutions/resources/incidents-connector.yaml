@@ -16,7 +16,5 @@ spec:
     key.converter.schemas.enable: false
     value.converter.schemas.enable: false
     topics: repair-request.events
-    errors.log.enable: true
-    errors.log.include.messages: true
     errors.tolerance: all
   tasksMax: 1
