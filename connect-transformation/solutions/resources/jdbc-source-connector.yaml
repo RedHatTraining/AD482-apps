@@ -21,6 +21,6 @@ spec:
     transforms.Mask.type: org.apache.kafka.connect.transforms.MaskField$Value
     transforms.Mask.fields: ssn
     transforms.Insert.type: org.apache.kafka.connect.transforms.InsertField$Value
-    transforms.Insert.static.field: data-source,
+    transforms.Insert.static.field: data-source
     transforms.Insert.static.value: database
   tasksMax: 1
