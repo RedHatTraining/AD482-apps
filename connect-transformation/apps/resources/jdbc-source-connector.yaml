@@ -16,5 +16,5 @@ spec:
     table.whitelist: accountants
     mode: incrementing
     incrementing.column.name: id
-    # TODO: Add MaskField transformation configuration
+    # TODO: Add Single Message Transformations
   tasksMax: 1

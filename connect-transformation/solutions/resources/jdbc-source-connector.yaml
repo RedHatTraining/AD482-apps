@@ -16,7 +16,11 @@ spec:
     table.whitelist: accountants
     mode: incrementing
     incrementing.column.name: id
-    transforms: MaskField
-    transforms.MaskField.type: org.apache.kafka.connect.transforms.MaskField$Value
-    transforms.MaskField.fields: ssn
+    # TODO: Add Single Message Transformations
+    transforms: Mask, Insert
+    transforms.Mask.type: org.apache.kafka.connect.transforms.MaskField$Value
+    transforms.Mask.fields: ssn
+    transforms.Insert.type: org.apache.kafka.connect.transforms.InsertField$Value
+    transforms.Insert.static.field: data-source,
+    transforms.Insert.static.value: database
   tasksMax: 1
