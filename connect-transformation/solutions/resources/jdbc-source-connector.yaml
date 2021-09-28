@@ -17,7 +17,7 @@ spec:
     mode: incrementing
     incrementing.column.name: id
     # TODO: Add Single Message Transformations
-    transforms: Mask, Insert
+    transforms: Mask,Insert
     transforms.Mask.type: org.apache.kafka.connect.transforms.MaskField$Value
     transforms.Mask.fields: ssn
     transforms.Insert.type: org.apache.kafka.connect.transforms.InsertField$Value
