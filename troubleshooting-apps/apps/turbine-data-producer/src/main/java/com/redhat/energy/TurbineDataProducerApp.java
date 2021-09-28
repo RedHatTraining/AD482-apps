@@ -11,6 +11,7 @@ public class TurbineDataProducerApp {
         // The emitter encapsulates a Kafka producer. Kakfa producer config is passed as a parameter
         Properties config = setProducerConfig();
         PowerMeasurementsEmitter emitter = new PowerMeasurementsEmitter("turbine-generated-watts", config);
+
         // TODO: Activate the turbine timestamps feature
 
         // Start turbines
