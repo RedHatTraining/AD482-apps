@@ -1,6 +1,6 @@
-# WaterLeak Inc. - Repair Requests
+# WaterLeak Inc. - Plumbers
 
-This is a minimal Quarkus application that simulates an intranet application that keeps repair requests records.
+This is a minimal Quarkus application that simulates an intranet application that keeps plumber service records.
 
 Features:
 - Panache (active record) for simple persistence.

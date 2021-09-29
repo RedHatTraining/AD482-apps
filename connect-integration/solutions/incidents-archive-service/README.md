@@ -1,10 +1,9 @@
-# WaterLeak Inc. - Repair Requests
+# WaterLeak Inc. - Incidents
 
-This is a minimal Quarkus application that simulates an intranet application that keeps repair requests records.
+This is a minimal Quarkus application that simulates an intranet application that keeps incident records and provide a searchable interface.
 
 Features:
-- Panache (active record) for simple persistence.
-- Postgres for the persistence.
+- Elasticsearch for the persistence.
 - REST API.
 - Basic front-end in Angular.
 
