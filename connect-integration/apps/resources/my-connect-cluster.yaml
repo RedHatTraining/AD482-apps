@@ -1,1 +1,11 @@
-
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  annotations: {}
+  name: ""
+spec:
+  bootstrapServers: ""
+  image: ""
+  config: {}
+  replicas: 0
+  version: 2.8.0
