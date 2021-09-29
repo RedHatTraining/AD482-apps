@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>💧WaterLeak Inc. - Plumbers👨‍🔧</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.8/wing.min.css"/>
+    <style>
+        input[type=number] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            -webkit-transition: .5s;
+            transition: .5s;
+            outline: 0;
+            font-family: 'Open Sans', serif;
+        }
+
+        .btn.light {
+            background: #fff;
+            color: #333030;
+            border: 1px solid #333030;
+        }
+    </style>
+    <!-- Load AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript">
+        var app = angular.module("PlumberManagement", []);
+
+        //Controller Part
+        app.controller("PlumberManagementController", function ($scope, $http) {
+
+            //Initialize page with default data which is blank in this example
+            $scope.plumbers = [];
+
+            //Now load the data from server
+            _refreshPageData();
+
+            /* Private Methods */
+
+            //HTTP GET- get all repairRequests collection
+            function _refreshPageData() {
+                $http({
+                    method: 'GET',
+                    url: '/plumbers'
+                }).then(function successCallback(response) {
+                    $scope.plumbers = response.data;
+                }, function errorCallback(response) {
+                    console.log(response.statusText);
+                });
+            }
+        });
+    </script>
+</head>
+<body ng-app="PlumberManagement" ng-controller="PlumberManagementController">
+
+<div class="container">
+    <h1>👨‍🔧Plumbers</h1>
+    <div class="row">
+        <div class="col-1">ID</div>
+        <div class="col-2">Name</div>
+        <div class="col-2">Status</div>
+    </div>
+    <div class="row" ng-repeat="plumber in plumbers">
+        <div class="col-1">{{ plumber.id }}</div>
+        <div class="col-2">{{ plumber.name }}</div>
+        <div class="col-2">{{ plumber.status }}</div>
+    </div>
+</div>
+
+</body>
+</html>
