@@ -16,6 +16,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 public class ConsumerApp
 {
     public static void main(String[] args) {
+        // TODO: Create Kafka consumer
         Consumer<Void,Integer> consumer = new KafkaConsumer<>(configureProperties());
         consumer.subscribe(Collections.singletonList("humidity-conditions"));
 
@@ -31,6 +32,7 @@ public class ConsumerApp
     private static Properties configureProperties() {
         Properties props = new Properties();
 
+        // TODO: Add Kafka configuration properties
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "your-kafka-cluster-name.apps.cluster.nextcle.com:443");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "humidityMonitoring");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
