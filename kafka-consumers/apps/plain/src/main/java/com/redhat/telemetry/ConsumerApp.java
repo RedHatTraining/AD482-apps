@@ -15,15 +15,15 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 
 public class ConsumerApp
 {
+    public static void main(String[] args) {
+        // TODO: Create Kafka consumer
+    }
+
     private static Properties configureProperties() {
         Properties props = new Properties();
 
-        // Add Kafka configuration properties here...
+        // TODO: Add Kafka configuration properties
 
         return props;
-    }
-
-    public static void main(String[] args) {
-        // Create Kafka consumer here
     }
 }
