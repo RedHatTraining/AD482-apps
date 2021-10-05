@@ -1,7 +1,9 @@
-package com.redhat.training;
+package com.redhat.training.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.redhat.training.model.Accountant;
+import com.redhat.training.service.AccountantsService;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
