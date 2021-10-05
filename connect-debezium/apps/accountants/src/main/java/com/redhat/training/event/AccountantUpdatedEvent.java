@@ -33,7 +33,7 @@ public class AccountantUpdatedEvent implements ExportedEvent<String, JsonNode> {
 
     @Override
     public String getAggregateId() {
-        return null;
+        return String.valueOf(id);
     }
 
     @Override
