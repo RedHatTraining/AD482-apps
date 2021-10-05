@@ -1,4 +1,4 @@
-package com.redhat.training;
+package com.redhat.training.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.vertx.core.json.JsonObject;
@@ -11,7 +11,7 @@ public class Accountant extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     @Column
     private String username;
@@ -30,6 +30,10 @@ public class Accountant extends PanacheEntityBase {
         this.username = username;
         this.ssn = ssn;
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -56,8 +60,4 @@ public class Accountant extends PanacheEntityBase {
         this.status = status;
     }
 
-    public JsonObject toJson() {
-        return new JsonObject().put("id", id).put("username", username).put("ssn", ssn)
-                .put("status", status != null ? status.toString() : null);
-    }
 }
