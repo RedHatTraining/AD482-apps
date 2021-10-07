@@ -14,6 +14,9 @@ Students can therefore serve the application by just running `python scripts/ser
 # Install development/build dependencies
 npm install
 
+# Start the fake backend (only if no real backend is available)
+node fake-backend.js
+
 # Start the development server
 npm run start:dev
 
