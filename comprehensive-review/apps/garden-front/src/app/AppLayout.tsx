@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   Page,
-  PageHeader,
-  SkipToContent
+  PageHeader
 } from '@patternfly/react-core';
 import logo from '@app/images/training_white.png';
 
@@ -30,20 +29,10 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
 
   const pageId = 'primary-app-container';
 
-  const PageSkipToContent = (
-    <SkipToContent onClick={(event) => {
-      event.preventDefault();
-      const primaryContentContainer = document.getElementById(pageId);
-      primaryContentContainer && primaryContentContainer.focus();
-    }} href={`#${pageId}`}>
-      Skip to Content
-    </SkipToContent>
-  );
   return (
     <Page
       mainContainerId={pageId}
-      header={Header}
-      skipToContent={PageSkipToContent}>
+      header={Header}>
       {children}
     </Page>
   );
