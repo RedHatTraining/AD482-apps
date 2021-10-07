@@ -1,5 +1,5 @@
 import { GardenStatus } from "@app/models/GardenStatus";
-import { Card, CardTitle, CardBody, DescriptionList, DescriptionListGroup, DescriptionListTerm, DescriptionListDescription, Grid, GridItem } from "@patternfly/react-core";
+import { Card, CardTitle, CardBody, DescriptionList, DescriptionListGroup, DescriptionListTerm, DescriptionListDescription, Grid, GridItem, Avatar, CardHeader } from "@patternfly/react-core";
 import React from "react";
 
 import garden0 from "@app/images/garden_0.jpg";
@@ -17,38 +17,29 @@ interface GardenStatusCardProps {
 export function GardenStatusCard(props: GardenStatusCardProps): JSX.Element {
     const { gardenStatus } = props;
     return (<Card isFlat>
-        <Grid md={6}>
-            <GridItem
-                style={{
-                    minHeight: "200px",
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                    backgroundImage: `url(${images[gardenStatus.id]})`
-                }}
-            />
-            <GridItem>
-                <CardTitle>{gardenStatus.name}</CardTitle>
-                <CardBody>
-                    <DescriptionList>
-                        <DescriptionListGroup>
-                            <DescriptionListTerm>Sensor</DescriptionListTerm>
-                            <DescriptionListDescription>{gardenStatus.sensorId}</DescriptionListDescription>
-                        </DescriptionListGroup>
-                        <DescriptionListGroup>
-                            <DescriptionListTerm>Timestamp</DescriptionListTerm>
-                            <DescriptionListDescription>{gardenStatus.lastUpdate}</DescriptionListDescription>
-                        </DescriptionListGroup>
-                        <DescriptionListGroup>
-                            <DescriptionListTerm>Temperature</DescriptionListTerm>
-                            <DescriptionListDescription>{gardenStatus.temperature} ºC</DescriptionListDescription>
-                        </DescriptionListGroup>
-                        <DescriptionListGroup>
-                            <DescriptionListTerm>Garden</DescriptionListTerm>
-                            <DescriptionListDescription>{gardenStatus.garden}</DescriptionListDescription>
-                        </DescriptionListGroup>
-                    </DescriptionList>
-                </CardBody>
-            </GridItem>
-        </Grid>
+        <CardHeader>
+            <Avatar src={images[gardenStatus.id]} alt={gardenStatus.name} />
+            <CardTitle>&nbsp;&nbsp;{gardenStatus.name}</CardTitle>
+        </CardHeader>
+        <CardBody>
+            <DescriptionList>
+                <DescriptionListGroup>
+                    <DescriptionListTerm>Sensor</DescriptionListTerm>
+                    <DescriptionListDescription>{gardenStatus.sensorId}</DescriptionListDescription>
+                </DescriptionListGroup>
+                <DescriptionListGroup>
+                    <DescriptionListTerm>Timestamp</DescriptionListTerm>
+                    <DescriptionListDescription>{gardenStatus.lastUpdate}</DescriptionListDescription>
+                </DescriptionListGroup>
+                <DescriptionListGroup>
+                    <DescriptionListTerm>Temperature</DescriptionListTerm>
+                    <DescriptionListDescription>{gardenStatus.temperature} ºC</DescriptionListDescription>
+                </DescriptionListGroup>
+                <DescriptionListGroup>
+                    <DescriptionListTerm>Garden</DescriptionListTerm>
+                    <DescriptionListDescription>{gardenStatus.garden}</DescriptionListDescription>
+                </DescriptionListGroup>
+            </DescriptionList>
+        </CardBody>
     </Card>);
 }
