@@ -166,7 +166,7 @@ public class AccountResource {
             );
         }
 
-        if (deposit.amount <= 0) {
+        if (deposit.amount == null || deposit.amount <= 0) {
             throw new WebApplicationException(
                     "Unprocessable amount on request.",
                     Response.Status.BAD_REQUEST
@@ -196,7 +196,7 @@ public class AccountResource {
             );
         }
 
-        if (withdrawal.amount <= 0) {
+        if (withdrawal.amount == null || withdrawal.amount <= 0) {
             throw new WebApplicationException(
                     "Unprocessable amount on request.",
                     Response.Status.BAD_REQUEST
