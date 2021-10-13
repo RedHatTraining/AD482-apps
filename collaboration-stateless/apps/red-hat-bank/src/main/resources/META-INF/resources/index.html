@@ -40,6 +40,8 @@
             };
 
             $scope.remove = function (bankAccount) {
+                validateBankAccount(bankAccount);
+
                 $http({
                     method: 'DELETE',
                     url: '/accounts/' + bankAccount.id
@@ -47,6 +49,8 @@
             };
 
             $scope.deposit = function (bankAccount) {
+                validateBankAccount(bankAccount);
+
                 var data = {}
                 data.bankAccountId = bankAccount.id;
                 data.amount = bankAccount.amount;
@@ -62,6 +66,8 @@
             };
 
             $scope.withdraw = function (bankAccount) {
+                validateBankAccount(bankAccount);
+
                 var data = {}
                 data.bankAccountId = bankAccount.id;
                 data.amount = bankAccount.amount;
@@ -93,6 +99,18 @@
 
         function _error(response) {
           alert(response.data.error || response.statusText);
+        }
+
+        function validateBankAccount(bankAccount) {
+            if (!bankAccount.id) {
+                alert("You must specify a bank account identifier")
+                throw Error()
+            }
+
+            if (!bankAccount.amount) {
+                alert("You must specify an amount")
+                throw Error()
+            }
         }
 
         function _clearForm() {
