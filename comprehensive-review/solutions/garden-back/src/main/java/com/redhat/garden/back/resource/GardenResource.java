@@ -32,7 +32,10 @@ public class GardenResource {
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
     public GardenEvent processLowTemperatureAlerts(LowTemperatureDetected event) {
         return new GardenEvent(
-
+                event.getClass().getSimpleName(),
+                event.gardenName,
+                event.sensorId,
+                event.timestamp
         );
     }
 
@@ -40,9 +43,12 @@ public class GardenResource {
     @Outgoing("in-memory-garden-alerts")
     @Broadcast
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public GardenEvent processDrySoilAlerts(DrySoilDetected event) {
+    public GardenEvent processDrySoilAlerts(DryConditionsDetected event) {
         return new GardenEvent(
-
+                event.getClass().getSimpleName(),
+                event.gardenName,
+                event.sensorId,
+                event.timestamp
         );
     }
 
@@ -52,7 +58,10 @@ public class GardenResource {
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
     public GardenEvent processLowNutrientsAlerts(LowNutrientsDetected event) {
         return new GardenEvent(
-
+                event.getClass().getSimpleName(),
+                event.gardenName,
+                event.sensorId,
+                event.timestamp
         );
     }
 
