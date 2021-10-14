@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 
@@ -51,7 +52,7 @@ public class GardenStreamsTopologyBuilderTest {
 
         dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
         dryConditionsEventsTopic = testDriver.createOutputTopic(
-            GardenStreamsTopologyBuilder.LOW_TEMPERATURE_EVENTS_TOPIC,
+            GardenStreamsTopologyBuilder.DRY_CONDITIONS_EVENTS_TOPIC,
             new IntegerDeserializer(),
             dryConditionsEventSerde.deserializer());
     }
@@ -91,6 +92,16 @@ public class GardenStreamsTopologyBuilderTest {
         assertEquals(0.1, event.value);
     }
 
-    
+    @Test
+    public void testGoodDryConditions() {
+        // Given
+        SensorMeasurement measurement = new SensorMeasurement(1, "humidity", 0.8, new Date());
+
+        // When
+        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+
+        // Then
+        assertTrue(dryConditionsEventsTopic.isEmpty());
+    }
 
 }
