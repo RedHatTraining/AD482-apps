@@ -23,6 +23,7 @@ public class GardenStreamsTopologyBuilder {
 
     public static String SENSOR_MEASUREMENTS_TOPIC = "sensor-measurements";
     public static String LOW_TEMPERATURE_EVENTS_TOPIC = "low-temperature-events";
+    public static String DRY_CONDITIONS_EVENTS_TOPIC = "dry-conditions-events";
 
     ObjectMapperSerde<SensorMeasurement> sensorMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurement.class);
     ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);

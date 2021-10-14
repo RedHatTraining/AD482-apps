@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Date;
 
+import com.redhat.garden.events.DryConditionsDetected;
 import com.redhat.garden.events.LowTemperatureDetected;
 
 import org.apache.kafka.common.serialization.IntegerDeserializer;
@@ -26,7 +27,10 @@ public class GardenStreamsTopologyBuilderTest {
     ObjectMapperSerde<SensorMeasurement> sensorMeasurementSerde;
 
     TestOutputTopic<Integer, LowTemperatureDetected> lowTemperatureEventsTopic;
-    ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventsSerde;
+    ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde;
+
+    TestOutputTopic<Integer, DryConditionsDetected> dryConditionsEventsTopic;
+    ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde;
 
     @BeforeEach
     public void setup() {
@@ -39,22 +43,28 @@ public class GardenStreamsTopologyBuilderTest {
                     new IntegerSerializer(),
                     sensorMeasurementSerde.serializer());
 
-        lowTemperatureEventsSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
+        lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
         lowTemperatureEventsTopic = testDriver.createOutputTopic(
             GardenStreamsTopologyBuilder.LOW_TEMPERATURE_EVENTS_TOPIC,
             new IntegerDeserializer(),
-            lowTemperatureEventsSerde.deserializer());
+            lowTemperatureEventSerde.deserializer());
+
+        dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
+        dryConditionsEventsTopic = testDriver.createOutputTopic(
+            GardenStreamsTopologyBuilder.LOW_TEMPERATURE_EVENTS_TOPIC,
+            new IntegerDeserializer(),
+            dryConditionsEventSerde.deserializer());
     }
 
     @AfterEach
     public void teardown() {
         testDriver.close();
         sensorMeasurementSerde.close();
-        lowTemperatureEventsSerde.close();
+        lowTemperatureEventSerde.close();
     }
 
     @Test
-    public void testXXX() {
+    public void testLowTemperatureConditions() {
         // Given
         SensorMeasurement measurement = new SensorMeasurement(1, "temperature", 4.5, new Date());
 
@@ -66,5 +76,21 @@ public class GardenStreamsTopologyBuilderTest {
         LowTemperatureDetected event = record.getValue();
         assertEquals(4.5, event.value);
     }
+
+    @Test
+    public void testDryConditions() {
+        // Given
+        SensorMeasurement measurement = new SensorMeasurement(1, "humidity", 0.1, new Date());
+
+        // When
+        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+
+        // Then
+        TestRecord<Integer, DryConditionsDetected> record = dryConditionsEventsTopic.readRecord();
+        DryConditionsDetected event = record.getValue();
+        assertEquals(0.1, event.value);
+    }
+
+    
 
 }
