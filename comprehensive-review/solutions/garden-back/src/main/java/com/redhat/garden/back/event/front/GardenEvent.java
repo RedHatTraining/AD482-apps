@@ -1,4 +1,4 @@
-package com.redhat.garden.back.event;
+package com.redhat.garden.back.event.front;
 
 public class GardenEvent {
     public String name;
