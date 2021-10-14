@@ -1,4 +1,4 @@
-package com.redhat.garden;
+package com.redhat.garden.sensors;
 
 public class SensorMeasurementEnriched extends SensorMeasurement {
     public String sensorName;

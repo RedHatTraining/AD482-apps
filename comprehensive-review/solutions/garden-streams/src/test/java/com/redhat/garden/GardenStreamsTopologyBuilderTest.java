@@ -13,6 +13,8 @@ import java.util.Date;
 import com.redhat.garden.events.DryConditionsDetected;
 import com.redhat.garden.events.LowNutrientsDetected;
 import com.redhat.garden.events.LowTemperatureDetected;
+import com.redhat.garden.sensors.Sensor;
+import com.redhat.garden.sensors.SensorMeasurement;
 
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.IntegerSerializer;

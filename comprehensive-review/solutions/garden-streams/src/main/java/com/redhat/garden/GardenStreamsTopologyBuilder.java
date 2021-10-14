@@ -6,6 +6,9 @@ import javax.enterprise.context.ApplicationScoped;
 import com.redhat.garden.events.DryConditionsDetected;
 import com.redhat.garden.events.LowNutrientsDetected;
 import com.redhat.garden.events.LowTemperatureDetected;
+import com.redhat.garden.sensors.Sensor;
+import com.redhat.garden.sensors.SensorMeasurement;
+import com.redhat.garden.sensors.SensorMeasurementEnriched;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
