@@ -19,12 +19,17 @@ import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.streams.TestInputTopic;
 import org.apache.kafka.streams.TestOutputTopic;
 import org.apache.kafka.streams.TopologyTestDriver;
+import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.test.TestRecord;
 
 
 public class GardenStreamsTopologyBuilderTest {
 
     TopologyTestDriver testDriver;
+
+    TestInputTopic<Integer, Sensor> sensorsTopic;
+    ObjectMapperSerde<Sensor> sensorSerde;
+
     TestInputTopic<Integer, SensorMeasurement> sensorMeasurementsTopic;
     ObjectMapperSerde<SensorMeasurement> sensorMeasurementSerde;
 
@@ -41,6 +46,12 @@ public class GardenStreamsTopologyBuilderTest {
     public void setup() {
         GardenStreamsTopologyBuilder topologyBuilder = new GardenStreamsTopologyBuilder();
         testDriver = new TopologyTestDriver(topologyBuilder.build());
+
+        sensorSerde = new ObjectMapperSerde<>(Sensor.class);
+        sensorsTopic = testDriver.createInputTopic(
+                    GardenStreamsTopologyBuilder.SENSORS_TOPIC,
+                    new IntegerSerializer(),
+                    sensorSerde.serializer());
 
         sensorMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurement.class);
         sensorMeasurementsTopic = testDriver.createInputTopic(
@@ -77,9 +88,11 @@ public class GardenStreamsTopologyBuilderTest {
     @Test
     public void testLowTemperatureConditions() {
         // Given
+        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, "temperature", 4.5, new Date());
 
         // When
+        sensorsTopic.pipeInput(sensor.id, sensor);
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
@@ -91,9 +104,11 @@ public class GardenStreamsTopologyBuilderTest {
     @Test
     public void testDryConditions() {
         // Given
+        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, "humidity", 0.1, new Date());
 
         // When
+        sensorsTopic.pipeInput(sensor.id, sensor);
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
@@ -105,9 +120,11 @@ public class GardenStreamsTopologyBuilderTest {
     @Test
     public void testGoodDryConditions() {
         // Given
+        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, "humidity", 0.8, new Date());
 
         // When
+        sensorsTopic.pipeInput(sensor.id, sensor);
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
@@ -117,9 +134,11 @@ public class GardenStreamsTopologyBuilderTest {
     @Test
     public void testLowNutrientsLevel() {
         // Given
+        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, "nutrients", 0.2, new Date());
 
         // When
+        sensorsTopic.pipeInput(sensor.id, sensor);
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
@@ -131,13 +150,33 @@ public class GardenStreamsTopologyBuilderTest {
     @Test
     public void testGoodNutrientsLevel() {
         // Given
+        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, "nutrients", 0.8, new Date());
 
         // When
+        sensorsTopic.pipeInput(sensor.id, sensor);
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
         assertTrue(dryConditionsEventsTopic.isEmpty());
+    }
+
+
+    @Test
+    public void testLowTemperatureEventIncludesSensorMetadata() {
+        // Given
+        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        SensorMeasurement measurement = new SensorMeasurement(1, "temperature", 4.5, new Date());
+
+        // When
+        sensorsTopic.pipeInput(sensor.id, sensor);
+        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+
+        // Then
+        TestRecord<Integer, LowTemperatureDetected> record = lowTemperatureEventsTopic.readRecord();
+        LowTemperatureDetected event = record.getValue();
+        assertEquals("Garden 1", event.gardenName);
+
     }
 
 }
