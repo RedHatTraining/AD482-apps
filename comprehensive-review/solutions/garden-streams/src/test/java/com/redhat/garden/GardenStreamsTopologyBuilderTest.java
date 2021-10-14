@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Date;
 
 import com.redhat.garden.events.DryConditionsDetected;
+import com.redhat.garden.events.LowNutrientsDetected;
 import com.redhat.garden.events.LowTemperatureDetected;
 
 import org.apache.kafka.common.serialization.IntegerDeserializer;
@@ -32,6 +33,9 @@ public class GardenStreamsTopologyBuilderTest {
 
     TestOutputTopic<Integer, DryConditionsDetected> dryConditionsEventsTopic;
     ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde;
+
+    TestOutputTopic<Integer, LowNutrientsDetected> lowNutrientsEventsTopic;
+    ObjectMapperSerde<LowNutrientsDetected> lowNutrientsEventSerde;
 
     @BeforeEach
     public void setup() {
@@ -55,6 +59,12 @@ public class GardenStreamsTopologyBuilderTest {
             GardenStreamsTopologyBuilder.DRY_CONDITIONS_EVENTS_TOPIC,
             new IntegerDeserializer(),
             dryConditionsEventSerde.deserializer());
+
+        lowNutrientsEventSerde = new ObjectMapperSerde<>(LowNutrientsDetected.class);
+        lowNutrientsEventsTopic = testDriver.createOutputTopic(
+            GardenStreamsTopologyBuilder.LOW_NUTRIENTS_EVENTS_TOPIC,
+            new IntegerDeserializer(),
+            lowNutrientsEventSerde.deserializer());
     }
 
     @AfterEach
@@ -96,6 +106,32 @@ public class GardenStreamsTopologyBuilderTest {
     public void testGoodDryConditions() {
         // Given
         SensorMeasurement measurement = new SensorMeasurement(1, "humidity", 0.8, new Date());
+
+        // When
+        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+
+        // Then
+        assertTrue(dryConditionsEventsTopic.isEmpty());
+    }
+
+    @Test
+    public void testLowNutrientsLevel() {
+        // Given
+        SensorMeasurement measurement = new SensorMeasurement(1, "nutrients", 0.2, new Date());
+
+        // When
+        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+
+        // Then
+        TestRecord<Integer, LowNutrientsDetected> record = lowNutrientsEventsTopic.readRecord();
+        LowNutrientsDetected event = record.getValue();
+        assertEquals(0.2, event.value);
+    }
+
+    @Test
+    public void testGoodNutrientsLevel() {
+        // Given
+        SensorMeasurement measurement = new SensorMeasurement(1, "nutrients", 0.8, new Date());
 
         // When
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
