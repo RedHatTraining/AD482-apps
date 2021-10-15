@@ -1,7 +1,4 @@
-package com.redhat.garden;
-
-import com.redhat.garden.sensors.SensorMeasurementEnriched;
-import com.redhat.garden.sensors.SensorMeasurementType;
+package com.redhat.garden.entities;
 
 public class GardenStatus {
     public String gardenName;

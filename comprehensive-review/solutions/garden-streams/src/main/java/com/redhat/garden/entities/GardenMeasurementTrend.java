@@ -1,4 +1,4 @@
-package com.redhat.garden;
+package com.redhat.garden.entities;
 
 public enum GardenMeasurementTrend {
     UP("Up"),

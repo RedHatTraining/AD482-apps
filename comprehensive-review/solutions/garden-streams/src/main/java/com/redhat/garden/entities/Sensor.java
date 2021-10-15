@@ -1,4 +1,4 @@
-package com.redhat.garden.sensors;
+package com.redhat.garden.entities;
 
 public class Sensor {
     public Integer id;
