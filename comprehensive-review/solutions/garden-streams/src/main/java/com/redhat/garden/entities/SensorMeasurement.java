@@ -1,7 +1,5 @@
 package com.redhat.garden.entities;
 
-import java.util.Date;
-
 public class SensorMeasurement {
     public Integer sensorId;
     public SensorMeasurementType type;
