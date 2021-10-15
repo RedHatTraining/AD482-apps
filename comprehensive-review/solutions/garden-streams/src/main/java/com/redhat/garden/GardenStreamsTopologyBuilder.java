@@ -52,7 +52,7 @@ public class GardenStreamsTopologyBuilder {
     private final ObjectMapperSerde<SensorMeasurementEnriched> sensorMeasurementEnrichedSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
     private final ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
     private final ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
-    private final ObjectMapperSerde<StrongWindDetected> lowNutrientsEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
+    private final ObjectMapperSerde<StrongWindDetected> strongWindEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
     private final ObjectMapperSerde<GardenStatus> gardenStatusSerde = new ObjectMapperSerde<>(GardenStatus.class);
 
     @Produces
@@ -117,7 +117,7 @@ public class GardenStreamsTopologyBuilder {
         windMeasurements
             .filter((sensorId, measurement) -> measurement.value > STRONG_WIND_THRESHOLD_MS)
             .mapValues((measurement) -> new StrongWindDetected(measurement.gardenName, measurement.sensorId, measurement.value, measurement.timestamp))
-            .to(STRONG_WIND_EVENTS_TOPIC, Produced.with(Serdes.Integer(), lowNutrientsEventSerde));
+            .to(STRONG_WIND_EVENTS_TOPIC, Produced.with(Serdes.Integer(), strongWindEventSerde));
     }
 
 }

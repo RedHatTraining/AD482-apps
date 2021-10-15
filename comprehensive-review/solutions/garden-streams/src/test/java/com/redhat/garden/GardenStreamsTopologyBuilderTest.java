@@ -48,8 +48,8 @@ public class GardenStreamsTopologyBuilderTest {
     TestOutputTopic<Integer, DryConditionsDetected> dryConditionsEventsTopic;
     ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde;
 
-    TestOutputTopic<Integer, StrongWindDetected> lowNutrientsEventsTopic;
-    ObjectMapperSerde<StrongWindDetected> lowNutrientsEventSerde;
+    TestOutputTopic<Integer, StrongWindDetected> strongWindEventsTopic;
+    ObjectMapperSerde<StrongWindDetected> strongWindEventSerde;
 
     TestOutputTopic<String, GardenStatus> gardenStatusEventsTopic;
     ObjectMapperSerde<GardenStatus> gardenStatusEventSerde;
@@ -83,11 +83,11 @@ public class GardenStreamsTopologyBuilderTest {
             new IntegerDeserializer(),
             dryConditionsEventSerde.deserializer());
 
-        lowNutrientsEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
-        lowNutrientsEventsTopic = testDriver.createOutputTopic(
+        strongWindEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
+        strongWindEventsTopic = testDriver.createOutputTopic(
             GardenStreamsTopologyBuilder.STRONG_WIND_EVENTS_TOPIC,
             new IntegerDeserializer(),
-            lowNutrientsEventSerde.deserializer());
+            strongWindEventSerde.deserializer());
 
         gardenStatusEventSerde = new ObjectMapperSerde<>(GardenStatus.class);
         gardenStatusEventsTopic = testDriver.createOutputTopic(
@@ -102,7 +102,7 @@ public class GardenStreamsTopologyBuilderTest {
         sensorMeasurementSerde.close();
         lowTemperatureEventSerde.close();
         dryConditionsEventSerde.close();
-        lowNutrientsEventSerde.close();
+        strongWindEventSerde.close();
         gardenStatusEventSerde.close();
     }
 
@@ -167,7 +167,7 @@ public class GardenStreamsTopologyBuilderTest {
     }
 
     @Test
-    public void testLowNutrientsLevel() {
+    public void testStrongWindConditions() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.WIND, 15.0, new Date());
@@ -177,7 +177,7 @@ public class GardenStreamsTopologyBuilderTest {
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
-        TestRecord<Integer, StrongWindDetected> record = lowNutrientsEventsTopic.readRecord();
+        TestRecord<Integer, StrongWindDetected> record = strongWindEventsTopic.readRecord();
         StrongWindDetected event = record.getValue();
         assertEquals(15.0, event.value);
     }
