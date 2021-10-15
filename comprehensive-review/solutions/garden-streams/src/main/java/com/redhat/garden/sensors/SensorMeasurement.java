@@ -4,15 +4,15 @@ import java.util.Date;
 
 public class SensorMeasurement {
     public Integer sensorId;
-    public String property;
+    public SensorMeasurementType type;
     public Double value;
     public Date timestamp;
 
     public SensorMeasurement() {}
 
-    public SensorMeasurement(Integer sensorId, String property, Double value, Date timestamp) {
+    public SensorMeasurement(Integer sensorId, SensorMeasurementType type, Double value, Date timestamp) {
         this.sensorId = sensorId;
-        this.property = property;
+        this.type = type;
         this.value = value;
         this.timestamp = timestamp;
     }
