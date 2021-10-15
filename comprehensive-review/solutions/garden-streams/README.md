@@ -1,6 +1,6 @@
 # Vehicles Project
 
-Application for the `streams-data` guided exercise.
+Kafka Streams application for the `comprehensive-review` exercise.
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
