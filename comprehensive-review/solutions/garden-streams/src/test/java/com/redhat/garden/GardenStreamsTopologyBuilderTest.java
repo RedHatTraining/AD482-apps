@@ -13,7 +13,7 @@ import java.util.Date;
 
 
 import com.redhat.garden.events.DryConditionsDetected;
-import com.redhat.garden.events.LowNutrientsDetected;
+import com.redhat.garden.events.StrongWindDetected;
 import com.redhat.garden.events.LowTemperatureDetected;
 import com.redhat.garden.sensors.Sensor;
 import com.redhat.garden.sensors.SensorMeasurement;
@@ -49,8 +49,8 @@ public class GardenStreamsTopologyBuilderTest {
     TestOutputTopic<Integer, DryConditionsDetected> dryConditionsEventsTopic;
     ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde;
 
-    TestOutputTopic<Integer, LowNutrientsDetected> lowNutrientsEventsTopic;
-    ObjectMapperSerde<LowNutrientsDetected> lowNutrientsEventSerde;
+    TestOutputTopic<Integer, StrongWindDetected> lowNutrientsEventsTopic;
+    ObjectMapperSerde<StrongWindDetected> lowNutrientsEventSerde;
 
     TestOutputTopic<String, GardenStatus> gardenStatusEventsTopic;
     ObjectMapperSerde<GardenStatus> gardenStatusEventSerde;
@@ -80,13 +80,13 @@ public class GardenStreamsTopologyBuilderTest {
 
         dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
         dryConditionsEventsTopic = testDriver.createOutputTopic(
-            GardenStreamsTopologyBuilder.DRY_CONDITIONS_EVENTS_TOPIC,
+            GardenStreamsTopologyBuilder.LOW_HUMIDITY_EVENTS_TOPIC,
             new IntegerDeserializer(),
             dryConditionsEventSerde.deserializer());
 
-        lowNutrientsEventSerde = new ObjectMapperSerde<>(LowNutrientsDetected.class);
+        lowNutrientsEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
         lowNutrientsEventsTopic = testDriver.createOutputTopic(
-            GardenStreamsTopologyBuilder.LOW_NUTRIENTS_EVENTS_TOPIC,
+            GardenStreamsTopologyBuilder.STRONG_WIND_EVENTS_TOPIC,
             new IntegerDeserializer(),
             lowNutrientsEventSerde.deserializer());
 
@@ -178,8 +178,8 @@ public class GardenStreamsTopologyBuilderTest {
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
-        TestRecord<Integer, LowNutrientsDetected> record = lowNutrientsEventsTopic.readRecord();
-        LowNutrientsDetected event = record.getValue();
+        TestRecord<Integer, StrongWindDetected> record = lowNutrientsEventsTopic.readRecord();
+        StrongWindDetected event = record.getValue();
         assertEquals(15.0, event.value);
     }
 
@@ -278,7 +278,6 @@ public class GardenStreamsTopologyBuilderTest {
         GardenStatus event = events.next().value;
         assertEquals(GardenMeasurementTrend.UP, event.temperatureTrend);
     }
-
 
     @Test
     public void testWritesToGardenStatusTopic() {

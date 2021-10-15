@@ -7,7 +7,7 @@ import java.time.Duration;
 import javax.enterprise.context.ApplicationScoped;
 
 import com.redhat.garden.events.DryConditionsDetected;
-import com.redhat.garden.events.LowNutrientsDetected;
+import com.redhat.garden.events.StrongWindDetected;
 import com.redhat.garden.events.LowTemperatureDetected;
 import com.redhat.garden.sensors.Sensor;
 import com.redhat.garden.sensors.SensorMeasurement;
@@ -27,14 +27,11 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.TimeWindows;
-import org.apache.kafka.streams.kstream.Windows;
-import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.WindowStore;
 
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
-import static org.apache.kafka.streams.kstream.Suppressed.untilWindowCloses;
-import static org.apache.kafka.streams.kstream.Suppressed.BufferConfig.unbounded;
+
 
 @ApplicationScoped
 public class GardenStreamsTopologyBuilder {
@@ -42,20 +39,20 @@ public class GardenStreamsTopologyBuilder {
     private static final double LOW_TEMPERATURE_THRESHOLD_CELSIUS = 5.0;
     private static final double LOW_HUMIDITY_THRESHOLD_PERCENT = 0.2;
     private static final double STRONG_WIND_THRESHOLD_MS = 10;
-    public static String SENSORS_TOPIC = "sensors";
-    public static String SENSOR_MEASUREMENTS_TOPIC = "sensor-measurements";
-    public static String LOW_TEMPERATURE_EVENTS_TOPIC = "low-temperature-events";
-    public static String DRY_CONDITIONS_EVENTS_TOPIC = "dry-conditions-events";
-    public static String LOW_NUTRIENTS_EVENTS_TOPIC = "low-nutrients-events";
-    public static String GARDEN_STATUS_EVENTS_TOPIC = "garden-status-events";
+    public static final String SENSORS_TOPIC = "sensors";
+    public static final String SENSOR_MEASUREMENTS_TOPIC = "sensor-measurements";
+    public static final String LOW_TEMPERATURE_EVENTS_TOPIC = "low-temperature-events";
+    public static final String LOW_HUMIDITY_EVENTS_TOPIC = "low-humidity-events";
+    public static final String STRONG_WIND_EVENTS_TOPIC = "strong-wind-events";
+    public static final String GARDEN_STATUS_EVENTS_TOPIC = "garden-status-events";
 
-    ObjectMapperSerde<Sensor> sensorSerde = new ObjectMapperSerde<>(Sensor.class);
-    ObjectMapperSerde<SensorMeasurement> sensorMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurement.class);
-    ObjectMapperSerde<SensorMeasurementEnriched> sensorMeasurementEnrichedSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
-    ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
-    ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
-    ObjectMapperSerde<LowNutrientsDetected> lowNutrientsEventSerde = new ObjectMapperSerde<>(LowNutrientsDetected.class);
-    ObjectMapperSerde<GardenStatus> gardenStatusSerde = new ObjectMapperSerde<>(GardenStatus.class);
+    private final ObjectMapperSerde<Sensor> sensorSerde = new ObjectMapperSerde<>(Sensor.class);
+    private final ObjectMapperSerde<SensorMeasurement> sensorMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurement.class);
+    private final ObjectMapperSerde<SensorMeasurementEnriched> sensorMeasurementEnrichedSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
+    private final ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
+    private final ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
+    private final ObjectMapperSerde<StrongWindDetected> lowNutrientsEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
+    private final ObjectMapperSerde<GardenStatus> gardenStatusSerde = new ObjectMapperSerde<>(GardenStatus.class);
 
     @Produces
     public Topology build() {
@@ -112,14 +109,14 @@ public class GardenStreamsTopologyBuilder {
         humidityMeasurements
             .filter((sensorId, measurement) -> measurement.value < LOW_HUMIDITY_THRESHOLD_PERCENT)
             .mapValues((measurement) -> new DryConditionsDetected(measurement.gardenName, measurement.sensorId, measurement.value, measurement.timestamp))
-            .to(DRY_CONDITIONS_EVENTS_TOPIC, Produced.with(Serdes.Integer(), dryConditionsEventSerde));
+            .to(LOW_HUMIDITY_EVENTS_TOPIC, Produced.with(Serdes.Integer(), dryConditionsEventSerde));
     }
 
-    private void processWind(KStream<Integer, SensorMeasurementEnriched> nutrientsMeasurements) {
-        nutrientsMeasurements
+    private void processWind(KStream<Integer, SensorMeasurementEnriched> windMeasurements) {
+        windMeasurements
             .filter((sensorId, measurement) -> measurement.value > STRONG_WIND_THRESHOLD_MS)
-            .mapValues((measurement) -> new LowNutrientsDetected(measurement.gardenName, measurement.sensorId, measurement.value, measurement.timestamp))
-            .to(LOW_NUTRIENTS_EVENTS_TOPIC, Produced.with(Serdes.Integer(), lowNutrientsEventSerde));
+            .mapValues((measurement) -> new StrongWindDetected(measurement.gardenName, measurement.sensorId, measurement.value, measurement.timestamp))
+            .to(STRONG_WIND_EVENTS_TOPIC, Produced.with(Serdes.Integer(), lowNutrientsEventSerde));
     }
 
 }
