@@ -1,11 +1,9 @@
 package com.redhat.garden.events;
 
-import java.util.Date;
-
 public class StrongWindDetected extends GardenEvent {
     public StrongWindDetected() {}
 
-    public StrongWindDetected(String gardenName, Integer sensorId, Double value, Date timestamp) {
+    public StrongWindDetected(String gardenName, Integer sensorId, Double value, Long timestamp) {
         super("Strong wind detected", gardenName, sensorId, value, timestamp);
     }
 }

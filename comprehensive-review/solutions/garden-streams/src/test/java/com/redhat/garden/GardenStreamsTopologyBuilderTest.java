@@ -110,7 +110,7 @@ public class GardenStreamsTopologyBuilderTest {
     public void testLowTemperatureConditions() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, new Date());
+        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -126,7 +126,7 @@ public class GardenStreamsTopologyBuilderTest {
     public void testGoodTemperatureConditions() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 20.0, new Date());
+        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 20.0, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -140,7 +140,7 @@ public class GardenStreamsTopologyBuilderTest {
     public void testDryConditions() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.1, new Date());
+        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.1, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -156,7 +156,7 @@ public class GardenStreamsTopologyBuilderTest {
     public void testGoodDryConditions() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.8, new Date());
+        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.8, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -170,7 +170,7 @@ public class GardenStreamsTopologyBuilderTest {
     public void testStrongWindConditions() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.WIND, 15.0, new Date());
+        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.WIND, 15.0, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -186,7 +186,7 @@ public class GardenStreamsTopologyBuilderTest {
     public void testCalmWindConditions() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.WIND, 3.0, new Date());
+        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.WIND, 3.0, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -201,7 +201,7 @@ public class GardenStreamsTopologyBuilderTest {
     public void testLowTemperatureEventIncludesSensorMetadata() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, new Date());
+        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -218,8 +218,8 @@ public class GardenStreamsTopologyBuilderTest {
     public void testAggregatesMeasurementsByGardenName() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, new Date());
-        SensorMeasurement measurement2 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, new Date());
+        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L);
+        SensorMeasurement measurement2 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -236,9 +236,9 @@ public class GardenStreamsTopologyBuilderTest {
     public void testGardenStatusKeepsLatestValue() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, new Date());
-        SensorMeasurement measurement2 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, new Date());
-        SensorMeasurement measurement3 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 6.0, new Date());
+        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L);
+        SensorMeasurement measurement2 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, 10L);
+        SensorMeasurement measurement3 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 6.0, 10L);
 
         WindowStore<String, GardenStatus> windowStore = testDriver.getWindowStore("garden-status-store");
 
@@ -259,9 +259,9 @@ public class GardenStreamsTopologyBuilderTest {
     public void testGardenStatusUpdatesTrend() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, new Date());
-        SensorMeasurement measurement2 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, new Date());
-        SensorMeasurement measurement3 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 6.0, new Date());
+        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L);
+        SensorMeasurement measurement2 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, 10L);
+        SensorMeasurement measurement3 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 6.0, 10L);
 
         WindowStore<String, GardenStatus> windowStore = testDriver.getWindowStore("garden-status-store");
 
@@ -282,7 +282,7 @@ public class GardenStreamsTopologyBuilderTest {
     public void testWritesToGardenStatusTopic() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, new Date());
+        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);

@@ -1,20 +1,18 @@
 package com.redhat.garden.events;
 
-import java.util.Date;
-
 /**
- * 
+ * Base event class
  */
 public class GardenEvent {
     public String name;
     public String gardenName;
     public Integer sensorId;
     public Double value;
-    public Date timestamp;
+    public Long timestamp;
 
     public GardenEvent() {}
 
-    public GardenEvent(String name, String gardenName, Integer sensorId, Double value, Date timestamp) {
+    public GardenEvent(String name, String gardenName, Integer sensorId, Double value, Long timestamp) {
         this.name = name;
         this.gardenName = gardenName;
         this.sensorId = sensorId;
