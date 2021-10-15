@@ -40,7 +40,7 @@ public class GardenStreamsTopologyBuilder {
     private static final double LOW_TEMPERATURE_THRESHOLD_CELSIUS = 5.0;
     private static final double LOW_HUMIDITY_THRESHOLD_PERCENT = 0.2;
     private static final double STRONG_WIND_THRESHOLD_MS = 10;
-    public static final String SENSORS_TOPIC = "sensors";
+    public static final String SENSORS_TOPIC = "garden-sensors";
     public static final String SENSOR_MEASUREMENTS_TOPIC = "sensor-measurements";
     public static final String LOW_TEMPERATURE_EVENTS_TOPIC = "low-temperature-events";
     public static final String LOW_HUMIDITY_EVENTS_TOPIC = "low-humidity-events";
