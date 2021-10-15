@@ -1,17 +1,9 @@
 package com.redhat.garden.back.event;
 
-public class LowTemperatureDetected {
-    public String gardenName;
-    public Integer sensorId;
-    public Double value;
-    public Long timestamp;
-
+public class LowTemperatureDetected extends GardenEvent {
     public LowTemperatureDetected() {}
 
-    public LowTemperatureDetected(String gardenName, Integer sensorId, Double value,  Long timestamp) {
-        this.gardenName = gardenName;
-        this.sensorId = sensorId;
-        this.value = value;
-        this.timestamp = timestamp;
+    public LowTemperatureDetected(String name, String gardenName, Integer sensorId, Double value, Long timestamp) {
+        super(name, gardenName, sensorId, value, timestamp);
     }
 }

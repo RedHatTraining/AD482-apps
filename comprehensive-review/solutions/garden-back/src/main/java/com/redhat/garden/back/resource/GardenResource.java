@@ -41,7 +41,7 @@ public class GardenResource {
         );
     }
 
-    @Incoming("garden-dry-soil-alerts")
+    @Incoming("garden-dry-conditions-alerts")
     @Outgoing("in-memory-garden-alerts")
     @Broadcast
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
@@ -54,11 +54,11 @@ public class GardenResource {
         );
     }
 
-    @Incoming("garden-low-nutrients-alerts")
+    @Incoming("garden-strong-wind-alerts")
     @Outgoing("in-memory-garden-alerts")
     @Broadcast
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public GardenEvent processLowNutrientsAlerts(LowNutrientsDetected event) {
+    public GardenEvent processStrongWindAlerts(StrongWindDetected event) {
         return new GardenEvent(
                 event.getClass().getSimpleName(),
                 event.gardenName,

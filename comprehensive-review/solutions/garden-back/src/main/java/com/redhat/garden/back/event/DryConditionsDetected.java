@@ -1,17 +1,9 @@
 package com.redhat.garden.back.event;
 
-public class DryConditionsDetected {
-    public String gardenName;
-    public Integer sensorId;
-    public Double value;
-    public Long timestamp;
-
+public class DryConditionsDetected extends GardenEvent {
     public DryConditionsDetected() {}
 
-    public DryConditionsDetected(String gardenName, Integer sensorId, Double value, Long timestamp) {
-        this.gardenName = gardenName;
-        this.sensorId = sensorId;
-        this.value = value;
-        this.timestamp = timestamp;
+    public DryConditionsDetected(String name, String gardenName, Integer sensorId, Double value, Long timestamp) {
+        super(name, gardenName, sensorId, value, timestamp);
     }
 }
