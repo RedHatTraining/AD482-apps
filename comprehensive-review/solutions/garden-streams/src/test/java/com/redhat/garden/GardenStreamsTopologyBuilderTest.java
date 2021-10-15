@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
@@ -24,7 +25,11 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.streams.TestInputTopic;
 import org.apache.kafka.streams.TestOutputTopic;
 import org.apache.kafka.streams.TopologyTestDriver;
+import org.apache.kafka.streams.kstream.Windowed;
+import org.apache.kafka.streams.state.KeyValueIterator;
 import org.apache.kafka.streams.state.KeyValueStore;
+import org.apache.kafka.streams.state.WindowStore;
+import org.apache.kafka.streams.state.WindowStoreIterator;
 import org.apache.kafka.streams.test.TestRecord;
 
 
@@ -225,8 +230,68 @@ public class GardenStreamsTopologyBuilderTest {
         // Then
         TestRecord<String, GardenStatus> record = gardenStatusEventsTopic.readRecord();
         String gardenName = record.getKey();
-        GardenStatus event = record.getValue();
         assertEquals("Garden 1", gardenName);
+    }
+
+    @Test
+    public void testGardenStatusKeepsLatestValue() {
+        // Given
+        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, new Date());
+        SensorMeasurement measurement2 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, new Date());
+        SensorMeasurement measurement3 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 6.0, new Date());
+
+        WindowStore<String, GardenStatus> windowStore = testDriver.getWindowStore("garden-status-store");
+
+        // When
+        sensorsTopic.pipeInput(sensor.id, sensor);
+        sensorMeasurementsTopic.pipeInput(sensor.id, measurement1, 10L);
+        sensorMeasurementsTopic.pipeInput(sensor.id, measurement2, 11L);
+        sensorMeasurementsTopic.pipeInput(sensor.id, measurement3, 12L);
+
+        // Then
+        KeyValueIterator<Windowed<String>, GardenStatus> events = windowStore.fetchAll(0, 20L);
+
+        GardenStatus event = events.next().value;
+        assertEquals(6.0, event.temperature);
+    }
+
+    @Test
+    public void testGardenStatusUpdatesTrend() {
+        // Given
+        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, new Date());
+        SensorMeasurement measurement2 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, new Date());
+        SensorMeasurement measurement3 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 6.0, new Date());
+
+        WindowStore<String, GardenStatus> windowStore = testDriver.getWindowStore("garden-status-store");
+
+        // When
+        sensorsTopic.pipeInput(sensor.id, sensor);
+        sensorMeasurementsTopic.pipeInput(sensor.id, measurement1, 10L);
+        sensorMeasurementsTopic.pipeInput(sensor.id, measurement2, 11L);
+        sensorMeasurementsTopic.pipeInput(sensor.id, measurement3, 12L);
+
+        // Then
+        KeyValueIterator<Windowed<String>, GardenStatus> events = windowStore.fetchAll(0, 20L);
+
+        GardenStatus event = events.next().value;
+        assertEquals(GardenMeasurementTrend.UP, event.temperatureTrend);
+    }
+
+
+    @Test
+    public void testWritesToGardenStatusTopic() {
+        // Given
+        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        SensorMeasurement measurement1 = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, new Date());
+
+        // When
+        sensorsTopic.pipeInput(sensor.id, sensor);
+        sensorMeasurementsTopic.pipeInput(sensor.id, measurement1, 10L);
+
+        // Then
+        assertFalse(gardenStatusEventsTopic.isEmpty());
     }
 
 }

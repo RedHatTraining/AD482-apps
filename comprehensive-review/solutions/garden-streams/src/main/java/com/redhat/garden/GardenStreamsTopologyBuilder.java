@@ -29,8 +29,12 @@ import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.kstream.Windows;
 import org.apache.kafka.streams.state.KeyValueStore;
+import org.apache.kafka.streams.state.WindowStore;
 
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
+
+import static org.apache.kafka.streams.kstream.Suppressed.untilWindowCloses;
+import static org.apache.kafka.streams.kstream.Suppressed.BufferConfig.unbounded;
 
 @ApplicationScoped
 public class GardenStreamsTopologyBuilder {
@@ -74,11 +78,14 @@ public class GardenStreamsTopologyBuilder {
                 (sensorId, measurement) -> measurement.gardenName,
                 Grouped.with(Serdes.String(), sensorMeasurementEnrichedSerde)
             )
-            .windowedBy(TimeWindows.of(Duration.ofMinutes(1)))
+            .windowedBy(TimeWindows.of(Duration.ofMinutes(60)).advanceBy(Duration.ofMinutes(60)))
             .aggregate(
                 GardenStatus::new,
                 (gardenName, measurement, gardenStatus) -> gardenStatus.updateWith(measurement),
-                Materialized.with(Serdes.String(), gardenStatusSerde))
+                Materialized
+                    .<String, GardenStatus, WindowStore<Bytes, byte[]>>as("garden-status-store")
+                        .withKeySerde(Serdes.String())
+                        .withValueSerde(gardenStatusSerde))
             .toStream()
             .map((windowedGardenName, gardenStatus) ->
                 new KeyValue<>(windowedGardenName.key(), gardenStatus))
