@@ -10,7 +10,7 @@ public class SensorMeasurementEnriched extends SensorMeasurement {
             Integer sensorId,
             String property,
             Double value,
-            Integer timestamp,
+            Long timestamp,
             String sensorName,
             String gardenName
     ) {

@@ -4,11 +4,11 @@ public class LowNutrientsDetected {
     public String gardenName;
     public Integer sensorId;
     public Double value;
-    public Integer timestamp;
+    public Long timestamp;
 
     public LowNutrientsDetected() {}
 
-    public LowNutrientsDetected(String gardenName, Integer sensorId, Double value,  Integer timestamp) {
+    public LowNutrientsDetected(String gardenName, Integer sensorId, Double value,  Long timestamp) {
         this.gardenName = gardenName;
         this.sensorId = sensorId;
         this.value = value;
