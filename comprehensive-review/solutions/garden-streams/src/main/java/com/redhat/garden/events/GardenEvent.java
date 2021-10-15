@@ -1,9 +1,9 @@
 package com.redhat.garden.events;
 
 /**
- * Base event class
+ * Abstract Base event class
  */
-public class GardenEvent {
+abstract public class GardenEvent {
     public String name;
     public String gardenName;
     public Integer sensorId;
