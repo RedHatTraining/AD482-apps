@@ -1,4 +1,4 @@
-package com.redhat.garden.entities;
+package com.redhat.training.gardens.model;
 
 public enum GardenMeasurementTrend {
     UP("Up"),

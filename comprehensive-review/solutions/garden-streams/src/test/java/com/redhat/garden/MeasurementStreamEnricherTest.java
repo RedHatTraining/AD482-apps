@@ -8,10 +8,12 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import com.redhat.garden.entities.Sensor;
-import com.redhat.garden.entities.SensorMeasurement;
-import com.redhat.garden.entities.SensorMeasurementEnriched;
-import com.redhat.garden.entities.SensorMeasurementType;
+import com.redhat.training.gardens.MeasurementStreamEnricher;
+import com.redhat.training.gardens.RulesProcessor;
+import com.redhat.training.gardens.model.Sensor;
+import com.redhat.training.gardens.model.SensorMeasurement;
+import com.redhat.training.gardens.model.SensorMeasurementEnriched;
+import com.redhat.training.gardens.model.SensorMeasurementType;
 
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.IntegerSerializer;

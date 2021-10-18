@@ -1,4 +1,4 @@
-package com.redhat.garden.events;
+package com.redhat.training.gardens.event;
 
 /**
  * Abstract Base event class

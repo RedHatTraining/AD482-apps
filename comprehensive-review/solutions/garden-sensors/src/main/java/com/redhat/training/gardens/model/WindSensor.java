@@ -1,4 +1,4 @@
-package com.redhat.training.sensors.model;
+package com.redhat.training.gardens.model;
 
 public class WindSensor extends Sensor{
 

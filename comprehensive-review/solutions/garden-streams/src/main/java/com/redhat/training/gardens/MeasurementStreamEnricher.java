@@ -1,19 +1,19 @@
-package com.redhat.garden;
+package com.redhat.training.gardens;
 
 import javax.enterprise.inject.Produces;
+
+import com.redhat.training.gardens.event.DryConditionsDetected;
+import com.redhat.training.gardens.event.LowTemperatureDetected;
+import com.redhat.training.gardens.event.StrongWindDetected;
+import com.redhat.training.gardens.model.GardenStatus;
+import com.redhat.training.gardens.model.Sensor;
+import com.redhat.training.gardens.model.SensorMeasurement;
+import com.redhat.training.gardens.model.SensorMeasurementEnriched;
+import com.redhat.training.gardens.model.SensorMeasurementType;
 
 import java.time.Duration;
 
 import javax.enterprise.context.ApplicationScoped;
-
-import com.redhat.garden.entities.GardenStatus;
-import com.redhat.garden.entities.Sensor;
-import com.redhat.garden.entities.SensorMeasurement;
-import com.redhat.garden.entities.SensorMeasurementEnriched;
-import com.redhat.garden.entities.SensorMeasurementType;
-import com.redhat.garden.events.DryConditionsDetected;
-import com.redhat.garden.events.StrongWindDetected;
-import com.redhat.garden.events.LowTemperatureDetected;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;

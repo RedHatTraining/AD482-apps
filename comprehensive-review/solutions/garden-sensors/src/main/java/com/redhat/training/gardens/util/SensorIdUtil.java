@@ -1,4 +1,4 @@
-package com.redhat.training.sensors.util;
+package com.redhat.training.gardens.util;
 
 import java.util.Random;
 

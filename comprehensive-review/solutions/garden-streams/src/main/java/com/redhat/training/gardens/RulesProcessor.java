@@ -1,13 +1,13 @@
-package com.redhat.garden;
+package com.redhat.training.gardens;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
-import com.redhat.garden.entities.SensorMeasurementEnriched;
-import com.redhat.garden.entities.SensorMeasurementType;
-import com.redhat.garden.events.DryConditionsDetected;
-import com.redhat.garden.events.StrongWindDetected;
-import com.redhat.garden.events.LowTemperatureDetected;
+import com.redhat.training.gardens.event.DryConditionsDetected;
+import com.redhat.training.gardens.event.LowTemperatureDetected;
+import com.redhat.training.gardens.event.StrongWindDetected;
+import com.redhat.training.gardens.model.SensorMeasurementEnriched;
+import com.redhat.training.gardens.model.SensorMeasurementType;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -20,7 +20,7 @@ import org.apache.kafka.streams.kstream.Produced;
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
 @ApplicationScoped
-class RulesProcessor {
+public class RulesProcessor {
     private static final double LOW_TEMPERATURE_THRESHOLD_CELSIUS = 5.0;
     private static final double LOW_HUMIDITY_THRESHOLD_PERCENT = 0.2;
     private static final double STRONG_WIND_THRESHOLD_MS = 10;

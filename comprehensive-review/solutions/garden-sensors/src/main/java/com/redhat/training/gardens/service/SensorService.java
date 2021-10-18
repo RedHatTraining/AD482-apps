@@ -1,11 +1,12 @@
-package com.redhat.training.sensors.service;
-
-import com.redhat.training.sensors.model.HumiditySensor;
-import com.redhat.training.sensors.model.Sensor;
-import com.redhat.training.sensors.model.TemperatureSensor;
-import com.redhat.training.sensors.model.WindSensor;
+package com.redhat.training.gardens.service;
 
 import javax.enterprise.context.ApplicationScoped;
+
+import com.redhat.training.gardens.model.HumiditySensor;
+import com.redhat.training.gardens.model.Sensor;
+import com.redhat.training.gardens.model.TemperatureSensor;
+import com.redhat.training.gardens.model.WindSensor;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;

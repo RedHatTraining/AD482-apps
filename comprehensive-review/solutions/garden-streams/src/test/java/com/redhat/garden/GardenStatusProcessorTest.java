@@ -8,12 +8,14 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import com.redhat.garden.entities.GardenMeasurementTrend;
-import com.redhat.garden.entities.GardenStatus;
-import com.redhat.garden.entities.Sensor;
-import com.redhat.garden.entities.SensorMeasurement;
-import com.redhat.garden.entities.SensorMeasurementEnriched;
-import com.redhat.garden.entities.SensorMeasurementType;
+import com.redhat.training.gardens.GardenStatusProcessor;
+import com.redhat.training.gardens.RulesProcessor;
+import com.redhat.training.gardens.model.GardenMeasurementTrend;
+import com.redhat.training.gardens.model.GardenStatus;
+import com.redhat.training.gardens.model.Sensor;
+import com.redhat.training.gardens.model.SensorMeasurement;
+import com.redhat.training.gardens.model.SensorMeasurementEnriched;
+import com.redhat.training.gardens.model.SensorMeasurementType;
 
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -79,8 +81,8 @@ public class GardenStatusProcessorTest {
 
         // Then
         TestRecord<String, GardenStatus> record = gardenStatusEventsTopic.readRecord();
-        String gardenName = record.getKey();
-        assertEquals("Garden 1", gardenName);
+        GardenStatus status = record.getValue();
+        assertEquals("Garden 1", status.gardenName);
     }
 
     @Test

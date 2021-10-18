@@ -1,14 +1,13 @@
-package com.redhat.garden;
+package com.redhat.training.gardens;
 
 import javax.enterprise.inject.Produces;
+
+import com.redhat.training.gardens.model.GardenStatus;
+import com.redhat.training.gardens.model.SensorMeasurementEnriched;
 
 import java.time.Duration;
 
 import javax.enterprise.context.ApplicationScoped;
-
-import com.redhat.garden.entities.GardenStatus;
-import com.redhat.garden.entities.SensorMeasurementEnriched;
-
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
@@ -56,12 +55,10 @@ public class GardenStatusProcessor {
                         .withKeySerde(Serdes.String())
                         .withValueSerde(gardenStatusSerde))
             .toStream()
-            .map((windowedGardenName, gardenStatus) ->
-                // Make key null
-                new KeyValue<>(windowedGardenName.key(), gardenStatus))
+            .map((windowedGardenName, gardenStatus) -> new KeyValue<Void, GardenStatus>(null, gardenStatus))
             .to(
                 GARDEN_STATUS_EVENTS_TOPIC,
-                Produced.with(Serdes.String(), gardenStatusSerde));
+                Produced.with(Serdes.Void(), gardenStatusSerde));
 
         return builder.build();
     }

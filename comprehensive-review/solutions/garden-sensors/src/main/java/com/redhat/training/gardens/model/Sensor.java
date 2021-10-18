@@ -1,7 +1,7 @@
-package com.redhat.training.sensors.model;
+package com.redhat.training.gardens.model;
 
-import com.redhat.training.sensors.util.SensorIdUtil;
-import com.redhat.training.sensors.util.SensorValueUtil;
+import com.redhat.training.gardens.util.SensorIdUtil;
+import com.redhat.training.gardens.util.SensorValueUtil;
 
 public abstract class Sensor {
 
