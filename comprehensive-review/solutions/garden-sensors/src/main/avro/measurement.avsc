@@ -1,0 +1,28 @@
+{
+  "namespace": "com.redhat.training.sensors.model",
+  "type": "record",
+  "name": "SensorMeasurementTaken",
+  "fields": [
+    {
+      "name": "sensorId",
+      "type": "int"
+    },
+    {
+      "name": "value",
+      "type": "double"
+    },
+    {
+      "name": "timestamp",
+      "type": "long"
+    },
+    {
+      "name": "type",
+      "type": ["null", {
+        "type": "enum",
+        "name": "SensorMeasurementType",
+        "symbols": ["TEMPERATURE", "HUMIDITY", "WIND"]
+      }
+      ]
+    }
+  ]
+}
