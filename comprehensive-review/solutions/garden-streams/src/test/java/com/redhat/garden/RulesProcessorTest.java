@@ -173,4 +173,20 @@ public class RulesProcessorTest {
         assertTrue(dryConditionsEventsTopic.isEmpty());
     }
 
+    @Test
+    public void testGeneratedEventsIncludesSensorMetadata() {
+        // Given
+        SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
+            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L),
+            new Sensor(1, "Sensor 1", "Garden 1"));
+
+        // When
+        enrichedMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+
+        // Then
+        TestRecord<Integer, LowTemperatureDetected> record = lowTemperatureEventsTopic.readRecord();
+        LowTemperatureDetected event = record.getValue();
+        assertEquals("Garden 1", event.gardenName);
+    }
+
 }

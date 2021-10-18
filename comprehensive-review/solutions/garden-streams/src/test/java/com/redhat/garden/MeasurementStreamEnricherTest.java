@@ -7,16 +7,13 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.redhat.garden.entities.GardenMeasurementTrend;
 import com.redhat.garden.entities.GardenStatus;
 import com.redhat.garden.entities.Sensor;
 import com.redhat.garden.entities.SensorMeasurement;
+import com.redhat.garden.entities.SensorMeasurementEnriched;
 import com.redhat.garden.entities.SensorMeasurementType;
-import com.redhat.garden.events.DryConditionsDetected;
-import com.redhat.garden.events.StrongWindDetected;
-import com.redhat.garden.events.LowTemperatureDetected;
 
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.IntegerSerializer;
@@ -40,17 +37,12 @@ public class MeasurementStreamEnricherTest {
     TestInputTopic<Integer, SensorMeasurement> sensorMeasurementsTopic;
     ObjectMapperSerde<SensorMeasurement> sensorMeasurementSerde;
 
-    TestOutputTopic<Integer, LowTemperatureDetected> lowTemperatureEventsTopic;
-    ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde;
-
-    TestOutputTopic<Integer, DryConditionsDetected> dryConditionsEventsTopic;
-    ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde;
-
-    TestOutputTopic<Integer, StrongWindDetected> strongWindEventsTopic;
-    ObjectMapperSerde<StrongWindDetected> strongWindEventSerde;
+    TestOutputTopic<Integer, SensorMeasurementEnriched> enrichedMeasurementsTopic;
+    ObjectMapperSerde<SensorMeasurementEnriched> enrichedMeasurementSerde;
 
     TestOutputTopic<String, GardenStatus> gardenStatusEventsTopic;
     ObjectMapperSerde<GardenStatus> gardenStatusEventSerde;
+
 
     @BeforeEach
     public void setup() {
@@ -69,23 +61,12 @@ public class MeasurementStreamEnricherTest {
                     new IntegerSerializer(),
                     sensorMeasurementSerde.serializer());
 
-        lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
-        lowTemperatureEventsTopic = testDriver.createOutputTopic(
-            MeasurementStreamEnricher.LOW_TEMPERATURE_EVENTS_TOPIC,
-            new IntegerDeserializer(),
-            lowTemperatureEventSerde.deserializer());
+        enrichedMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
+        enrichedMeasurementsTopic = testDriver.createOutputTopic(
+                    RulesProcessor.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
+                    new IntegerDeserializer(),
+                    enrichedMeasurementSerde.deserializer());
 
-        dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
-        dryConditionsEventsTopic = testDriver.createOutputTopic(
-            MeasurementStreamEnricher.LOW_HUMIDITY_EVENTS_TOPIC,
-            new IntegerDeserializer(),
-            dryConditionsEventSerde.deserializer());
-
-        strongWindEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
-        strongWindEventsTopic = testDriver.createOutputTopic(
-            MeasurementStreamEnricher.STRONG_WIND_EVENTS_TOPIC,
-            new IntegerDeserializer(),
-            strongWindEventSerde.deserializer());
 
         gardenStatusEventSerde = new ObjectMapperSerde<>(GardenStatus.class);
         gardenStatusEventsTopic = testDriver.createOutputTopic(
@@ -98,14 +79,12 @@ public class MeasurementStreamEnricherTest {
     public void teardown() {
         testDriver.close();
         sensorMeasurementSerde.close();
-        lowTemperatureEventSerde.close();
-        dryConditionsEventSerde.close();
-        strongWindEventSerde.close();
+        enrichedMeasurementSerde.close();
         gardenStatusEventSerde.close();
     }
 
     @Test
-    public void testLowTemperatureConditions() {
+    public void testWritesEnrichedStreamToTopic() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
@@ -115,101 +94,11 @@ public class MeasurementStreamEnricherTest {
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
-        TestRecord<Integer, LowTemperatureDetected> record = lowTemperatureEventsTopic.readRecord();
-        LowTemperatureDetected event = record.getValue();
-        assertEquals(4.5, event.value);
-    }
-
-    @Test
-    public void testGoodTemperatureConditions() {
-        // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 20.0, 10L);
-
-        // When
-        sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
-
-        // Then
-        assertTrue(lowTemperatureEventsTopic.isEmpty());
-    }
-
-    @Test
-    public void testDryConditions() {
-        // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.1, 10L);
-
-        // When
-        sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
-
-        // Then
-        TestRecord<Integer, DryConditionsDetected> record = dryConditionsEventsTopic.readRecord();
-        DryConditionsDetected event = record.getValue();
-        assertEquals(0.1, event.value);
-    }
-
-    @Test
-    public void testGoodDryConditions() {
-        // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.8, 10L);
-
-        // When
-        sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
-
-        // Then
-        assertTrue(dryConditionsEventsTopic.isEmpty());
-    }
-
-    @Test
-    public void testStrongWindConditions() {
-        // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.WIND, 15.0, 10L);
-
-        // When
-        sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
-
-        // Then
-        TestRecord<Integer, StrongWindDetected> record = strongWindEventsTopic.readRecord();
-        StrongWindDetected event = record.getValue();
-        assertEquals(15.0, event.value);
-    }
-
-    @Test
-    public void testCalmWindConditions() {
-        // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.WIND, 3.0, 10L);
-
-        // When
-        sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
-
-        // Then
-        assertTrue(dryConditionsEventsTopic.isEmpty());
-    }
-
-
-    @Test
-    public void testLowTemperatureEventIncludesSensorMetadata() {
-        // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
-
-        // When
-        sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
-
-        // Then
-        TestRecord<Integer, LowTemperatureDetected> record = lowTemperatureEventsTopic.readRecord();
-        LowTemperatureDetected event = record.getValue();
+        TestRecord<Integer, SensorMeasurementEnriched> record = enrichedMeasurementsTopic.readRecord();
+        SensorMeasurementEnriched event = record.getValue();
         assertEquals("Garden 1", event.gardenName);
-
+        assertEquals(SensorMeasurementType.TEMPERATURE, event.type);
+        assertEquals(4.5, event.value);
     }
 
     @Test
