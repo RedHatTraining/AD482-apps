@@ -27,7 +27,7 @@ public class SensorMeasurementService {
                 .onOverflow().drop()
                 .map(tick -> {
                     SensorMeasurementTaken event = generateEvent(sensorService.getSensor());
-                    LOGGER.info("Sensor measured: " + event);
+                    LOGGER.info("Sensor measurement taken: " + event);
                     return Record.of(event.getSensorId(), event);
                 });
     }
