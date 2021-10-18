@@ -28,9 +28,6 @@ public class RulesProcessorTest {
 
     TopologyTestDriver testDriver;
 
-    TestInputTopic<Integer, Sensor> sensorsTopic;
-    ObjectMapperSerde<Sensor> sensorSerde;
-
     TestInputTopic<Integer, SensorMeasurementEnriched> enrichedMeasurementsTopic;
     ObjectMapperSerde<SensorMeasurementEnriched> sensorMeasurementSerde;
 

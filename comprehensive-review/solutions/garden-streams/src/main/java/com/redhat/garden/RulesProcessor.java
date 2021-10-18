@@ -1,5 +1,6 @@
 package com.redhat.garden;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
 import com.redhat.garden.entities.SensorMeasurementEnriched;
@@ -18,6 +19,7 @@ import org.apache.kafka.streams.kstream.Produced;
 
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
+@ApplicationScoped
 class RulesProcessor {
     private static final double LOW_TEMPERATURE_THRESHOLD_CELSIUS = 5.0;
     private static final double LOW_HUMIDITY_THRESHOLD_PERCENT = 0.2;
