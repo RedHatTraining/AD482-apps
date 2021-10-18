@@ -1,15 +1,22 @@
 package com.redhat.training.gardens.model;
 
+import com.redhat.training.sensors.util.SensorIdUtil;
+
 public class HumiditySensor extends Sensor{
 
     @Override
-    public int getMinIndex() {
-        return 1;
+    public int getId() {
+        return SensorIdUtil.getRandomId(1, 3);
     }
 
     @Override
-    public int getMaxIndex() {
-        return 6;
+    public int getMinValue() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxValue() {
+        return 1;
     }
 
     @Override
