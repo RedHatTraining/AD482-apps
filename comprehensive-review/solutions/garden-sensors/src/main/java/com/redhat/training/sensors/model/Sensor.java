@@ -5,18 +5,16 @@ import com.redhat.training.sensors.util.SensorValueUtil;
 
 public abstract class Sensor {
 
-    public abstract int getMinIndex();
+    public abstract int getMinValue();
 
-    public abstract int getMaxIndex();
+    public abstract int getMaxValue();
 
-    public int getId() {
-        return SensorIdUtil.getRandomId(getMinIndex(), getMaxIndex());
-    }
+    public abstract int getId();
 
     public abstract SensorType getType();
 
     public double getValue() {
-        return SensorValueUtil.getRandomValue();
+        return SensorValueUtil.getRandomValue(getMinValue(), getMaxValue());
     }
 
 

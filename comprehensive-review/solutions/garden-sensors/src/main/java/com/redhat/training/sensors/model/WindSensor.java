@@ -3,13 +3,18 @@ package com.redhat.training.sensors.model;
 public class WindSensor extends Sensor{
 
     @Override
-    public int getMinIndex() {
-        return 11;
+    public int getId() {
+        return 3;
     }
 
     @Override
-    public int getMaxIndex() {
-        return 16;
+    public int getMinValue() {
+        return 1;
+    }
+
+    @Override
+    public int getMaxValue() {
+        return 20;
     }
 
     @Override
