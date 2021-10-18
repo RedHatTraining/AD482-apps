@@ -1,10 +1,13 @@
 package com.redhat.training.gardens.model;
 
+import java.time.Instant;
+
 public class SensorMeasurement {
     public Integer sensorId;
-    public SensorMeasurementType type;
     public Double value;
+    public SensorMeasurementType type;
     public Long timestamp;
+    public Long receivedAt;
 
     public SensorMeasurement() {}
 
@@ -13,6 +16,7 @@ public class SensorMeasurement {
         this.type = type;
         this.value = value;
         this.timestamp = timestamp;
+        this.receivedAt = Instant.now().getEpochSecond();
     }
 }
 

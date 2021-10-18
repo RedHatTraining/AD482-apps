@@ -85,7 +85,7 @@ public class ConditionsDetectorTest {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L),
-            new Sensor(1, "Sensor 1", "Garden 1"));
+            new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1"));
 
         // When
         enrichedMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
@@ -101,7 +101,7 @@ public class ConditionsDetectorTest {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 20.0, 10L),
-            new Sensor(1, "Sensor 1", "Garden 1"));
+            new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1"));
 
         // When
         enrichedMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
@@ -115,7 +115,7 @@ public class ConditionsDetectorTest {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.1, 10L),
-            new Sensor(1, "Sensor 1", "Garden 1"));
+            new Sensor(1, "Sensor 1", "Humidity", "Customer 1", "Garden 1"));
 
         // When
         enrichedMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
@@ -131,7 +131,7 @@ public class ConditionsDetectorTest {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.8, 10L),
-            new Sensor(1, "Sensor 1", "Garden 1"));
+            new Sensor(1, "Sensor 1", "Humidity", "Customer 1", "Garden 1"));
 
         // When
         enrichedMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
@@ -145,7 +145,7 @@ public class ConditionsDetectorTest {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.WIND, 15.0, 10L),
-            new Sensor(1, "Sensor 1", "Garden 1"));
+            new Sensor(1, "Sensor 1", "Wind", "Customer 1", "Garden 1"));
 
         // When
         enrichedMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
@@ -161,7 +161,7 @@ public class ConditionsDetectorTest {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.WIND, 3.0, 10L),
-            new Sensor(1, "Sensor 1", "Garden 1"));
+            new Sensor(1, "Sensor 1", "Wind", "Customer 1", "Garden 1"));
 
         // When
         enrichedMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
@@ -175,7 +175,7 @@ public class ConditionsDetectorTest {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L),
-            new Sensor(1, "Sensor 1", "Garden 1"));
+            new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1"));
 
         // When
         enrichedMeasurementsTopic.pipeInput(measurement.sensorId, measurement);

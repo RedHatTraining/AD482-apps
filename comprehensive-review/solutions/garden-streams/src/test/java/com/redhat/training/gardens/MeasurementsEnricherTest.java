@@ -68,7 +68,7 @@ public class MeasurementsEnricherTest {
     @Test
     public void testWritesEnrichedStreamToTopic() {
         // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
 
         // When
@@ -82,7 +82,7 @@ public class MeasurementsEnricherTest {
     @Test
     public void testEnrichedMeasurementIncludeGardenName() {
         // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
 
         // When
@@ -98,7 +98,7 @@ public class MeasurementsEnricherTest {
     @Test
     public void testEnrichedMeasurementIncludeMeasurementType() {
         // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
 
         // When
@@ -114,7 +114,7 @@ public class MeasurementsEnricherTest {
     @Test
     public void testEnrichedMeasurementIncludeValue() {
         // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
 
         // When

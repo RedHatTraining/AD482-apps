@@ -9,9 +9,11 @@ public class Sensor {
 
     public Sensor() {}
 
-    public Sensor(Integer id, String name, String garden) {
+    public Sensor(Integer id, String name, String type, String customer, String garden) {
         this.id = id;
         this.name = name;
+        this.type = type;
+        this.customer = customer;
         this.garden = garden;
     }
 }

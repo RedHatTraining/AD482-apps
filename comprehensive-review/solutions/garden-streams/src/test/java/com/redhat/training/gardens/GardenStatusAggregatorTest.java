@@ -65,7 +65,7 @@ public class GardenStatusAggregatorTest {
     @Test
     public void testAggregatesMeasurementsByGardenName() {
         // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurementEnriched measurement1 = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L),
             sensor);
@@ -86,7 +86,7 @@ public class GardenStatusAggregatorTest {
     @Test
     public void testGardenStatusKeepsLatestValue() {
         // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurementEnriched measurement1 = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L),
             sensor);
@@ -114,7 +114,7 @@ public class GardenStatusAggregatorTest {
     @Test
     public void testGardenStatusUpdatesTrend() {
         // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurementEnriched measurement1 = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L),
             sensor);
@@ -142,7 +142,7 @@ public class GardenStatusAggregatorTest {
     @Test
     public void testWritesToGardenStatusTopic() {
         // Given
-        Sensor sensor = new Sensor(1, "Sensor 1", "Garden 1");
+        Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
             new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L),
             sensor);
