@@ -33,7 +33,8 @@ public class SensorMeasurementService {
     }
 
     private SensorMeasurementTaken generateEvent(Sensor sensor) {
-        return new SensorMeasurementTaken(sensor.getId(), sensor.getValue(), Instant.now().toEpochMilli(), SensorMeasurementType.valueOf(sensor.getType().name()));
+        return new SensorMeasurementTaken(sensor.getId(), sensor.getValue(), Instant.now().toEpochMilli(),
+                SensorMeasurementType.valueOf(sensor.getType().name()));
     }
 
 }
