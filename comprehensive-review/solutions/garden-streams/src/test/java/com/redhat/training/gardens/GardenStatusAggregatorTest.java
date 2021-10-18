@@ -1,4 +1,4 @@
-package com.redhat.garden;
+package com.redhat.training.gardens;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,8 +8,6 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import com.redhat.training.gardens.GardenStatusProcessor;
-import com.redhat.training.gardens.RulesProcessor;
 import com.redhat.training.gardens.model.GardenMeasurementTrend;
 import com.redhat.training.gardens.model.GardenStatus;
 import com.redhat.training.gardens.model.Sensor;
@@ -28,7 +26,7 @@ import org.apache.kafka.streams.state.WindowStore;
 import org.apache.kafka.streams.test.TestRecord;
 
 
-public class GardenStatusProcessorTest {
+public class GardenStatusAggregatorTest {
 
     TopologyTestDriver testDriver;
 
@@ -41,18 +39,18 @@ public class GardenStatusProcessorTest {
 
     @BeforeEach
     public void setup() {
-        GardenStatusProcessor topologyBuilder = new GardenStatusProcessor();
+        GardenStatusAggregator topologyBuilder = new GardenStatusAggregator();
         testDriver = new TopologyTestDriver(topologyBuilder.getTopology());
 
         enrichedMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
         enrichedMeasurementsTopic = testDriver.createInputTopic(
-                    RulesProcessor.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
+                    MeasurementsEnricher.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
                     new IntegerSerializer(),
                     enrichedMeasurementSerde.serializer());
 
         gardenStatusEventSerde = new ObjectMapperSerde<>(GardenStatus.class);
         gardenStatusEventsTopic = testDriver.createOutputTopic(
-            GardenStatusProcessor.GARDEN_STATUS_EVENTS_TOPIC,
+            GardenStatusAggregator.GARDEN_STATUS_EVENTS_TOPIC,
             new StringDeserializer(),
             gardenStatusEventSerde.deserializer());
     }

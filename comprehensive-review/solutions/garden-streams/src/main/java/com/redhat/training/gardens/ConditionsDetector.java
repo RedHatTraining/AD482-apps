@@ -20,11 +20,11 @@ import org.apache.kafka.streams.kstream.Produced;
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
 @ApplicationScoped
-public class RulesProcessor {
+public class ConditionsDetector {
     private static final double LOW_TEMPERATURE_THRESHOLD_CELSIUS = 5.0;
     private static final double LOW_HUMIDITY_THRESHOLD_PERCENT = 0.2;
     private static final double STRONG_WIND_THRESHOLD_MS = 10;
-    public static final String ENRICHED_SENSOR_MEASUREMENTS_TOPIC = "garden-enriched-sensor-measurements";
+
     public static final String LOW_TEMPERATURE_EVENTS_TOPIC = "garden-low-temperature-events";
     public static final String LOW_HUMIDITY_EVENTS_TOPIC = "garden-low-humidity-events";
     public static final String STRONG_WIND_EVENTS_TOPIC = "garden-strong-wind-events";
@@ -40,7 +40,7 @@ public class RulesProcessor {
 
         builder
             .stream(
-                ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
+                MeasurementsEnricher.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
                 Consumed.with(Serdes.Integer(), sensorMeasurementEnrichedSerde))
             .split()
                 .branch((sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.TEMPERATURE),

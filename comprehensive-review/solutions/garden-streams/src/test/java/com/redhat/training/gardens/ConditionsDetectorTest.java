@@ -1,4 +1,4 @@
-package com.redhat.garden;
+package com.redhat.training.gardens;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,7 +8,6 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.redhat.training.gardens.RulesProcessor;
 import com.redhat.training.gardens.event.DryConditionsDetected;
 import com.redhat.training.gardens.event.LowTemperatureDetected;
 import com.redhat.training.gardens.event.StrongWindDetected;
@@ -25,7 +24,7 @@ import org.apache.kafka.streams.TopologyTestDriver;
 import org.apache.kafka.streams.test.TestRecord;
 
 
-public class RulesProcessorTest {
+public class ConditionsDetectorTest {
 
     TopologyTestDriver testDriver;
 
@@ -44,30 +43,30 @@ public class RulesProcessorTest {
 
     @BeforeEach
     public void setup() {
-        RulesProcessor processor = new RulesProcessor();
+        ConditionsDetector processor = new ConditionsDetector();
         testDriver = new TopologyTestDriver(processor.getTopology());
 
         sensorMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
         enrichedMeasurementsTopic = testDriver.createInputTopic(
-                    RulesProcessor.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
+                    MeasurementsEnricher.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
                     new IntegerSerializer(),
                     sensorMeasurementSerde.serializer());
 
         lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
         lowTemperatureEventsTopic = testDriver.createOutputTopic(
-            RulesProcessor.LOW_TEMPERATURE_EVENTS_TOPIC,
+            ConditionsDetector.LOW_TEMPERATURE_EVENTS_TOPIC,
             new IntegerDeserializer(),
             lowTemperatureEventSerde.deserializer());
 
         dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
         dryConditionsEventsTopic = testDriver.createOutputTopic(
-            RulesProcessor.LOW_HUMIDITY_EVENTS_TOPIC,
+            ConditionsDetector.LOW_HUMIDITY_EVENTS_TOPIC,
             new IntegerDeserializer(),
             dryConditionsEventSerde.deserializer());
 
         strongWindEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
         strongWindEventsTopic = testDriver.createOutputTopic(
-            RulesProcessor.STRONG_WIND_EVENTS_TOPIC,
+            ConditionsDetector.STRONG_WIND_EVENTS_TOPIC,
             new IntegerDeserializer(),
             strongWindEventSerde.deserializer());
     }

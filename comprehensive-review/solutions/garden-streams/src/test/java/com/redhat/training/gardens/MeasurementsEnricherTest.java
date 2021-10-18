@@ -1,4 +1,4 @@
-package com.redhat.garden;
+package com.redhat.training.gardens;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,8 +8,6 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import com.redhat.training.gardens.MeasurementStreamEnricher;
-import com.redhat.training.gardens.RulesProcessor;
 import com.redhat.training.gardens.model.Sensor;
 import com.redhat.training.gardens.model.SensorMeasurement;
 import com.redhat.training.gardens.model.SensorMeasurementEnriched;
@@ -23,7 +21,7 @@ import org.apache.kafka.streams.TopologyTestDriver;
 import org.apache.kafka.streams.test.TestRecord;
 
 
-public class MeasurementStreamEnricherTest {
+public class MeasurementsEnricherTest {
 
     TopologyTestDriver testDriver;
 
@@ -38,24 +36,24 @@ public class MeasurementStreamEnricherTest {
 
     @BeforeEach
     public void setup() {
-        MeasurementStreamEnricher topologyBuilder = new MeasurementStreamEnricher();
+        MeasurementsEnricher topologyBuilder = new MeasurementsEnricher();
         testDriver = new TopologyTestDriver(topologyBuilder.build());
 
         sensorSerde = new ObjectMapperSerde<>(Sensor.class);
         sensorsTopic = testDriver.createInputTopic(
-                    MeasurementStreamEnricher.SENSORS_TOPIC,
+                    MeasurementsEnricher.SENSORS_TOPIC,
                     new IntegerSerializer(),
                     sensorSerde.serializer());
 
         sensorMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurement.class);
         sensorMeasurementsTopic = testDriver.createInputTopic(
-                    MeasurementStreamEnricher.SENSOR_MEASUREMENTS_TOPIC,
+                    MeasurementsEnricher.SENSOR_MEASUREMENTS_TOPIC,
                     new IntegerSerializer(),
                     sensorMeasurementSerde.serializer());
 
         enrichedMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
         enrichedMeasurementsTopic = testDriver.createOutputTopic(
-                    RulesProcessor.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
+                    MeasurementsEnricher.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
                     new IntegerDeserializer(),
                     enrichedMeasurementSerde.deserializer());
     }

@@ -9,7 +9,7 @@ public class SensorMeasurementEnriched extends SensorMeasurement {
     public SensorMeasurementEnriched(SensorMeasurement measurement, Sensor sensor) {
         this.sensorId = sensor.id;
         this.sensorName = sensor.name;
-        this.gardenName = sensor.gardenName;
+        this.gardenName = sensor.garden;
         this.type = measurement.type;
         this.value = measurement.value;
         this.timestamp = measurement.timestamp;

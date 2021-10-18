@@ -25,7 +25,7 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
 
 @ApplicationScoped
-public class GardenStatusProcessor {
+public class GardenStatusAggregator {
     public static final String ENRICHED_SENSOR_MEASUREMENTS_TOPIC = "garden-enriched-sensor-measurements";
     public static final String GARDEN_STATUS_EVENTS_TOPIC = "garden-status-events";
 
