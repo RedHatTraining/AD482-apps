@@ -11,9 +11,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.logging.Logger;
 
 @ApplicationScoped
 public class SensorMeasurementService {
+
+    private static final Logger LOGGER = Logger.getLogger(SensorMeasurementService.class.getName());
 
     @Inject
     private SensorService sensorService;
@@ -24,6 +27,7 @@ public class SensorMeasurementService {
                 .onOverflow().drop()
                 .map(tick -> {
                     SensorMeasurementTaken event = generateEvent(sensorService.getSensor());
+                    LOGGER.info("Sensor measured: " + event);
                     return Record.of(event.getSensorId(), event);
                 });
     }
