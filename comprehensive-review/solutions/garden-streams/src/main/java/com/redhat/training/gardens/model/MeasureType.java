@@ -1,13 +1,13 @@
 package com.redhat.training.gardens.model;
 
-public enum SensorMeasurementType {
+public enum MeasureType {
     TEMPERATURE("Temperature"),
     HUMIDITY("Humidity"),
     WIND("Wind");
 
     public String type;
 
-    SensorMeasurementType(String type) {
+    MeasureType(String type) {
         this.type = type;
     }
 }

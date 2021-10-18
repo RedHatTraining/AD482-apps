@@ -13,7 +13,7 @@ import com.redhat.training.gardens.model.GardenStatus;
 import com.redhat.training.gardens.model.Sensor;
 import com.redhat.training.gardens.model.SensorMeasurement;
 import com.redhat.training.gardens.model.SensorMeasurementEnriched;
-import com.redhat.training.gardens.model.SensorMeasurementType;
+import com.redhat.training.gardens.model.MeasureType;
 
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -67,10 +67,10 @@ public class GardenStatusAggregatorTest {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurementEnriched measurement1 = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 2.0, 10L),
             sensor);
         SensorMeasurementEnriched measurement2 = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 4.0, 10L),
             sensor);
 
         // When
@@ -88,13 +88,13 @@ public class GardenStatusAggregatorTest {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurementEnriched measurement1 = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 2.0, 10L),
             sensor);
         SensorMeasurementEnriched measurement2 = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 4.0, 10L),
             sensor);
         SensorMeasurementEnriched measurement3 = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 6.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 6.0, 10L),
             sensor);
 
         WindowStore<String, GardenStatus> windowStore = testDriver.getWindowStore("garden-status-store");
@@ -116,13 +116,13 @@ public class GardenStatusAggregatorTest {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurementEnriched measurement1 = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 2.0, 10L),
             sensor);
         SensorMeasurementEnriched measurement2 = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 4.0, 10L),
             sensor);
         SensorMeasurementEnriched measurement3 = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 6.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 6.0, 10L),
             sensor);
 
         WindowStore<String, GardenStatus> windowStore = testDriver.getWindowStore("garden-status-store");
@@ -144,7 +144,7 @@ public class GardenStatusAggregatorTest {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 2.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 2.0, 10L),
             sensor);
 
         // When

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import com.redhat.training.gardens.model.Sensor;
 import com.redhat.training.gardens.model.SensorMeasurement;
 import com.redhat.training.gardens.model.SensorMeasurementEnriched;
-import com.redhat.training.gardens.model.SensorMeasurementType;
+import com.redhat.training.gardens.model.MeasureType;
 
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.IntegerSerializer;
@@ -69,7 +69,7 @@ public class MeasurementsEnricherTest {
     public void testWritesEnrichedStreamToTopic() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
+        SensorMeasurement measurement = new SensorMeasurement(1, MeasureType.TEMPERATURE, 4.5, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -83,7 +83,7 @@ public class MeasurementsEnricherTest {
     public void testEnrichedMeasurementIncludeGardenName() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
+        SensorMeasurement measurement = new SensorMeasurement(1, MeasureType.TEMPERATURE, 4.5, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -99,7 +99,7 @@ public class MeasurementsEnricherTest {
     public void testEnrichedMeasurementIncludeMeasurementType() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
+        SensorMeasurement measurement = new SensorMeasurement(1, MeasureType.TEMPERATURE, 4.5, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
@@ -108,14 +108,14 @@ public class MeasurementsEnricherTest {
         // Then
         TestRecord<Integer, SensorMeasurementEnriched> record = enrichedMeasurementsTopic.readRecord();
         SensorMeasurementEnriched event = record.getValue();
-        assertEquals(SensorMeasurementType.TEMPERATURE, event.type);
+        assertEquals(MeasureType.TEMPERATURE, event.type);
     }
 
     @Test
     public void testEnrichedMeasurementIncludeValue() {
         // Given
         Sensor sensor = new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1");
-        SensorMeasurement measurement = new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L);
+        SensorMeasurement measurement = new SensorMeasurement(1, MeasureType.TEMPERATURE, 4.5, 10L);
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);

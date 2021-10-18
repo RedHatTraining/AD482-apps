@@ -14,7 +14,7 @@ import com.redhat.training.gardens.event.StrongWindDetected;
 import com.redhat.training.gardens.model.Sensor;
 import com.redhat.training.gardens.model.SensorMeasurement;
 import com.redhat.training.gardens.model.SensorMeasurementEnriched;
-import com.redhat.training.gardens.model.SensorMeasurementType;
+import com.redhat.training.gardens.model.MeasureType;
 
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.IntegerSerializer;
@@ -84,7 +84,7 @@ public class ConditionsDetectorTest {
     public void testLowTemperatureConditions() {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 4.5, 10L),
             new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1"));
 
         // When
@@ -100,7 +100,7 @@ public class ConditionsDetectorTest {
     public void testGoodTemperatureConditions() {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 20.0, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 20.0, 10L),
             new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1"));
 
         // When
@@ -114,7 +114,7 @@ public class ConditionsDetectorTest {
     public void testDryConditions() {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.1, 10L),
+            new SensorMeasurement(1, MeasureType.HUMIDITY, 0.1, 10L),
             new Sensor(1, "Sensor 1", "Humidity", "Customer 1", "Garden 1"));
 
         // When
@@ -130,7 +130,7 @@ public class ConditionsDetectorTest {
     public void testGoodHumidityConditions() {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.HUMIDITY, 0.8, 10L),
+            new SensorMeasurement(1, MeasureType.HUMIDITY, 0.8, 10L),
             new Sensor(1, "Sensor 1", "Humidity", "Customer 1", "Garden 1"));
 
         // When
@@ -144,7 +144,7 @@ public class ConditionsDetectorTest {
     public void testStrongWindConditions() {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.WIND, 15.0, 10L),
+            new SensorMeasurement(1, MeasureType.WIND, 15.0, 10L),
             new Sensor(1, "Sensor 1", "Wind", "Customer 1", "Garden 1"));
 
         // When
@@ -160,7 +160,7 @@ public class ConditionsDetectorTest {
     public void testCalmWindConditions() {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.WIND, 3.0, 10L),
+            new SensorMeasurement(1, MeasureType.WIND, 3.0, 10L),
             new Sensor(1, "Sensor 1", "Wind", "Customer 1", "Garden 1"));
 
         // When
@@ -174,7 +174,7 @@ public class ConditionsDetectorTest {
     public void testGeneratedEventsIncludesSensorMetadata() {
         // Given
         SensorMeasurementEnriched measurement = new SensorMeasurementEnriched(
-            new SensorMeasurement(1, SensorMeasurementType.TEMPERATURE, 4.5, 10L),
+            new SensorMeasurement(1, MeasureType.TEMPERATURE, 4.5, 10L),
             new Sensor(1, "Sensor 1", "Temperature", "Customer 1", "Garden 1"));
 
         // When

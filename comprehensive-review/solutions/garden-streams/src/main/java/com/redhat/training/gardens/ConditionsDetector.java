@@ -7,7 +7,7 @@ import com.redhat.training.gardens.event.DryConditionsDetected;
 import com.redhat.training.gardens.event.LowTemperatureDetected;
 import com.redhat.training.gardens.event.StrongWindDetected;
 import com.redhat.training.gardens.model.SensorMeasurementEnriched;
-import com.redhat.training.gardens.model.SensorMeasurementType;
+import com.redhat.training.gardens.model.MeasureType;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -43,11 +43,11 @@ public class ConditionsDetector {
                 MeasurementsEnricher.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
                 Consumed.with(Serdes.Integer(), sensorMeasurementEnrichedSerde))
             .split()
-                .branch((sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.TEMPERATURE),
+                .branch((sensorId, measurement) -> measurement.type.equals(MeasureType.TEMPERATURE),
                         Branched.withConsumer(this::proccessTemperature))
-                .branch((sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.HUMIDITY),
+                .branch((sensorId, measurement) -> measurement.type.equals(MeasureType.HUMIDITY),
                         Branched.withConsumer(this::processHumidity))
-                .branch((sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.WIND),
+                .branch((sensorId, measurement) -> measurement.type.equals(MeasureType.WIND),
                         Branched.withConsumer(this::processWind));
 
         return builder.build();
