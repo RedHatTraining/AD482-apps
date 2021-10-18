@@ -35,20 +35,21 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
 
 @ApplicationScoped
-public class GardenStreamsTopologyBuilder {
+public class MeasurementStreamEnricher {
 
     private static final double LOW_TEMPERATURE_THRESHOLD_CELSIUS = 5.0;
     private static final double LOW_HUMIDITY_THRESHOLD_PERCENT = 0.2;
     private static final double STRONG_WIND_THRESHOLD_MS = 10;
     public static final String SENSORS_TOPIC = "garden-sensors";
-    public static final String SENSOR_MEASUREMENTS_TOPIC = "sensor-measurements";
-    public static final String LOW_TEMPERATURE_EVENTS_TOPIC = "low-temperature-events";
-    public static final String LOW_HUMIDITY_EVENTS_TOPIC = "low-humidity-events";
-    public static final String STRONG_WIND_EVENTS_TOPIC = "strong-wind-events";
+    public static final String SENSOR_MEASUREMENTS_TOPIC = "garden-sensor-measurements";
+    public static final String LOW_TEMPERATURE_EVENTS_TOPIC = "garden-low-temperature-events";
+    public static final String LOW_HUMIDITY_EVENTS_TOPIC = "garden-low-humidity-events";
+    public static final String STRONG_WIND_EVENTS_TOPIC = "garden-strong-wind-events";
     public static final String GARDEN_STATUS_EVENTS_TOPIC = "garden-status-events";
 
     private final ObjectMapperSerde<Sensor> sensorSerde = new ObjectMapperSerde<>(Sensor.class);
     private final ObjectMapperSerde<SensorMeasurement> sensorMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurement.class);
+    // Use AVRO in this one
     private final ObjectMapperSerde<SensorMeasurementEnriched> sensorMeasurementEnrichedSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
     private final ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
     private final ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
@@ -57,6 +58,7 @@ public class GardenStreamsTopologyBuilder {
 
     @Produces
     public Topology build() {
+        // Step 3
         StreamsBuilder builder = new StreamsBuilder();
 
         GlobalKTable<Integer, Sensor> sensors = builder.globalTable(
@@ -70,13 +72,19 @@ public class GardenStreamsTopologyBuilder {
                 (sensorId, measurement) -> sensorId,
                 (measurement, sensor) -> new SensorMeasurementEnriched(measurement, sensor)
             );
+            //.to()
 
+        enrichedSensorMeasurements.to(
+            RulesProcessor.ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
+            Produced.with(Serdes.Integer(), sensorMeasurementEnrichedSerde));
+
+        // Step 4
         enrichedSensorMeasurements
             .groupBy(
                 (sensorId, measurement) -> measurement.gardenName,
                 Grouped.with(Serdes.String(), sensorMeasurementEnrichedSerde)
             )
-            .windowedBy(TimeWindows.of(Duration.ofMinutes(60)).advanceBy(Duration.ofMinutes(60)))
+            .windowedBy(TimeWindows.of(Duration.ofMinutes(1)).advanceBy(Duration.ofMinutes(1)))
             .aggregate(
                 GardenStatus::new,
                 (gardenName, measurement, gardenStatus) -> gardenStatus.updateWith(measurement),
@@ -86,11 +94,13 @@ public class GardenStreamsTopologyBuilder {
                         .withValueSerde(gardenStatusSerde))
             .toStream()
             .map((windowedGardenName, gardenStatus) ->
+                // Make key null
                 new KeyValue<>(windowedGardenName.key(), gardenStatus))
             .to(
                 GARDEN_STATUS_EVENTS_TOPIC,
                 Produced.with(Serdes.String(), gardenStatusSerde));
 
+        // Step 5
         enrichedSensorMeasurements.split()
                 .branch(
                     (sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.TEMPERATURE),

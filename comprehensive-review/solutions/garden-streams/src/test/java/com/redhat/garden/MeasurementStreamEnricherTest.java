@@ -30,7 +30,7 @@ import org.apache.kafka.streams.state.WindowStore;
 import org.apache.kafka.streams.test.TestRecord;
 
 
-public class GardenStreamsTopologyBuilderTest {
+public class MeasurementStreamEnricherTest {
 
     TopologyTestDriver testDriver;
 
@@ -54,42 +54,42 @@ public class GardenStreamsTopologyBuilderTest {
 
     @BeforeEach
     public void setup() {
-        GardenStreamsTopologyBuilder topologyBuilder = new GardenStreamsTopologyBuilder();
+        MeasurementStreamEnricher topologyBuilder = new MeasurementStreamEnricher();
         testDriver = new TopologyTestDriver(topologyBuilder.build());
 
         sensorSerde = new ObjectMapperSerde<>(Sensor.class);
         sensorsTopic = testDriver.createInputTopic(
-                    GardenStreamsTopologyBuilder.SENSORS_TOPIC,
+                    MeasurementStreamEnricher.SENSORS_TOPIC,
                     new IntegerSerializer(),
                     sensorSerde.serializer());
 
         sensorMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurement.class);
         sensorMeasurementsTopic = testDriver.createInputTopic(
-                    GardenStreamsTopologyBuilder.SENSOR_MEASUREMENTS_TOPIC,
+                    MeasurementStreamEnricher.SENSOR_MEASUREMENTS_TOPIC,
                     new IntegerSerializer(),
                     sensorMeasurementSerde.serializer());
 
         lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
         lowTemperatureEventsTopic = testDriver.createOutputTopic(
-            GardenStreamsTopologyBuilder.LOW_TEMPERATURE_EVENTS_TOPIC,
+            MeasurementStreamEnricher.LOW_TEMPERATURE_EVENTS_TOPIC,
             new IntegerDeserializer(),
             lowTemperatureEventSerde.deserializer());
 
         dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
         dryConditionsEventsTopic = testDriver.createOutputTopic(
-            GardenStreamsTopologyBuilder.LOW_HUMIDITY_EVENTS_TOPIC,
+            MeasurementStreamEnricher.LOW_HUMIDITY_EVENTS_TOPIC,
             new IntegerDeserializer(),
             dryConditionsEventSerde.deserializer());
 
         strongWindEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
         strongWindEventsTopic = testDriver.createOutputTopic(
-            GardenStreamsTopologyBuilder.STRONG_WIND_EVENTS_TOPIC,
+            MeasurementStreamEnricher.STRONG_WIND_EVENTS_TOPIC,
             new IntegerDeserializer(),
             strongWindEventSerde.deserializer());
 
         gardenStatusEventSerde = new ObjectMapperSerde<>(GardenStatus.class);
         gardenStatusEventsTopic = testDriver.createOutputTopic(
-            GardenStreamsTopologyBuilder.GARDEN_STATUS_EVENTS_TOPIC,
+            MeasurementStreamEnricher.GARDEN_STATUS_EVENTS_TOPIC,
             new StringDeserializer(),
             gardenStatusEventSerde.deserializer());
     }
