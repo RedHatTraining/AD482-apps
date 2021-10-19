@@ -4,6 +4,7 @@ import com.redhat.training.gardens.model.Sensor;
 import com.redhat.training.sensors.model.SensorMeasurementTaken;
 import com.redhat.training.sensors.model.SensorMeasurementType;
 import io.smallrye.mutiny.Multi;
+import io.smallrye.reactive.messaging.annotations.Broadcast;
 import io.smallrye.reactive.messaging.kafka.Record;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
@@ -21,7 +22,8 @@ public class SensorMeasurementService {
     @Inject
     private SensorService sensorService;
 
-    @Outgoing("garden-sensor-measurements")
+    @Outgoing("garden-sensor-measurements-out")
+    @Broadcast
     public Multi<Record<Integer, SensorMeasurementTaken>> measure() {
         return Multi.createFrom().ticks().every(Duration.ofMillis(3000))
                 .onOverflow().drop()
