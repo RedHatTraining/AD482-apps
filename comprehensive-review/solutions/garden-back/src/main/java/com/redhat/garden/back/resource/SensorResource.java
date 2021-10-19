@@ -22,6 +22,9 @@ public class SensorResource {
     @Inject @Channel("in-memory-garden-enriched-sensor-measurements")
     Publisher<SensorMeasurementEnriched> enrichedSensorMeasurements;
 
+    @Inject @Channel("in-memory-garden-raw-sensor-measurements")
+    Publisher<SensorMeasurement> rawSensorMeasurements;
+
     // Event processors ------------------------------------------------------------------------------------------------
 
     @Incoming("garden-sensor-measurements-enriched")
@@ -32,13 +35,29 @@ public class SensorResource {
         return event;
     }
 
+    @Incoming("garden-sensor-measurements-raw")
+    @Outgoing("in-memory-garden-raw-sensor-measurements")
+    @Broadcast
+    @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
+    public SensorMeasurement consumeRawSensorMeasurements(SensorMeasurement event) {
+        return event;
+    }
+
     // Endpoints -------------------------------------------------------------------------------------------------------
 
     @GET
-    @Path("measurements")
+    @Path("measurements/enriched")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
     public Publisher<SensorMeasurementEnriched> getEnrichedSensorMeasurements() {
         return enrichedSensorMeasurements;
+    }
+
+    @GET
+    @Path("measurements/raw")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType(MediaType.APPLICATION_JSON)
+    public Publisher<SensorMeasurement> getRawSensorMeasurements() {
+        return rawSensorMeasurements;
     }
 }
