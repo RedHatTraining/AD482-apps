@@ -23,17 +23,6 @@ public class SensorMeasurementService {
     private SensorService sensorService;
 
     // TODO: Implement the Kafka producer
-    @Outgoing("garden-sensor-measurements-out")
-    @Broadcast
-    public Multi<Record<Integer, SensorMeasurementTaken>> measure() {
-        return Multi.createFrom().ticks().every(Duration.ofMillis(5000))
-                .onOverflow().drop()
-                .map(tick -> {
-                    SensorMeasurementTaken event = generateEvent(sensorService.getSensor());
-                    LOGGER.info("Sensor measurement taken: " + event);
-                    return Record.of(event.getSensorId(), event);
-                });
-    }
 
     private SensorMeasurementTaken generateEvent(Sensor sensor) {
         return new SensorMeasurementTaken(sensor.getId(), sensor.getValue(), Instant.now().toEpochMilli(),
