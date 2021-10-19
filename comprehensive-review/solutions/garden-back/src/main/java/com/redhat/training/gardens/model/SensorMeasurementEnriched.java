@@ -1,4 +1,4 @@
-package com.redhat.garden.back.measurement;
+package com.redhat.training.gardens.model;
 
 public class SensorMeasurementEnriched extends SensorMeasurement {
     public String sensorName;
@@ -8,13 +8,13 @@ public class SensorMeasurementEnriched extends SensorMeasurement {
 
     public SensorMeasurementEnriched(
             Integer sensorId,
-            String property,
+            String type,
             Double value,
             Long timestamp,
             String sensorName,
             String gardenName
     ) {
-        super(sensorId, property, value, timestamp);
+        super(sensorId, type, value, timestamp);
 
         this.sensorName = sensorName;
         this.gardenName = gardenName;

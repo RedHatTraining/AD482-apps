@@ -1,8 +1,10 @@
-package com.redhat.garden.back.resource;
+package com.redhat.training.gardens.rest;
 
-import com.redhat.garden.back.event.*;
-import com.redhat.garden.back.event.front.GardenEvent;
-import com.redhat.garden.back.event.front.GardenStatus;
+import com.redhat.training.gardens.event.DryConditionsDetected;
+import com.redhat.training.gardens.event.LowTemperatureDetected;
+import com.redhat.training.gardens.event.StrongWindDetected;
+import com.redhat.training.gardens.event.front.GardenEvent;
+import com.redhat.training.gardens.event.front.GardenStatus;
 import io.smallrye.reactive.messaging.annotations.Broadcast;
 import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
 import org.eclipse.microprofile.reactive.messaging.Channel;

@@ -1,4 +1,4 @@
-package com.redhat.garden.back.event;
+package com.redhat.training.gardens.event;
 
 public class DryConditionsDetected extends GardenEvent {
     public DryConditionsDetected() {}
