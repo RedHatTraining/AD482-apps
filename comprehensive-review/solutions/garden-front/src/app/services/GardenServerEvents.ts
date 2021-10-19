@@ -14,7 +14,5 @@ export function subscribeToGardenEvents(onEvent: (p: GardenEvent) => void): void
 }
 
 export function subscribeToSensorMeasurements(onEvent: (p: SensorMeasurement) => void): void {
-    sse.open<SensorMeasurement>("/sensor/measurements", onEvent);
+    sse.open<SensorMeasurement>("/sensor/measurements/enriched", onEvent);
 }
-
-

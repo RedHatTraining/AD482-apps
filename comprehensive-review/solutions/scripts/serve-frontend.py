@@ -3,11 +3,11 @@ from pathlib import Path
 import http.server
 import socketserver
 
-PORT = 8081
+PORT = 8083
 
 directory = (Path(__file__)
     .parent
-    .joinpath(Path("energy-meter-front", "dist")
+    .joinpath(Path("garden-front", "dist")
     .resolve()))
 
 os.chdir(directory)
