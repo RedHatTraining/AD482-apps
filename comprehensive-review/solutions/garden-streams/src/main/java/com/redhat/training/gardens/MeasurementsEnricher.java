@@ -21,7 +21,7 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 public class MeasurementsEnricher {
 
     public static final String SENSORS_TOPIC = "garden-sensors";
-    public static final String SENSOR_MEASUREMENTS_TOPIC = "garden-received-sensor-measurements";
+    public static final String SENSOR_MEASUREMENTS_TOPIC = "garden-sensor-measurements-repl";
     public static final String ENRICHED_SENSOR_MEASUREMENTS_TOPIC = "garden-enriched-sensor-measurements";
 
     private final ObjectMapperSerde<Sensor> sensorSerde = new ObjectMapperSerde<>(Sensor.class);
