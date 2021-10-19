@@ -1,4 +1,4 @@
-package com.redhat.garden.back.event.front;
+package com.redhat.training.gardens.event.front;
 
 public class GardenStatus {
     public Integer id;

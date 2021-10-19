@@ -1,16 +1,16 @@
-package com.redhat.garden.back.measurement;
+package com.redhat.training.gardens.model;
 
 public class SensorMeasurement {
     public Integer sensorId;
-    public String property;
+    public String type;
     public Double value;
     public Long timestamp;
 
     public SensorMeasurement() {}
 
-    public SensorMeasurement(Integer sensorId, String property, Double value, Long timestamp) {
+    public SensorMeasurement(Integer sensorId, String type, Double value, Long timestamp) {
         this.sensorId = sensorId;
-        this.property = property;
+        this.type = type;
         this.value = value;
         this.timestamp = timestamp;
     }
