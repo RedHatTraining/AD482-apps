@@ -1,8 +1,8 @@
 package com.redhat.training.gardens.service;
 
 import com.redhat.training.gardens.model.Sensor;
-import com.redhat.training.gardens.model.SensorMeasurementTaken;
-import com.redhat.training.gardens.model.SensorMeasurementType;
+import com.redhat.training.gardens.event.SensorMeasurementTaken;
+import com.redhat.training.gardens.event.SensorMeasurementType;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.reactive.messaging.annotations.Broadcast;
 import io.smallrye.reactive.messaging.kafka.Record;
