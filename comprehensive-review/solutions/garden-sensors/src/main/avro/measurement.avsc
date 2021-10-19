@@ -1,5 +1,5 @@
 {
-  "namespace": "com.redhat.training.sensors.model",
+  "namespace": "com.redhat.training.gardens.event",
   "type": "record",
   "name": "SensorMeasurementTaken",
   "fields": [
