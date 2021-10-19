@@ -10,7 +10,7 @@ import com.redhat.training.gardens.model.GardenStatus;
 import com.redhat.training.gardens.model.SensorMeasurement;
 import com.redhat.training.gardens.model.SensorMeasurementType;
 import com.redhat.training.gardens.model.SensorMeasurementEnriched;
-import com.redhat.training.gardens.event.DryConditionsDetected;
+import com.redhat.training.gardens.event.LowHumidityDetected;
 import com.redhat.training.gardens.event.LowTemperatureDetected;
 import com.redhat.training.gardens.event.StrongWindDetected;
 
@@ -49,7 +49,7 @@ public class GardenStreamsTopology {
 
     private final ObjectMapperSerde<SensorMeasurementEnriched> sensorMeasurementEnrichedSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
     private final ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
-    private final ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
+    private final ObjectMapperSerde<LowHumidityDetected> dryConditionsEventSerde = new ObjectMapperSerde<>(LowHumidityDetected.class);
     private final ObjectMapperSerde<StrongWindDetected> strongWindEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
     private final ObjectMapperSerde<GardenStatus> gardenStatusSerde = new ObjectMapperSerde<>(GardenStatus.class);
 
@@ -89,6 +89,7 @@ public class GardenStreamsTopology {
                 ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
                 Produced.with(Serdes.Integer(), sensorMeasurementEnrichedSerde));
 
+        // TODO: split stream
         enrichedSensorMeasurements
             .split()
                 .branch((sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.TEMPERATURE),
@@ -122,6 +123,7 @@ public class GardenStreamsTopology {
         return builder.build();
     }
 
+    // TODO: implement temperature processor
     private void proccessTemperature(KStream<Integer, SensorMeasurementEnriched> temperatureMeasurements) {
         temperatureMeasurements
             .filter((sensorId, measurement) -> measurement.value < LOW_TEMPERATURE_THRESHOLD_CELSIUS)
@@ -130,14 +132,16 @@ public class GardenStreamsTopology {
             .to(LOW_TEMPERATURE_EVENTS_TOPIC, Produced.with(Serdes.Integer(), lowTemperatureEventSerde));
     }
 
+    // TODO: implement humidity processor
     private void processHumidity(KStream<Integer, SensorMeasurementEnriched> humidityMeasurements) {
         humidityMeasurements
             .filter((sensorId, measurement) -> measurement.value < LOW_HUMIDITY_THRESHOLD_PERCENT)
-            .mapValues((measurement) -> new DryConditionsDetected(measurement.gardenName, measurement.sensorId,
+            .mapValues((measurement) -> new LowHumidityDetected(measurement.gardenName, measurement.sensorId,
                     measurement.value, measurement.timestamp))
             .to(LOW_HUMIDITY_EVENTS_TOPIC, Produced.with(Serdes.Integer(), dryConditionsEventSerde));
     }
 
+    // TODO: implement wind processor
     private void processWind(KStream<Integer, SensorMeasurementEnriched> windMeasurements) {
         windMeasurements
         .filter((sensorId, measurement) -> measurement.value > STRONG_WIND_THRESHOLD_MS)

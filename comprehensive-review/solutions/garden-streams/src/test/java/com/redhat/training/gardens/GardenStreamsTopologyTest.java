@@ -15,7 +15,7 @@ import com.redhat.training.gardens.model.SensorMeasurementEnriched;
 import com.redhat.training.gardens.model.SensorMeasurementType;
 import com.redhat.training.gardens.model.GardenMeasurementTrend;
 import com.redhat.training.gardens.model.GardenStatus;
-import com.redhat.training.gardens.event.DryConditionsDetected;
+import com.redhat.training.gardens.event.LowHumidityDetected;
 import com.redhat.training.gardens.event.LowTemperatureDetected;
 import com.redhat.training.gardens.event.StrongWindDetected;
 
@@ -49,8 +49,8 @@ public class GardenStreamsTopologyTest {
     TestOutputTopic<Integer, LowTemperatureDetected> lowTemperatureEventsTopic;
     ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde;
 
-    TestOutputTopic<Integer, DryConditionsDetected> dryConditionsEventsTopic;
-    ObjectMapperSerde<DryConditionsDetected> dryConditionsEventSerde;
+    TestOutputTopic<Integer, LowHumidityDetected> dryConditionsEventsTopic;
+    ObjectMapperSerde<LowHumidityDetected> dryConditionsEventSerde;
 
     TestOutputTopic<Integer, StrongWindDetected> strongWindEventsTopic;
     ObjectMapperSerde<StrongWindDetected> strongWindEventSerde;
@@ -75,7 +75,7 @@ public class GardenStreamsTopologyTest {
         lowTemperatureEventsTopic = testDriver.createOutputTopic("garden-low-temperature-events",
                 new IntegerDeserializer(), lowTemperatureEventSerde.deserializer());
 
-        dryConditionsEventSerde = new ObjectMapperSerde<>(DryConditionsDetected.class);
+        dryConditionsEventSerde = new ObjectMapperSerde<>(LowHumidityDetected.class);
         dryConditionsEventsTopic = testDriver.createOutputTopic("garden-low-humidity-events",
                 new IntegerDeserializer(), dryConditionsEventSerde.deserializer());
 
@@ -202,8 +202,8 @@ public class GardenStreamsTopologyTest {
         sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
-        TestRecord<Integer, DryConditionsDetected> record = dryConditionsEventsTopic.readRecord();
-        DryConditionsDetected event = record.getValue();
+        TestRecord<Integer, LowHumidityDetected> record = dryConditionsEventsTopic.readRecord();
+        LowHumidityDetected event = record.getValue();
         assertEquals(0.1, event.value);
     }
 
