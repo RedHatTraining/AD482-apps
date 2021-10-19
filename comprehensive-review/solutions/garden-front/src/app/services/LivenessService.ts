@@ -1,16 +1,15 @@
-
 import { getRESTClient, ServiceName } from "./API";
 
 interface LivenessResponse {
     checks: {
-        data?: { state: string }
+        status?: string
     }[]
 }
 
 const API = getRESTClient(ServiceName.BACKEND);
 
 function kafkaStreamsIsReady(data: LivenessResponse) {
-    return data.checks.some(check => check.data && check.data.state === "RUNNING");
+    return data.checks.some(check => check.status && check.status === "UP");
 }
 
 async function isAppReady() {
