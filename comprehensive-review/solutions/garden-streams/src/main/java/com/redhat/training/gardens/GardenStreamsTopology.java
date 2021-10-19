@@ -26,8 +26,10 @@ import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Printed;
 import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.state.WindowStore;
+import org.apache.kafka.streams.state.KeyValueStore;
 
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 
@@ -58,20 +60,31 @@ public class GardenStreamsTopology {
     public Topology build() {
         StreamsBuilder builder = new StreamsBuilder();
 
+        // TODO: Read sensors
         GlobalKTable<Integer, Sensor> sensors = builder.globalTable(
             SENSORS_TOPIC,
-            Consumed.with(Serdes.Integer(), sensorSerde));
+            Consumed.with(Serdes.Integer(), sensorSerde),
+            Materialized.<Integer, Sensor, KeyValueStore<Bytes, byte[]>>as("sensors-store")
+                 .withKeySerde(Serdes.Integer())
+                 .withValueSerde(sensorSerde));
 
+        //TODO: Read sensor measurements
         KStream<Integer, SensorMeasurement> sensorMeasurements = builder.stream(
             SENSOR_MEASUREMENTS_TOPIC,
-            Consumed.with(Serdes.Integer(), sensorMeasurementSerde));
+            Consumed.with(Serdes.Void(), sensorMeasurementSerde)
+        )
+        .map((nullKey, m) -> new KeyValue<>(m.sensorId, m));
 
+        // TODO: Join measurements with sensor table
         KStream<Integer, SensorMeasurementEnriched> enrichedSensorMeasurements = sensorMeasurements
             .join(
                 sensors,
-                (sensorId, measurement) -> sensorId,
+                (sensorId, measurement) -> measurement.sensorId,
                 (measurement, sensor) -> new SensorMeasurementEnriched(measurement, sensor));
 
+        enrichedSensorMeasurements.print(Printed.toSysOut());
+
+        // TODO: Send enriched measurements to topic
         enrichedSensorMeasurements.to(
                 ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
                 Produced.with(Serdes.Integer(), sensorMeasurementEnrichedSerde));
