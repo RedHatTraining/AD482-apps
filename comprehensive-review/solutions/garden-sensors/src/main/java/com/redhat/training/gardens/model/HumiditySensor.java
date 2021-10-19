@@ -1,6 +1,6 @@
 package com.redhat.training.gardens.model;
 
-import com.redhat.training.sensors.util.SensorIdUtil;
+import com.redhat.training.gardens.util.SensorIdUtil;
 
 public class HumiditySensor extends Sensor{
 

@@ -1,9 +1,9 @@
-package com.redhat.training.sensors.service;
+package com.redhat.training.gardens.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.redhat.training.sensors.model.SensorMeasurementTaken;
+import com.redhat.training.gardens.model.SensorMeasurementTaken;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
