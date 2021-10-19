@@ -14,15 +14,15 @@ public class GardenStatus {
     public GardenStatus updateWith(SensorMeasurementEnriched measurement) {
         gardenName = measurement.gardenName;
 
-        if (measurement.type == MeasureType.TEMPERATURE) {
+        if (measurement.type == SensorMeasurementType.TEMPERATURE) {
             updateTemperature(measurement);
         }
 
-        if (measurement.type == MeasureType.HUMIDITY) {
+        if (measurement.type == SensorMeasurementType.HUMIDITY) {
             updateHumidity(measurement);
         }
 
-        if (measurement.type == MeasureType.WIND) {
+        if (measurement.type == SensorMeasurementType.WIND) {
             updateWind(measurement);
         }
 
