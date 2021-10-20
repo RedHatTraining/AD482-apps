@@ -1,15 +1,11 @@
 package com.redhat.training.gardens.rest;
 
-import com.redhat.training.gardens.event.DryConditionsDetected;
+import com.redhat.training.gardens.event.GardenStatusEvent;
+import com.redhat.training.gardens.event.LowHumidityDetected;
 import com.redhat.training.gardens.event.LowTemperatureDetected;
 import com.redhat.training.gardens.event.StrongWindDetected;
-import com.redhat.training.gardens.event.front.GardenEvent;
-import com.redhat.training.gardens.event.front.GardenStatus;
-import io.smallrye.reactive.messaging.annotations.Broadcast;
-import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
+
 import org.eclipse.microprofile.reactive.messaging.Channel;
-import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.jboss.resteasy.annotations.SseElementType;
 import org.reactivestreams.Publisher;
 
@@ -22,68 +18,50 @@ import javax.ws.rs.core.MediaType;
 @Path("garden")
 public class GardenResource {
 
-    @Inject @Channel("in-memory-garden-alerts")
-    Publisher<GardenEvent> gardenEvents;
+    @Inject @Channel("garden-low-temperature-events")
+    Publisher<LowTemperatureDetected> gardenTemperatureEvents;
 
-    @Inject @Channel("in-memory-garden-statuses")
-    Publisher<GardenStatus> gardenStatuses;
+    @Inject @Channel("garden-low-humidity-events")
+    Publisher<LowHumidityDetected> gardenHumidityEvents;
 
-    // Event processors ------------------------------------------------------------------------------------------------
+    @Inject @Channel("garden-strong-wind-events")
+    Publisher<StrongWindDetected> gardenWindEvents;
 
-    @Incoming("garden-low-temperature-alerts")
-    @Outgoing("in-memory-garden-alerts")
-    @Broadcast
-    @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public GardenEvent processLowTemperatureAlerts(LowTemperatureDetected event) {
-        return new GardenEvent(
-                event.getClass().getSimpleName(),
-                event.gardenName,
-                event.sensorId,
-                event.timestamp
-        );
-    }
+    @Inject @Channel("garden-status-events")
+    Publisher<GardenStatusEvent> gardenStatuses;
 
-    @Incoming("garden-dry-conditions-alerts")
-    @Outgoing("in-memory-garden-alerts")
-    @Broadcast
-    @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public GardenEvent processDrySoilAlerts(DryConditionsDetected event) {
-        return new GardenEvent(
-                event.getClass().getSimpleName(),
-                event.gardenName,
-                event.sensorId,
-                event.timestamp
-        );
-    }
-
-    @Incoming("garden-strong-wind-alerts")
-    @Outgoing("in-memory-garden-alerts")
-    @Broadcast
-    @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public GardenEvent processStrongWindAlerts(StrongWindDetected event) {
-        return new GardenEvent(
-                event.getClass().getSimpleName(),
-                event.gardenName,
-                event.sensorId,
-                event.timestamp
-        );
-    }
 
     // Endpoints -------------------------------------------------------------------------------------------------------
 
     @GET
-    @Path("events")
+    @Path("events/temperature")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
-    public Publisher<GardenEvent> getGardenEvents() {
-        return gardenEvents;
+    public Publisher<LowTemperatureDetected> getGardenTemperatureEvents() {
+        return gardenTemperatureEvents;
+    }
+
+    @GET
+    @Path("events/humidity")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType(MediaType.APPLICATION_JSON)
+    public Publisher<LowHumidityDetected> getGardenHumidityEvents() {
+        return gardenHumidityEvents;
+    }
+
+    @GET
+    @Path("events/wind")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType(MediaType.APPLICATION_JSON)
+    public Publisher<StrongWindDetected> getGardenWindEvents() {
+        return gardenWindEvents;
     }
 
     @GET
     @Path("statuses")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
-    public Publisher<GardenStatus> getGardenStatuses() {
+    public Publisher<GardenStatusEvent> getGardenStatuses() {
         return gardenStatuses;
     }
 }
