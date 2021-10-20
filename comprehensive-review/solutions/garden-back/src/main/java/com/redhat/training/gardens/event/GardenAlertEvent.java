@@ -1,15 +1,15 @@
 package com.redhat.training.gardens.event;
 
-abstract public class GardenEvent {
+abstract public class GardenAlertEvent {
     public String name;
     public String gardenName;
     public Integer sensorId;
     public Double value;
     public Long timestamp;
 
-    public GardenEvent() {}
+    public GardenAlertEvent() {}
 
-    public GardenEvent(String name, String gardenName, Integer sensorId, Double value, Long timestamp) {
+    public GardenAlertEvent(String name, String gardenName, Integer sensorId, Double value, Long timestamp) {
         this.name = name;
         this.gardenName = gardenName;
         this.sensorId = sensorId;
