@@ -1,4 +1,4 @@
-# Vehicles Project
+# Garden Streams Service
 
 Kafka Streams application for the `comprehensive-review` exercise.
 
