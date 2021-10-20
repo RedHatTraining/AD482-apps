@@ -20,6 +20,7 @@ import com.redhat.training.gardens.event.LowTemperatureDetected;
 import com.redhat.training.gardens.event.StrongWindDetected;
 
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.VoidSerializer;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.streams.TestInputTopic;
@@ -37,7 +38,7 @@ public class GardenStreamsTopologyTest {
     TestInputTopic<Integer, Sensor> sensorsTopic;
     ObjectMapperSerde<Sensor> sensorSerde;
 
-    TestInputTopic<Integer, SensorMeasurement> sensorMeasurementsTopic;
+    TestInputTopic<Void, SensorMeasurement> sensorMeasurementsTopic;
     ObjectMapperSerde<SensorMeasurement> sensorMeasurementSerde;
 
     TestOutputTopic<Integer, SensorMeasurementEnriched> enrichedMeasurementsTopic;
@@ -65,7 +66,7 @@ public class GardenStreamsTopologyTest {
 
         sensorMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurement.class);
         sensorMeasurementsTopic = testDriver.createInputTopic("garden-sensor-measurements-repl",
-                new IntegerSerializer(), sensorMeasurementSerde.serializer());
+                new VoidSerializer(), sensorMeasurementSerde.serializer());
 
         enrichedMeasurementSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
         enrichedMeasurementsTopic = testDriver.createOutputTopic("garden-sensor-measurements-enriched",
@@ -107,7 +108,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         assertFalse(enrichedMeasurementsTopic.isEmpty());
@@ -121,7 +122,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         TestRecord<Integer, SensorMeasurementEnriched> record = enrichedMeasurementsTopic.readRecord();
@@ -137,7 +138,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         TestRecord<Integer, SensorMeasurementEnriched> record = enrichedMeasurementsTopic.readRecord();
@@ -153,7 +154,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         TestRecord<Integer, SensorMeasurementEnriched> record = enrichedMeasurementsTopic.readRecord();
@@ -169,7 +170,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         TestRecord<Integer, LowTemperatureDetected> record = lowTemperatureEventsTopic.readRecord();
@@ -185,7 +186,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         assertTrue(lowTemperatureEventsTopic.isEmpty());
@@ -199,7 +200,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         TestRecord<Integer, LowHumidityDetected> record = dryConditionsEventsTopic.readRecord();
@@ -215,7 +216,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         assertTrue(dryConditionsEventsTopic.isEmpty());
@@ -229,7 +230,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         TestRecord<Integer, StrongWindDetected> record = strongWindEventsTopic.readRecord();
@@ -245,7 +246,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         assertTrue(dryConditionsEventsTopic.isEmpty());
@@ -259,7 +260,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
+        sensorMeasurementsTopic.pipeInput(null, measurement);
 
         // Then
         TestRecord<Integer, LowTemperatureDetected> record = lowTemperatureEventsTopic.readRecord();
@@ -276,8 +277,8 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement1);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement2);
+        sensorMeasurementsTopic.pipeInput(null, measurement1);
+        sensorMeasurementsTopic.pipeInput(null, measurement2);
 
         // Then
         TestRecord<String, GardenStatus> record = gardenStatusEventsTopic.readRecord();
@@ -297,9 +298,9 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement1, 10L);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement2, 11L);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement3, 12L);
+        sensorMeasurementsTopic.pipeInput(null, measurement1, 10L);
+        sensorMeasurementsTopic.pipeInput(null, measurement2, 11L);
+        sensorMeasurementsTopic.pipeInput(null, measurement3, 12L);
 
         // Then
         KeyValueIterator<Windowed<String>, GardenStatus> events = windowStore.fetchAll(0, 20L);
@@ -320,9 +321,9 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement1, 10L);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement2, 11L);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement3, 12L);
+        sensorMeasurementsTopic.pipeInput(null, measurement1, 10L);
+        sensorMeasurementsTopic.pipeInput(null, measurement2, 11L);
+        sensorMeasurementsTopic.pipeInput(null, measurement3, 12L);
 
         // Then
         KeyValueIterator<Windowed<String>, GardenStatus> events = windowStore.fetchAll(0, 20L);
@@ -339,7 +340,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement, 10L);
+        sensorMeasurementsTopic.pipeInput(null, measurement, 10L);
 
         // Then
         assertFalse(gardenStatusEventsTopic.isEmpty());
