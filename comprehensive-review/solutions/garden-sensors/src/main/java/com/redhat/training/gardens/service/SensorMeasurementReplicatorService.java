@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redhat.training.gardens.event.SensorMeasurementTaken;
+import io.smallrye.reactive.messaging.kafka.Record;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
@@ -18,10 +19,9 @@ public class SensorMeasurementReplicatorService {
 
     @Incoming("garden-sensor-measurements-in")
     @Outgoing("garden-sensor-measurements-repl")
-    public JsonNode replicate(SensorMeasurementTaken event) throws JsonProcessingException {
+    public Record<Integer, JsonNode> replicate(SensorMeasurementTaken event) throws JsonProcessingException {
         LOGGER.info("Sensor measurement event replicated: " + event);
-        return new ObjectMapper().readTree(event.toString());
+        return Record.of(event.getSensorId(), new ObjectMapper().readTree(event.toString()));
     }
-
 
 }
