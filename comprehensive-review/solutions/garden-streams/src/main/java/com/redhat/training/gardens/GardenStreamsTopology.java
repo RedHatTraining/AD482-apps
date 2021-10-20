@@ -68,7 +68,7 @@ public class GardenStreamsTopology {
                  .withKeySerde(Serdes.Integer())
                  .withValueSerde(sensorSerde));
 
-        //TODO: Read sensor measurements
+        // TODO: Read sensor measurements
         KStream<Integer, SensorMeasurement> sensorMeasurements = builder.stream(
             SENSOR_MEASUREMENTS_TOPIC,
             Consumed.with(Serdes.Void(), sensorMeasurementSerde)
@@ -99,6 +99,7 @@ public class GardenStreamsTopology {
                 .branch((sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.WIND),
                         Branched.withConsumer(this::processWind));
 
+        // TODO: Aggregate enriched measurements
         enrichedSensorMeasurements
             .groupBy(
                 (sensorId, measurement) -> measurement.gardenName,
