@@ -71,9 +71,8 @@ public class GardenStreamsTopology {
         //TODO: Read sensor measurements
         KStream<Integer, SensorMeasurement> sensorMeasurements = builder.stream(
             SENSOR_MEASUREMENTS_TOPIC,
-            Consumed.with(Serdes.Void(), sensorMeasurementSerde)
-        )
-        .map((nullKey, m) -> new KeyValue<>(m.sensorId, m));
+            Consumed.with(Serdes.Integer(), sensorMeasurementSerde)
+        );
 
         // TODO: Join measurements with sensor table
         KStream<Integer, SensorMeasurementEnriched> enrichedSensorMeasurements = sensorMeasurements
