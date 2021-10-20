@@ -1,7 +1,7 @@
 export interface SensorMeasurement {
     type: string,
     value: any,
-    garden: string,
-    sensorId: number,
+    gardenName: string,
+    sensorName: string,
     timestamp: Date
 }

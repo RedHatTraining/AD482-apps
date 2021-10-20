@@ -1,8 +1,9 @@
 export interface GardenStatus {
-    id: number,
-    name: string,
-    temperature: number,
-    garden: string,
-    sensorId: number,
-    lastUpdate: Date
+    gardenName: string;
+    temperature: number;
+    temperatureTrend: string;
+    humidity: number;
+    humidityTrend: string;
+    wind: number;
+    windTrend: string;
 }

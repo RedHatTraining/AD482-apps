@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { PageSection, Title, PageSectionVariants, Card, CardBody, CardTitle, Grid, GridItem, Gallery, GalleryItem, Text, TextVariants, CardHeader, Skeleton, Page } from "@patternfly/react-core";
-import { subscribeToGardenEvents, subscribeToGardenStatuses, subscribeToSensorMeasurements } from "../services/GardenServerEvents";
+import { PageSection, Title, PageSectionVariants, Card,
+    CardBody, CardTitle, Grid, GridItem, Gallery,
+    GalleryItem, Text, TextVariants, Skeleton
+} from "@patternfly/react-core";
+import { subscribeToGardenTemperatureEvents,
+    subscribeToGardenHumidityEvents, subscribeToGardenWindEvents,
+    subscribeToGardenStatuses, subscribeToSensorMeasurements
+} from "../services/GardenServerEvents";
 import { waitForLiveness } from "../services/LivenessService";
 import { GardenStatus } from "@app/models/GardenStatus";
 import { GardenStatusCard } from "./GardenStatusCard";
-import { BullseyeSpinner } from "./BullseyeSpinner";
 import { SensorMeasurement } from "@app/models/SensorMeasurement";
 import { RecentList } from "@app/models/RecentList";
 import { Caption, TableComposable, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
@@ -18,7 +23,7 @@ import InfoCircleIcon from "@patternfly/react-icons/dist/esm/icons/info-circle-i
 
 
 interface StatusByGarden {
-    [gardenId: number]: GardenStatus
+    [gardenName: string]: GardenStatus
 }
 
 
@@ -40,16 +45,21 @@ export function Dashboard(): JSX.Element {
 
     function getGardenStatuses() {
         subscribeToGardenStatuses((gardenStatus) => {
-            console.log(gardenStatus);
             setGardenStatuses(previous => ({
                 ...previous,
-                [gardenStatus.id]: gardenStatus
+                [gardenStatus.gardenName]: gardenStatus
             }));
         });
     }
 
     function getGardenEvents() {
-        subscribeToGardenEvents((event) => {
+        subscribeToGardenTemperatureEvents((event) => {
+            setGardenEvents(previous => RecentList.createFrom(previous).add(event));
+        });
+        subscribeToGardenHumidityEvents((event) => {
+            setGardenEvents(previous => RecentList.createFrom(previous).add(event));
+        });
+        subscribeToGardenWindEvents((event) => {
             setGardenEvents(previous => RecentList.createFrom(previous).add(event));
         });
     }
@@ -65,13 +75,14 @@ export function Dashboard(): JSX.Element {
             aria-label="Events table"
             variant="compact"
             borders={true}>
-            <Caption>Real-time events generated after processing sensor measurements</Caption>
+            <Caption>Real-time events generated after processing sensor measurements (garden-low-temperature-events, garden-low-humidity-events, garden-strong-wind-events)</Caption>
             <Thead>
                 <Tr>
                     <Th key={0}>Event</Th>
-                    <Th key={2}>Garden</Th>
+                    <Th key={1}>Garden</Th>
+                    <Th key={2}>Value</Th>
                     <Th key={3}>Sensor id</Th>
-                    <Th key={4}>Timestamp</Th>
+                    <Th key={4}>When</Th>
                 </Tr>
             </Thead>
             <Tbody>
@@ -85,14 +96,14 @@ export function Dashboard(): JSX.Element {
             aria-label="Measurements table"
             variant="compact"
             borders={true}>
-            <Caption>Real-time measurements produced by garden sensors</Caption>
+            <Caption>Real-time measurements produced by garden sensors (garden-sensor-measurements-enriched)</Caption>
             <Thead>
                 <Tr>
                     <Th key={0}>Type</Th>
                     <Th key={1}>Value</Th>
                     <Th key={2}>Garden</Th>
-                    <Th key={3}>Sensor id</Th>
-                    <Th key={4}>Timestamp</Th>
+                    <Th key={3}>Sensor</Th>
+                    <Th key={4}>When</Th>
                 </Tr>
             </Thead>
             <Tbody>
@@ -107,48 +118,52 @@ export function Dashboard(): JSX.Element {
             lg: "300px",
             xl: "400px"
         }}>
-            {Object.values(gardenStatuses).map(gardenStatus => <GalleryItem key={gardenStatus.id}>
+            {Object.values(gardenStatuses).map(gardenStatus => <GalleryItem key={gardenStatus.gardenName}>
                 <GardenStatusCard gardenStatus={gardenStatus}></GardenStatusCard>
             </GalleryItem>)}
         </Gallery>;
     }
 
     function renderSensorMeasurementRow(m: SensorMeasurement) {
-        const tableIndex = `${m.garden}_${m.sensorId}_${m.timestamp}`;
-        return (<Tr key={m.timestamp.toString()}>
+        const tableIndex = `${m.gardenName}_${m.sensorName}_${m.timestamp.toISOString()}`;
+        return (<Tr key={tableIndex}>
             <Td key={`${tableIndex}_type`} dataLabel="Type">
                 {m.type}
             </Td>
             <Td key={`${tableIndex}_value`} dataLabel="Value">
-                {m.value}
+                {parseFloat(m.value).toFixed(2)}
             </Td>
             <Td key={`${tableIndex}_garden`} dataLabel="Garden">
-                {m.garden}
+                {m.gardenName}
             </Td>
             <Td key={`${tableIndex}_sensor`} dataLabel="Sensor id">
-                {m.sensorId}
+                {m.sensorName}
             </Td>
             <Td key={`${tableIndex}_timestamp`} dataLabel="Type">
-                {m.timestamp}
+                {m.timestamp.toISOString()}
             </Td>
         </Tr>);
     }
 
 
-    function renderGardenEventRow(m: GardenEvent) {
-        const tableIndex = `${m.garden}_${m.sensorId}_${m.timestamp}`;
-        return (<Tr key={m.timestamp.toString()}>
+    function renderGardenEventRow(e: GardenEvent) {
+        console.log(e);
+        const tableIndex = `${e.sensorId}_${e.gardenName}_${e.timestamp.toISOString()}`;
+        return (<Tr key={tableIndex}>
             <Td key={`${tableIndex}_name`} dataLabel="Type">
-                {m.name}
+                {e.name}
             </Td>
             <Td key={`${tableIndex}_garden`} dataLabel="Garden">
-                {m.garden}
+                {e.gardenName}
+            </Td>
+            <Td key={`${tableIndex}_value`} dataLabel="Sensor id">
+                {Number(e.value).toFixed(2)}
             </Td>
             <Td key={`${tableIndex}_sensor`} dataLabel="Sensor id">
-                {m.sensorId}
+                {e.sensorId}
             </Td>
             <Td key={`${tableIndex}_timestamp`} dataLabel="Type">
-                {m.timestamp}
+                {e.timestamp.toISOString()}
             </Td>
         </Tr>);
     }
@@ -160,7 +175,7 @@ export function Dashboard(): JSX.Element {
                 Garden Status&nbsp;
             </Title>
             <Text component={TextVariants.small}>
-                General data for each garden, aggregated in time windows.
+                General data for each garden, aggregated in time windows (garden-status-events).
             </Text>
         </PageSection>
 

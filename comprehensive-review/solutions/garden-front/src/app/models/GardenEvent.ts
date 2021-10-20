@@ -1,7 +1,7 @@
 export interface GardenEvent {
     name: string,
-    temperature: number,
-    garden: string,
-    sensorId: string,
+    gardenName: string,
+    value: number,
+    sensorId: number,
     timestamp: Date
 }
