@@ -107,7 +107,7 @@ public class GardenStreamsTopologyTest {
 
         // When
         sensorsTopic.pipeInput(sensor.id, sensor);
-        sensorMeasurementsTopic.pipeInput(sensor.id, measurement);
+        sensorMeasurementsTopic.pipeInput(measurement.sensorId, measurement);
 
         // Then
         assertFalse(enrichedMeasurementsTopic.isEmpty());
