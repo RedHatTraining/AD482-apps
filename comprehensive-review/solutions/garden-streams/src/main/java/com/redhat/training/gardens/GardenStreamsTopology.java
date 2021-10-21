@@ -63,10 +63,7 @@ public class GardenStreamsTopology {
         // TODO: Read sensors
         GlobalKTable<Integer, Sensor> sensors = builder.globalTable(
             SENSORS_TOPIC,
-            Consumed.with(Serdes.Integer(), sensorSerde),
-            Materialized.<Integer, Sensor, KeyValueStore<Bytes, byte[]>>as("sensors-store")
-                 .withKeySerde(Serdes.Integer())
-                 .withValueSerde(sensorSerde));
+            Consumed.with(Serdes.Integer(), sensorSerde));
 
         // TODO: Read sensor measurements
         KStream<Integer, SensorMeasurement> sensorMeasurements = builder.stream(
@@ -76,17 +73,17 @@ public class GardenStreamsTopology {
 
         // TODO: Join measurements with sensor table
         KStream<Integer, SensorMeasurementEnriched> enrichedSensorMeasurements = sensorMeasurements
-            .join(
-                sensors,
-                (sensorId, measurement) -> measurement.sensorId,
-                (measurement, sensor) -> new SensorMeasurementEnriched(measurement, sensor));
-
-        enrichedSensorMeasurements.print(Printed.toSysOut());
+        .join(
+            sensors,
+            (sensorId, measurement) -> sensorId,
+            (measurement, sensor) -> new SensorMeasurementEnriched(measurement, sensor));
 
         // TODO: Send enriched measurements to topic
         enrichedSensorMeasurements.to(
-                ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
-                Produced.with(Serdes.Integer(), sensorMeasurementEnrichedSerde));
+            ENRICHED_SENSOR_MEASUREMENTS_TOPIC,
+            Produced.with(Serdes.Integer(), sensorMeasurementEnrichedSerde));
+
+        enrichedSensorMeasurements.print(Printed.toSysOut());
 
         // TODO: split stream
         enrichedSensorMeasurements
@@ -149,4 +146,5 @@ public class GardenStreamsTopology {
                     measurement.value, measurement.timestamp))
             .to(STRONG_WIND_EVENTS_TOPIC, Produced.with(Serdes.Integer(), strongWindEventSerde));
     }
+
 }
