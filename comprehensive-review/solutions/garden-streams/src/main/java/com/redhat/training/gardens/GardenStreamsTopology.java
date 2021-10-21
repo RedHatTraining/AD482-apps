@@ -89,7 +89,7 @@ public class GardenStreamsTopology {
         enrichedSensorMeasurements
             .split()
                 .branch((sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.TEMPERATURE),
-                        Branched.withConsumer(this::proccessTemperature))
+                        Branched.withConsumer(this::processTemperature))
                 .branch((sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.HUMIDITY),
                         Branched.withConsumer(this::processHumidity))
                 .branch((sensorId, measurement) -> measurement.type.equals(SensorMeasurementType.WIND),
@@ -121,7 +121,7 @@ public class GardenStreamsTopology {
     }
 
     // TODO: implement temperature processor
-    private void proccessTemperature(KStream<Integer, SensorMeasurementEnriched> temperatureMeasurements) {
+    private void processTemperature(KStream<Integer, SensorMeasurementEnriched> temperatureMeasurements) {
         temperatureMeasurements
             .filter((sensorId, measurement) -> measurement.value < LOW_TEMPERATURE_THRESHOLD_CELSIUS)
             .mapValues((measurement) -> new LowTemperatureDetected(measurement.gardenName, measurement.sensorId,
