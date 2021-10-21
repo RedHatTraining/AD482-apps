@@ -49,7 +49,7 @@ public class GardenStreamsTopology {
 
     private final ObjectMapperSerde<SensorMeasurementEnriched> sensorMeasurementEnrichedSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
     private final ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
-    private final ObjectMapperSerde<LowHumidityDetected> dryConditionsEventSerde = new ObjectMapperSerde<>(LowHumidityDetected.class);
+    private final ObjectMapperSerde<LowHumidityDetected> lowHumidityEventSerde = new ObjectMapperSerde<>(LowHumidityDetected.class);
     private final ObjectMapperSerde<StrongWindDetected> strongWindEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
     private final ObjectMapperSerde<GardenStatus> gardenStatusSerde = new ObjectMapperSerde<>(GardenStatus.class);
 
@@ -138,7 +138,7 @@ public class GardenStreamsTopology {
             .filter((sensorId, measurement) -> measurement.value < LOW_HUMIDITY_THRESHOLD_PERCENT)
             .mapValues((measurement) -> new LowHumidityDetected(measurement.gardenName, measurement.sensorId,
                     measurement.value, measurement.timestamp))
-            .to(LOW_HUMIDITY_EVENTS_TOPIC, Produced.with(Serdes.Integer(), dryConditionsEventSerde));
+            .to(LOW_HUMIDITY_EVENTS_TOPIC, Produced.with(Serdes.Integer(), lowHumidityEventSerde));
     }
 
     // TODO: implement wind processor

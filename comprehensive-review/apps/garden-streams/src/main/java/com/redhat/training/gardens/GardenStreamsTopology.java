@@ -49,7 +49,7 @@ public class GardenStreamsTopology {
 
     private final ObjectMapperSerde<SensorMeasurementEnriched> sensorMeasurementEnrichedSerde = new ObjectMapperSerde<>(SensorMeasurementEnriched.class);
     private final ObjectMapperSerde<LowTemperatureDetected> lowTemperatureEventSerde = new ObjectMapperSerde<>(LowTemperatureDetected.class);
-    private final ObjectMapperSerde<LowHumidityDetected> dryConditionsEventSerde = new ObjectMapperSerde<>(LowHumidityDetected.class);
+    private final ObjectMapperSerde<LowHumidityDetected> lowHumidityEventSerde = new ObjectMapperSerde<>(LowHumidityDetected.class);
     private final ObjectMapperSerde<StrongWindDetected> strongWindEventSerde = new ObjectMapperSerde<>(StrongWindDetected.class);
     private final ObjectMapperSerde<GardenStatus> gardenStatusSerde = new ObjectMapperSerde<>(GardenStatus.class);
 
