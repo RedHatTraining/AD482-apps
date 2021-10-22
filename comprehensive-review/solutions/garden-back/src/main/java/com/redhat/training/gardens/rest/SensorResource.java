@@ -31,8 +31,8 @@ public class SensorResource {
 
     // Event processors ------------------------------------------------------------------------------------------------
 
-    // TODO: Implement a Kafka consumer that returns `SensorMeasurementEnriched` data.
-    //  Stream messages to an outgoing channel called `in-memory-garden-sensor-measurements-enriched`
+    // TODO: Implement a Kafka consumer that returns "SensorMeasurementEnriched" data.
+    //  Stream messages to an outgoing channel called "in-memory-garden-sensor-measurements-enriched"
     @Incoming("garden-sensor-measurements-enriched")
     @Outgoing("in-memory-garden-sensor-measurements-enriched")
     @Broadcast
@@ -41,8 +41,8 @@ public class SensorResource {
         return event;
     }
 
-    // TODO: Implement a Kafka consumer that returns `SensorMeasurement` data.
-    //  Stream messages to an outgoing channel called `in-memory-garden-sensor-measurements-raw`
+    // TODO: Implement a Kafka consumer that returns "SensorMeasurement" data.
+    //  Stream messages to an outgoing channel called "in-memory-garden-sensor-measurements-raw"
     @Incoming("garden-sensor-measurements-raw")
     @Outgoing("in-memory-garden-sensor-measurements-raw")
     @Broadcast
