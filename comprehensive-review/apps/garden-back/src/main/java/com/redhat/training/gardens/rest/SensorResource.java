@@ -31,9 +31,11 @@ public class SensorResource {
 
     // Event processors ------------------------------------------------------------------------------------------------
 
-    // TODO: Implement a Kafka consumer that returns `SensorMeasurementEnriched` data. Stream messages to an outgoing channel called `in-memory-garden-sensor-measurements-enriched`
+    // TODO: Implement a Kafka consumer that returns `SensorMeasurementEnriched` data.
+    //  Stream messages to an outgoing channel called `in-memory-garden-sensor-measurements-enriched`
 
-    // TODO: Implement a Kafka consumer that returns `SensorMeasurement` data. Stream messages to an outgoing channel called `in-memory-garden-sensor-measurements-raw`
+    // TODO: Implement a Kafka consumer that returns `SensorMeasurement` data.
+    //  Stream messages to an outgoing channel called `in-memory-garden-sensor-measurements-raw`
 
     private SensorMeasurement createSensorMeasurementFromEvent(SensorMeasurementTaken event) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
