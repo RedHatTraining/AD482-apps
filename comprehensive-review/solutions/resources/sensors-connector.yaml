@@ -1,0 +1,31 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+  name: sensors-connector
+spec:
+  class: io.debezium.connector.postgresql.PostgresConnector
+  config:
+    plugin.name: pgoutput
+    database.hostname: postgresql
+    database.port: 5432
+    database.user: postgres
+    database.password: postgres
+    database.dbname: sensorsdb
+    database.server.name: sensorsdb1
+    schema.include.list : public
+    table.include.list: public.sensors
+    tombstones.on.delete: false
+    key.converter: org.apache.kafka.connect.converters.IntegerConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable: false
+    value.converter.schemas.enable: false
+    transforms: ExtractField, Extract, RegexRouter
+    transforms.Extract.type: io.debezium.transforms.ExtractNewRecordState
+    transforms.ExtractField.type: org.apache.kafka.connect.transforms.ExtractField$Key
+    transforms.ExtractField.field: id
+    transforms.RegexRouter.type: org.apache.kafka.connect.transforms.RegexRouter
+    transforms.RegexRouter.regex: sensorsdb1.public.(.*)
+    transforms.RegexRouter.replacement: garden-$1
+  tasksMax: 1
