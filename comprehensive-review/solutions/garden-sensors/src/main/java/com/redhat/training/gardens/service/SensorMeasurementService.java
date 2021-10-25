@@ -29,7 +29,9 @@ public class SensorMeasurementService {
         return Multi.createFrom().ticks().every(Duration.ofMillis(5000))
                 .onOverflow().drop()
                 .map(tick -> {
-                    SensorMeasurementTaken event = generateEvent(sensorService.getSensor());
+                    SensorMeasurementTaken event = generateEvent(
+                        sensorService.getSensor()
+                    );
                     LOGGER.info("Sensor measurement taken: " + event);
                     return Record.of(event.getSensorId(), event);
                 });

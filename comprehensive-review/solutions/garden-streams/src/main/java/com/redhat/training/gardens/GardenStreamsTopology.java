@@ -68,15 +68,15 @@ public class GardenStreamsTopology {
         // TODO: Read sensor measurements
         KStream<Integer, SensorMeasurement> sensorMeasurements = builder.stream(
             SENSOR_MEASUREMENTS_TOPIC,
-            Consumed.with(Serdes.Integer(), sensorMeasurementSerde)
-        );
+            Consumed.with(Serdes.Integer(), sensorMeasurementSerde));
 
         // TODO: Join measurements with sensor table
         KStream<Integer, SensorMeasurementEnriched> enrichedSensorMeasurements = sensorMeasurements
         .join(
             sensors,
             (sensorId, measurement) -> sensorId,
-            (measurement, sensor) -> new SensorMeasurementEnriched(measurement, sensor));
+            (measurement, sensor) -> new SensorMeasurementEnriched(
+                measurement, sensor));
 
         // TODO: Send enriched measurements to topic
         enrichedSensorMeasurements.to(
@@ -106,13 +106,17 @@ public class GardenStreamsTopology {
             )
             .aggregate(
                 GardenStatus::new,
-                (gardenName, measurement, gardenStatus) -> gardenStatus.updateWith(measurement),
+                (gardenName, measurement, gardenStatus) ->
+                    gardenStatus.updateWith(measurement),
                 Materialized
-                    .<String, GardenStatus, WindowStore<Bytes, byte[]>>as("garden-status-store")
+                    .<String, GardenStatus, WindowStore<Bytes, byte[]>>as(
+                            "garden-status-store"
+                        )
                         .withKeySerde(Serdes.String())
                         .withValueSerde(gardenStatusSerde))
             .toStream()
-            .map((windowedGardenName, gardenStatus) -> new KeyValue<Void, GardenStatus>(null, gardenStatus))
+            .map((windowedGardenName, gardenStatus) -> new KeyValue<Void, GardenStatus>(
+                null, gardenStatus))
             .to(
                 GARDEN_STATUS_EVENTS_TOPIC,
                 Produced.with(Serdes.Void(), gardenStatusSerde));
