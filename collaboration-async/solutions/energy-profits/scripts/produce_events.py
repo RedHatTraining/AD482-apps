@@ -50,17 +50,17 @@ def get_topic_from_value(value):
 
 events_data = [
     {'key': 1, 'value': WindTurbineEarningWasAdded(1, 100.00)},
-    {'key': 2, 'value': WindTurbineEarningWasAdded(1, 3000.00)},
+    {'key': 2, 'value': WindTurbineEarningWasAdded(2, 3000.00)},
     {'key': 1, 'value': WindTurbineExpenseWasAdded(1, 50.00)},
-    {'key': 2, 'value': WindTurbineExpenseWasAdded(1, 2000.00)},
+    {'key': 2, 'value': WindTurbineExpenseWasAdded(2, 2000.00)},
     {'key': 1, 'value': WindTurbineEarningWasAdded(1, 1000.00)},
-    {'key': 2, 'value': WindTurbineEarningWasAdded(1, 3500.00)},
+    {'key': 2, 'value': WindTurbineEarningWasAdded(2, 3500.00)},
     {'key': 1, 'value': WindTurbineExpenseWasAdded(1, 150.00)},
-    {'key': 2, 'value': WindTurbineExpenseWasAdded(1, 3200.00)},
+    {'key': 2, 'value': WindTurbineExpenseWasAdded(2, 3200.00)},
     {'key': 1, 'value': WindTurbineEarningWasAdded(1, 1300.00)},
-    {'key': 2, 'value': WindTurbineEarningWasAdded(1, 3800.00)},
+    {'key': 2, 'value': WindTurbineEarningWasAdded(2, 3800.00)},
     {'key': 1, 'value': WindTurbineExpenseWasAdded(1, 300.00)},
-    {'key': 2, 'value': WindTurbineExpenseWasAdded(1, 4200.00)},
+    {'key': 2, 'value': WindTurbineExpenseWasAdded(2, 4200.00)},
 ]
 
 
