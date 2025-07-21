@@ -7,9 +7,9 @@ curl -X POST \
     {
         "connector.class": "'$connector_class'",
         "tasks.max": "1",
-        "topics": "github-events",
+        "topics": "user-interactions",
         "camel.sink.endpoint.hostAddresses": "elasticsearch-es-http:9200",
-        "camel.sink.endpoint.indexName": "github_events",
+        "camel.sink.endpoint.indexName": "user_interactions",
         "camel.sink.endpoint.operation": "Index",
         "camel.sink.path.clusterName": "elasticsearch",
         "key.converter": "org.apache.kafka.connect.storage.StringConverter",
