@@ -1,0 +1,14 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: filestream-source-connector
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: org.apache.kafka.connect.file.FileStreamSourceConnector
+  config:
+    file: "_FILE_PATH_"
+    topic: user-interactions
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+  tasksMax: 2
